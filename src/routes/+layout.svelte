@@ -51,7 +51,7 @@
 				class="left-sidebar hidden sm:block w-full lg:w-50 p-4 lg:h-full
                         lg:border-r border-gray-300 lg:flex lg:flex-col lg:justify-between lg:items-end"
 			>
-				<div class="lg:mt-18">
+				<div class="lg:mt-36">
 					<ul
 						class="flex flex-row lg:flex-col
                              justify-around lg:justify-start lg:space-y-4
@@ -60,8 +60,8 @@
 					>
 						<li>Home</li>
 						<li>About</li>
+						<li>Projects</li>
 						<li>Blog</li>
-						<li>Contact</li>
 					</ul>
 				</div>
 
@@ -91,7 +91,7 @@
 			<!-- Main content column - Slot for page content -->
 			<div
 				class="main-content w-full lg:w-200 lg:h-20
-                        border-y lg:border-t-0 border-gray-300"
+                        border-y lg:border-t-0 border-gray-300 lg:mt-18"
 			>
 				{@render children()}
 			</div>
@@ -130,8 +130,8 @@
 				<ul class="space-y-4 font-serif font-medium">
 					<li class="py-2 border-b border-gray-300">Home</li>
 					<li class="py-2 border-b border-gray-300">About</li>
-					<li class="py-2 border-b border-gray-300">Blog</li>
-					<li class="py-2">Contact</li>
+					<li class="py-2 border-b border-gray-300">Projects</li>
+					<li class="py-2">Blog</li>
 				</ul>
 			</div>
 		</div>
