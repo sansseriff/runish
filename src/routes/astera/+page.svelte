@@ -1,9 +1,9 @@
 <script>
 </script>
 
-<div class="prose max-w-none mx-auto mt-6 lg:pr-4">
-	<div class="border-y lg:border-t-0 border-gray-300 flex p-4 px-8 lg:h-35">
-		<h2 class="font-serif font-medium lg:h-4 justify-end flex-col block">
+<div class="prose max-w-none w-full mx-auto mt-6 lg:pr-4">
+	<div class="border-y lg:border-t-0 border-gray-300 p-6 h-37 relative">
+		<h2 class="font-serif font-medium lg:h-4 justify-end flex-col block mt-16">
 			Astera residency application links
 		</h2>
 		<!-- <p class="font-serif font-medium">
@@ -11,6 +11,10 @@
 			<br />
 			I'm passionate about science communication and meta-science.
 		</p> -->
+
+		<div
+			class="absolute size-2 z-10 rounded-[1px] rotate-45 border border-gray-300 dark:border-blue-300/25 bg-gray-50 dark:bg-black left-[-4.5px] bottom-[-4.5px]"
+		></div>
 	</div>
 
 	<div class="font-serif font-medium p-7 px-8">
@@ -62,24 +66,6 @@
 </div>
 
 <style>
-	.iframe-container {
-		position: relative;
-		width: 100%; /* Make it scale to the width of its container */
-		padding-bottom: 56.25%; /* Aspect ratio: 16:9 (height / width = 9 / 16 = 0.5625) */
-		height: 0; /* Set height to 0 to make padding-bottom control the height */
-		overflow: hidden;
-	}
-
-	.iframe-container iframe {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		border: 0;
-	}
-
-	/* Remove independent scrolling from .prose */
 	.prose {
 		overflow-y: unset;
 	}

@@ -9,6 +9,7 @@
 	import GithubLogo from 'phosphor-svelte/lib/GithubLogo';
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
+	import LinkDiamond from '$lib/LinkDiamond.svelte';
 
 	let { children } = $props();
 	let menuOpen = $state(false);
@@ -53,7 +54,7 @@
 			<div
 				class="left-sidebar hidden sm:block w-full lg:w-50 p-4
                         lg:border-r border-gray-300 lg:flex lg:flex-col lg:justify-between lg:items-end
-                        sticky top-0 h-screen"
+                        sticky top-0 lg:h-screen"
 			>
 				<div class="lg:mt-48">
 					<ul
@@ -63,21 +64,39 @@
                              font-serif font-medium"
 					>
 						<li>
-							<a href="{base}/" class:font-bold={page.url.pathname === `${base}/`}> Home </a>
+							<a href="{base}/" class="relative" class:font-bold={page.url.pathname === `${base}/`}>
+								Home
+								<LinkDiamond {page} path={`${base}/`}></LinkDiamond></a
+							>
 						</li>
 						<li>
-							<a href="{base}/about" class:font-bold={page.url.pathname === `${base}/about`}>
+							<a
+								href="{base}/about"
+								class="relative"
+								class:font-bold={page.url.pathname === `${base}/about`}
+							>
 								About
+								<LinkDiamond {page} path={`${base}/about`}></LinkDiamond>
 							</a>
 						</li>
 						<li>
-							<a href="{base}/projects" class:font-bold={page.url.pathname === `${base}/projects`}>
+							<a
+								href="{base}/projects"
+								class="relative"
+								class:font-bold={page.url.pathname === `${base}/projects`}
+							>
 								Projects
+								<LinkDiamond {page} path={`${base}/projects`}></LinkDiamond>
 							</a>
 						</li>
 						<li>
-							<a href="{base}/blog" class:font-bold={page.url.pathname === `${base}/blog`}>
+							<a
+								href="{base}/blog"
+								class="relative"
+								class:font-bold={page.url.pathname === `${base}/blog`}
+							>
 								Blog
+								<LinkDiamond {page} path={`${base}/blog`}></LinkDiamond>
 							</a>
 						</li>
 					</ul>
@@ -109,7 +128,7 @@
 			<!-- Main content column - Slot for page content -->
 			<div
 				class="main-content w-full lg:w-200
-                         lg:mt-6"
+                         lg:mt-6 sm:flex m:flex"
 			>
 				{@render children()}
 			</div>
