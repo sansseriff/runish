@@ -24,9 +24,11 @@
 		<br />
 		<br />
 		<br />
-		<h4>My Thesis</h4>
-		Using pandoc, I cross compiled my PhD thesis to latex and markdown, based on a pseudo-markdown source
-		format:
+		<h4>My Research</h4>
+		-
+		<a href="https://scholar.google.com/citations?user=FRQbz4sAAAAJ&hl=en">Google scholar</a>
+		<br />
+		- My PhD thesis, compiled to a website using pandoc and mkdocs:
 		<a href="https://www.snsphd.online" class=""> Thesis</a>
 		<br />
 		<br />
@@ -47,7 +49,7 @@
 		<h4>Compass</h4>
 		A demonstration of using AI tools to connect arbitrary visual entities that share common interfaces.
 		Entities can influence the state of each other once connected, as shown by the detector illuminating
-		when the switch connected to it is closed.
+		when the switch connected to it is closed:
 		<a href="https://youtu.be/41owusgOsOU">Compass demo</a>
 
 		<br />
