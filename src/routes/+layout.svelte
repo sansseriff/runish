@@ -7,6 +7,9 @@
 	// import Bluesky from 'phosphor-svelte/lib/BlueskyLogo';
 	import BlueSkyLogo from '$lib/BlueSkyLogo.svelte';
 	import GithubLogo from 'phosphor-svelte/lib/GithubLogo';
+	import { base } from '$app/paths';
+	import { page } from '$app/state';
+
 	let { children } = $props();
 	let menuOpen = $state(false);
 
@@ -17,7 +20,7 @@
 
 <main
 	class="min-h-screen h-screen
-             bg-gray-50"
+             bg-gray-50 overflow-y-auto"
 >
 	<div class="centered-content max-w-300 mx-auto h-full">
 		<!-- Mobile header with hamburger -->
@@ -43,29 +46,44 @@
 
 		<!-- Container with three columns -->
 		<div
-			class="main-container flex-1 h-screen
+			class="main-container flex-1
                       flex flex-col lg:flex-row"
 		>
 			<!-- Left sidebar -->
 			<div
-				class="left-sidebar hidden sm:block w-full lg:w-50 p-4 lg:h-full
-                        lg:border-r border-gray-300 lg:flex lg:flex-col lg:justify-between lg:items-end"
+				class="left-sidebar hidden sm:block w-full lg:w-50 p-4
+                        lg:border-r border-gray-300 lg:flex lg:flex-col lg:justify-between lg:items-end
+                        sticky top-0 h-screen"
 			>
-				<div class="lg:mt-36">
+				<div class="lg:mt-48">
 					<ul
 						class="flex flex-row lg:flex-col
                              justify-around lg:justify-start lg:space-y-4
                              lg:text-right lg:pr-4
                              font-serif font-medium"
 					>
-						<li>Home</li>
-						<li>About</li>
-						<li>Projects</li>
-						<li>Blog</li>
+						<li>
+							<a href="{base}/" class:font-bold={page.url.pathname === `${base}/`}> Home </a>
+						</li>
+						<li>
+							<a href="{base}/about" class:font-bold={page.url.pathname === `${base}/about`}>
+								About
+							</a>
+						</li>
+						<li>
+							<a href="{base}/projects" class:font-bold={page.url.pathname === `${base}/projects`}>
+								Projects
+							</a>
+						</li>
+						<li>
+							<a href="{base}/blog" class:font-bold={page.url.pathname === `${base}/blog`}>
+								Blog
+							</a>
+						</li>
 					</ul>
 				</div>
 
-				<div class="hidden lg:flex lg:flex-col lg:items-end lg:space-y-4">
+				<div class="hidden lg:flex lg:flex-col lg:items-end lg:space-y-4 lg:mt-auto">
 					<a href="https://bsky.app/profile/sansseriff.bsky.social">
 						<BlueSkyLogo cls="text-gray-400 hover:text-gray-600"></BlueSkyLogo>
 					</a>
@@ -90,8 +108,8 @@
 
 			<!-- Main content column - Slot for page content -->
 			<div
-				class="main-content w-full lg:w-200 lg:h-20
-                        border-y lg:border-t-0 border-gray-300 lg:mt-18"
+				class="main-content w-full lg:w-200
+                         lg:mt-6"
 			>
 				{@render children()}
 			</div>
@@ -128,10 +146,22 @@
 			</div>
 			<div class="p-4">
 				<ul class="space-y-4 font-serif font-medium">
-					<li class="py-2 border-b border-gray-300">Home</li>
-					<li class="py-2 border-b border-gray-300">About</li>
-					<li class="py-2 border-b border-gray-300">Projects</li>
-					<li class="py-2">Blog</li>
+					<li class="py-2 border-b border-gray-300">
+						<a href="{base}/" class:font-bold={page.url.pathname === `${base}/`}> Home </a>
+					</li>
+					<li class="py-2 border-b border-gray-300">
+						<a href="{base}/about" class:font-bold={page.url.pathname === `${base}/about`}>
+							About
+						</a>
+					</li>
+					<li class="py-2 border-b border-gray-300">
+						<a href="{base}/projects" class:font-bold={page.url.pathname === `${base}/projects`}>
+							Projects
+						</a>
+					</li>
+					<li class="py-2">
+						<a href="{base}/blog" class:font-bold={page.url.pathname === `${base}/blog`}> Blog </a>
+					</li>
 				</ul>
 			</div>
 		</div>
