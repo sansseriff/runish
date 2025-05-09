@@ -21,7 +21,7 @@
 
 <main
 	class="min-h-screen h-screen
-             bg-gray-50 overflow-y-auto"
+             bg-gray-50 overflow-y-auto dark:bg-gray-900"
 >
 	<div class="centered-content max-w-300 mx-auto h-full">
 		<!-- Mobile header with hamburger -->
@@ -30,18 +30,18 @@
                     flex items-center justify-between"
 		>
 			<div class="logo inline-flex">
-				<h1 class="font-serif font-medium">Something Runi</h1>
-				<h1 class="text-gray-400">.</h1>
-				<h1 class="font-serif font-medium">sh</h1>
+				<h1 class="font-serif font-medium dark:text-gray-400">Something Runi</h1>
+				<h1 class="text-gray-400 dark:text-gray-400">.</h1>
+				<h1 class="font-serif font-medium dark:text-gray-400">sh</h1>
 			</div>
 
 			<button
 				onclick={toggleMenu}
 				class="p-2
-                          hover:bg-gray-100
+                          hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800
                           cursor-pointer"
 			>
-				<Diamond size={24} weight={'regular'}></Diamond>
+				<Diamond size={24} weight={'regular'} color={'gray'}></Diamond>
 			</button>
 		</div>
 
@@ -53,7 +53,7 @@
 			<!-- Left sidebar -->
 			<div
 				class="left-sidebar hidden sm:block w-full lg:w-50 p-4
-                        lg:border-r border-gray-300 lg:flex lg:flex-col lg:justify-between lg:items-end
+                        lg:border-r border-gray-300 dark:border-gray-700 lg:flex lg:flex-col lg:justify-between lg:items-end
                         sticky top-0 lg:h-screen"
 			>
 				<div class="lg:mt-48">
@@ -61,7 +61,7 @@
 						class="flex flex-row lg:flex-col
                              justify-around lg:justify-start lg:space-y-4
                              lg:text-right lg:pr-4
-                             font-serif font-medium"
+                             font-serif font-medium dark:text-gray-400"
 					>
 						<li>
 							<a href="{base}/" class="relative" class:font-bold={page.url.pathname === `${base}/`}>
@@ -151,7 +151,7 @@
 		>
 			<div
 				class="flex justify-between items-center p-4
-                        border-b border-gray-300"
+                        border-b border-gray-300 dark:border-gray-700"
 			>
 				<h2 class="font-serif font-bold">Menu</h2>
 				<button
@@ -165,15 +165,15 @@
 			</div>
 			<div class="p-4">
 				<ul class="space-y-4 font-serif font-medium">
-					<li class="py-2 border-b border-gray-300">
+					<li class="py-2 border-b border-gray-300 dark:border-gray-700">
 						<a href="{base}/" class:font-bold={page.url.pathname === `${base}/`}> Home </a>
 					</li>
-					<li class="py-2 border-b border-gray-300">
+					<li class="py-2 border-b border-gray-300 dark:border-gray-700">
 						<a href="{base}/about" class:font-bold={page.url.pathname === `${base}/about`}>
 							About
 						</a>
 					</li>
-					<li class="py-2 border-b border-gray-300">
+					<li class="py-2 border-b border-gray-300 dark:border-gray-700">
 						<a href="{base}/projects" class:font-bold={page.url.pathname === `${base}/projects`}>
 							Projects
 						</a>
