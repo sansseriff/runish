@@ -141,10 +141,10 @@
 			theater and opera.
 		</p>
 		<p>
-			AI tools now make superficially rigorous text nearly costless, creating a curation crisis in
-			academic discourse, exacerbated by closed, for-profit publishing models. As AI-generated slop
-			proliferates, demand shifts toward higher-bandwidth and more sophisticated content forms that
-			teach and demonstrate research integrity more effectively.
+			AI tools now make superficially rigorous text nearly costless [1,2], creating a curation
+			crisis in academic discourse, exacerbated by closed, for-profit publishing models. As
+			AI-generated slop proliferates, demand shifts toward higher-bandwidth and more sophisticated
+			content forms that teach and demonstrate research integrity more effectively.
 		</p>
 		<p>
 			We need to guide the move away from static PDFs in favor of new abstract synthesis formats
@@ -152,6 +152,15 @@
 			format. I want to develop a solution and demonstrate its benefits to my fellow academics, in
 			time to avoid the highest societal costs of the current publishing system.
 		</p>
+
+		<ol class="list-decimal list-inside">
+			<li>
+				[1] <a href="https://dub.sh/8PpT6KY">https://dub.sh/8PpT6KY</a>
+			</li>
+			<li>
+				[2] <a href="https://dub.sh/xctdVM2">https://dub.sh/xctdVM2</a>
+			</li>
+		</ol>
 	</div>
 
 	<div

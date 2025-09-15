@@ -13,4 +13,8 @@
 			class="absolute size-2 z-10 rounded-[1px] rotate-45 border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 left-[-4.5px] bottom-[-4.5px]"
 		></div>
 	</div>
+
+	<div class="font-serif font-medium p-7 px-8 dark:text-gray-400">
+		This website is a work in progress. This page is coming soon!
+	</div>
 </div>
