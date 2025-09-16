@@ -11,14 +11,7 @@
 		></div>
 	</div>
 	<div class="p-6 lg:p-8 font-serif text-sm leading-relaxed space-y-6 dark:text-gray-300">
-		<video
-			src={hero}
-			autoplay
-			muted
-			loop
-			playsinline
-			class="w-full border border-gray-300 dark:border-gray-700 object-cover"
-		></video>
+		<video src={hero} autoplay muted loop playsinline class="w-full object-cover"></video>
 		<p>
 			Visualization experiments for high‑rate superconducting single photon detector readout.
 			Emphasis on conveying temporal clustering, pattern recognition, and noise discrimination.

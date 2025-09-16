@@ -12,11 +12,11 @@
 	import LinkDiamond from '$lib/LinkDiamond.svelte';
 	// Sidebar expandable state for portfolio sub-items
 	let portfolioOpen = $state(false);
-	// Auto-open when on a portfolio detail page
+	// Auto-open when on a portfolio page; close when leaving
 	$effect(() => {
-		if (page.url.pathname.startsWith(`${base}/portfolio`)) {
-			portfolioOpen = true;
-		}
+		const onPortfolio = page.url.pathname.startsWith(`${base}/portfolio`);
+		if (onPortfolio) portfolioOpen = true;
+		else portfolioOpen = false;
 	});
 
 	let { children } = $props();
@@ -31,7 +31,10 @@
 	class="min-h-screen h-screen
              bg-gray-50 overflow-y-auto dark:bg-gray-900"
 >
-	<div class="centered-content max-w-300 mx-auto h-full transition-all" class:portfolio-mode={page.url.pathname.startsWith(`${base}/portfolio`)}>
+	<div
+		class="centered-content max-w-300 mx-auto h-full transition-all"
+		class:portfolio-mode={page.url.pathname.startsWith(`${base}/portfolio`)}
+	>
 		<!-- Mobile header with hamburger -->
 		<div
 			class="sm:hidden p-4
@@ -68,12 +71,16 @@
 				<div class="lg:mt-48">
 					<ul
 						class="flex flex-row lg:flex-col
-                             justify-around lg:justify-start lg:space-y-4
-                             lg:text-right lg:pr-4
-                             font-serif font-medium dark:text-gray-400"
+								 justify-around lg:justify-start lg:space-y-4
+								 lg:text-right
+								 font-serif font-medium dark:text-gray-400"
 					>
 						<li>
-							<a href="{base}/" class="relative" class:font-bold={page.url.pathname === `${base}/`}>
+							<a
+								href="{base}/"
+								class="relative lg:pr-4"
+								class:font-bold={page.url.pathname === `${base}/`}
+							>
 								Home
 								<LinkDiamond {page} path={`${base}/`}></LinkDiamond></a
 							>
@@ -81,7 +88,7 @@
 						<li>
 							<a
 								href="{base}/about"
-								class="relative"
+								class="relative lg:pr-4"
 								class:font-bold={page.url.pathname === `${base}/about`}
 							>
 								About
@@ -92,24 +99,44 @@
 							<a
 								href="{base}/portfolio"
 								onclick={() => (portfolioOpen = !portfolioOpen)}
-								class="relative inline-block w-full text-left cursor-pointer select-none"
+								class="relative inline-block w-full text-left cursor-pointer select-none lg:pr-4"
 								class:font-bold={page.url.pathname.startsWith(`${base}/portfolio`)}
 							>
 								<span class="inline-flex items-center gap-1">Portfolio</span>
 								<LinkDiamond {page} path={`${base}/portfolio`}></LinkDiamond>
 							</a>
 							{#if portfolioOpen}
-								<ul class="mt-2 space-y-2 text-sm font-normal opacity-70">
-									<li><a href="{base}/portfolio/traversable-wormholes" class="hover:opacity-100 transition-opacity" class:font-bold={page.url.pathname===`${base}/portfolio/traversable-wormholes`}>wormhole</a></li>
-									<li><a href="{base}/portfolio/compass" class="hover:opacity-100 transition-opacity" class:font-bold={page.url.pathname===`${base}/portfolio/compass`}>compass</a></li>
-									<li><a href="{base}/portfolio/feathered-peacoq" class="hover:opacity-100 transition-opacity" class:font-bold={page.url.pathname===`${base}/portfolio/feathered-peacoq`}>peacoq</a></li>
+								<ul class="mt-2 space-y-2 text-sm font-normal opacity-70 dark:text-gray-300">
+									<li>
+										<a
+											href="{base}/portfolio/traversable-wormholes"
+											class="hover:opacity-100 transition-opacity"
+											class:font-bold={page.url.pathname ===
+												`${base}/portfolio/traversable-wormholes`}>wormhole</a
+										>
+									</li>
+									<li>
+										<a
+											href="{base}/portfolio/compass"
+											class="hover:opacity-100 transition-opacity"
+											class:font-bold={page.url.pathname === `${base}/portfolio/compass`}>compass</a
+										>
+									</li>
+									<li>
+										<a
+											href="{base}/portfolio/feathered-peacoq"
+											class="hover:opacity-100 transition-opacity"
+											class:font-bold={page.url.pathname === `${base}/portfolio/feathered-peacoq`}
+											>peacoq</a
+										>
+									</li>
 								</ul>
 							{/if}
 						</li>
 						<li>
 							<a
 								href="{base}/blog"
-								class="relative"
+								class="relative lg:pr-4"
 								class:font-bold={page.url.pathname === `${base}/blog`}
 							>
 								Blog
@@ -143,9 +170,7 @@
 			</div>
 
 			<!-- Main content column - Slot for page content -->
-			<div
-				class="main-content w-full lg:w-200 lg:mt-6 sm:flex m:flex transition-all"
-			>
+			<div class="main-content w-full lg:w-200 lg:mt-6 sm:flex m:flex transition-all">
 				{@render children()}
 			</div>
 		</div>
@@ -159,7 +184,7 @@
 			role="button"
 			tabindex="0"
 			onclick={toggleMenu}
-			onkeydown={(e) => (e.key==='Enter' || e.key===' ') && toggleMenu()}
+			onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleMenu()}
 			aria-label="Close menu overlay"
 		></div>
 		<div
@@ -207,23 +232,6 @@
 	{/if}
 </main>
 
-<style>
-	:root { --portfolio-shift:3.5rem; }
-	/* Sidebar shift now uses negative margin to reclaim layout space (no transform gap) */
-	@media (min-width:1024px){
-		.left-sidebar.portfolio-shift { margin-left: calc(-1 * var(--portfolio-shift)); }
-		/* Fixed widths: normal pages use 56rem, portfolio uses 72rem */
-		.main-content { width:56rem; max-width:56rem; }
-		.portfolio-mode .main-content { width:72rem; max-width:72rem; }
-		/* Keep centered container controlling total span */
-		.centered-content { display:flex; }
-		.main-container { width:100%; justify-content:flex-start; }
-		.main-content { margin-left:0; }
-	}
-	/* Ensure media inside main-content never overflow */
-	.main-content img, .main-content video, .main-content canvas, .main-content figure { max-width:100%; height:auto; }
-</style>
-
 <!-- <style>
     /* Add this to ensure the transition works properly */
     .translate-y-full {
@@ -238,3 +246,47 @@
         will-change: transform;
     }
 </style> -->
+
+<style>
+	html,
+	body {
+		scrollbar-gutter: stable both-edges;
+	}
+	:root {
+		--portfolio-shift: 3.5rem;
+	}
+	/* Sidebar shift now uses negative margin to reclaim layout space (no transform gap) */
+	@media (min-width: 1024px) {
+		.left-sidebar.portfolio-shift {
+			margin-left: calc(-1 * var(--portfolio-shift));
+		}
+		/* Fixed widths: normal pages use 56rem, portfolio uses 72rem */
+		.main-content {
+			width: 56rem;
+			max-width: 56rem;
+		}
+		.portfolio-mode .main-content {
+			width: 72rem;
+			max-width: 72rem;
+		}
+		/* Keep centered container controlling total span */
+		.centered-content {
+			display: flex;
+		}
+		.main-container {
+			width: 100%;
+			justify-content: flex-start;
+		}
+		.main-content {
+			margin-left: 0;
+		}
+	}
+	/* Ensure media inside main-content never overflow */
+	.main-content img,
+	.main-content video,
+	.main-content canvas,
+	.main-content figure {
+		max-width: 100%;
+		height: auto;
+	}
+</style>

@@ -1,0 +1,9 @@
+---
+layout: blog
+---
+
+# Hello this is a svelte blog post
+
+And this is some normal text
+
+## Here is a subheading

@@ -14,7 +14,7 @@
 		<img
 			src={hero}
 			alt="Traversable wormholes visualization"
-			class="w-full border border-gray-300 dark:border-gray-700 object-cover"
+			class="w-full object-cover"
 			loading="lazy"
 		/>
 		<p>

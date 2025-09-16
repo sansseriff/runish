@@ -11,14 +11,7 @@
 		></div>
 	</div>
 	<div class="p-6 lg:p-8 font-serif text-sm leading-relaxed space-y-6 dark:text-gray-300">
-		<video
-			src={hero}
-			autoplay
-			muted
-			loop
-			playsinline
-			class="w-full border border-gray-300 dark:border-gray-700 object-cover"
-		></video>
+		<video src={hero} autoplay muted loop playsinline class="w-full object-cover"></video>
 		<p>
 			A prototyping environment for composable scientific visuals—establishing design primitives
 			later formalized in Lunaframe. Focus areas include temporal layering, semantic color systems,

@@ -31,8 +31,7 @@
 			title: 'COMPASS – a precursor to Lunaframe',
 			slug: 'compass',
 			flags: ['software', 'visual'],
-			media: `${base}/videos/feathered_peacoq.mp4`,
-			mediaType: 'video',
+			media: `${base}/images/feathered_peacoq.png`,
 			description:
 				'A design language & rendering pipeline for procedural scientific visuals later evolved into Lunaframe.'
 		},
@@ -40,8 +39,7 @@
 			title: 'Feathered PEACOQ',
 			slug: 'feathered-peacoq',
 			flags: ['quantum', 'visual'],
-			media: `${base}/videos/feathered_peacoq.mp4`,
-			mediaType: 'video',
+			media: `${base}/images/feathered_peacoq.png`,
 			description:
 				'High‑rate single photon detection visualization – pattern recognition tricks for superconducting detector signals.'
 		}
@@ -63,8 +61,8 @@
 
 <div class="prose max-w-none w-full mx-auto mt-6 lg:pr-4 portfolio-wrapper">
 	<div class="border-y lg:border-t-0 border-gray-300 dark:border-gray-700 p-6 relative">
-		<h2 class="font-serif font-medium lg:h-4 flex flex-col lg:flex-row gap-2">
-			<span>Built with code, built with colors</span>
+		<h2 class="font-serif font-medium lg:h-4 flex flex-col lg:flex-row gap-2 dark:text-gray-100">
+			<span class="dark:text-gray-100">Built with code, built with colors</span>
 		</h2>
 		<p class="font-serif font-medium text-sm dark:text-gray-400 max-w-prose">
 			Call me a computational artist, or an artistic scientist and engineer. My projects span the
@@ -101,7 +99,7 @@
 			{#if shown(c)}
 				<a href={`${base}/portfolio/${c.slug}`} class="block group">
 					<div
-						class="group border border-gray-300 dark:border-gray-700 relative overflow-hidden rounded-sm backdrop-blur-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-mint-500 card w-full"
+						class="group relative overflow-hidden rounded-sm backdrop-blur-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-mint-500 card w-full"
 					>
 						{#if c.mediaType === 'video'}
 							<video
