@@ -10,6 +10,14 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import LinkDiamond from '$lib/LinkDiamond.svelte';
+	// Sidebar expandable state for portfolio sub-items
+	let portfolioOpen = $state(false);
+	// Auto-open when on a portfolio detail page
+	$effect(() => {
+		if (page.url.pathname.startsWith(`${base}/portfolio`)) {
+			portfolioOpen = true;
+		}
+	});
 
 	let { children } = $props();
 	let menuOpen = $state(false);
@@ -23,7 +31,7 @@
 	class="min-h-screen h-screen
              bg-gray-50 overflow-y-auto dark:bg-gray-900"
 >
-	<div class="centered-content max-w-300 mx-auto h-full">
+	<div class="centered-content max-w-300 mx-auto h-full transition-all" class:portfolio-mode={page.url.pathname.startsWith(`${base}/portfolio`)}>
 		<!-- Mobile header with hamburger -->
 		<div
 			class="sm:hidden p-4
@@ -53,8 +61,9 @@
 			<!-- Left sidebar -->
 			<div
 				class="left-sidebar hidden sm:block w-full lg:w-50 p-4
-                        lg:border-r border-gray-300 dark:border-gray-700 lg:flex lg:flex-col lg:justify-between lg:items-end
-                        sticky top-0 lg:h-screen"
+							lg:border-r border-gray-300 dark:border-gray-700 lg:flex lg:flex-col lg:justify-between lg:items-end
+							sticky top-0 lg:h-screen transition-all duration-300"
+				class:portfolio-shift={page.url.pathname.startsWith(`${base}/portfolio`)}
 			>
 				<div class="lg:mt-48">
 					<ul
@@ -79,15 +88,23 @@
 								<LinkDiamond {page} path={`${base}/about`}></LinkDiamond>
 							</a>
 						</li>
-						<li>
+						<li class="relative">
 							<a
-								href="{base}/projects"
-								class="relative"
-								class:font-bold={page.url.pathname === `${base}/projects`}
+								href="{base}/portfolio"
+								onclick={() => (portfolioOpen = !portfolioOpen)}
+								class="relative inline-block w-full text-left cursor-pointer select-none"
+								class:font-bold={page.url.pathname.startsWith(`${base}/portfolio`)}
 							>
-								Projects
-								<LinkDiamond {page} path={`${base}/projects`}></LinkDiamond>
+								<span class="inline-flex items-center gap-1">Portfolio</span>
+								<LinkDiamond {page} path={`${base}/portfolio`}></LinkDiamond>
 							</a>
+							{#if portfolioOpen}
+								<ul class="mt-2 space-y-2 text-sm font-normal opacity-70">
+									<li><a href="{base}/portfolio/traversable-wormholes" class="hover:opacity-100 transition-opacity" class:font-bold={page.url.pathname===`${base}/portfolio/traversable-wormholes`}>wormhole</a></li>
+									<li><a href="{base}/portfolio/compass" class="hover:opacity-100 transition-opacity" class:font-bold={page.url.pathname===`${base}/portfolio/compass`}>compass</a></li>
+									<li><a href="{base}/portfolio/feathered-peacoq" class="hover:opacity-100 transition-opacity" class:font-bold={page.url.pathname===`${base}/portfolio/feathered-peacoq`}>peacoq</a></li>
+								</ul>
+							{/if}
 						</li>
 						<li>
 							<a
@@ -127,8 +144,7 @@
 
 			<!-- Main content column - Slot for page content -->
 			<div
-				class="main-content w-full lg:w-200
-                         lg:mt-6 sm:flex m:flex"
+				class="main-content w-full lg:w-200 lg:mt-6 sm:flex m:flex transition-all"
 			>
 				{@render children()}
 			</div>
@@ -139,8 +155,12 @@
 	{#if menuOpen}
 		<div
 			class="lg:hidden fixed inset-0 z-40
-                  bg-black/30"
+				  bg-black/30"
+			role="button"
+			tabindex="0"
 			onclick={toggleMenu}
+			onkeydown={(e) => (e.key==='Enter' || e.key===' ') && toggleMenu()}
+			aria-label="Close menu overlay"
 		></div>
 		<div
 			class="lg:hidden fixed bottom-0 left-0 right-0 z-50
@@ -174,8 +194,8 @@
 						</a>
 					</li>
 					<li class="py-2 border-b border-gray-300 dark:border-gray-700">
-						<a href="{base}/projects" class:font-bold={page.url.pathname === `${base}/projects`}>
-							Projects
+						<a href="{base}/portfolio" class:font-bold={page.url.pathname === `${base}/portfolio`}>
+							Portfolio
 						</a>
 					</li>
 					<li class="py-2">
@@ -186,6 +206,23 @@
 		</div>
 	{/if}
 </main>
+
+<style>
+	:root { --portfolio-shift:3.5rem; }
+	/* Sidebar shift now uses negative margin to reclaim layout space (no transform gap) */
+	@media (min-width:1024px){
+		.left-sidebar.portfolio-shift { margin-left: calc(-1 * var(--portfolio-shift)); }
+		/* Fixed widths: normal pages use 56rem, portfolio uses 72rem */
+		.main-content { width:56rem; max-width:56rem; }
+		.portfolio-mode .main-content { width:72rem; max-width:72rem; }
+		/* Keep centered container controlling total span */
+		.centered-content { display:flex; }
+		.main-container { width:100%; justify-content:flex-start; }
+		.main-content { margin-left:0; }
+	}
+	/* Ensure media inside main-content never overflow */
+	.main-content img, .main-content video, .main-content canvas, .main-content figure { max-width:100%; height:auto; }
+</style>
 
 <!-- <style>
     /* Add this to ensure the transition works properly */

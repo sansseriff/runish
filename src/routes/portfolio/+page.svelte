@@ -1,0 +1,168 @@
+<script lang="ts">
+	// Filter logic
+	type Flag = 'software' | 'quantum' | 'visual';
+	interface Card {
+		title: string;
+		slug: string; // future detail page
+		flags: Flag[];
+		media: string; // background image or video path (under /static)
+		mediaType?: 'image' | 'video';
+		description: string;
+		iconFlags?: Record<Flag, string>; // optional mapping to icon asset
+	}
+
+	import { base } from '$app/paths';
+	const iconMap: Record<Flag, string> = {
+		software: `${base}/icons/software_icon.svg`,
+		quantum: `${base}/icons/quantum_icon.svg`,
+		visual: `${base}/icons/visual_icon.svg`
+	};
+
+	const cards: Card[] = [
+		{
+			title: 'Traversable wormholes – nature',
+			slug: 'traversable-wormholes',
+			flags: ['quantum', 'software', 'visual'],
+			media: `${base}/images/traversable_wormholes.png`,
+			description:
+				'Interactive figures and tooling exploring negative energy shortcuts in spacetime via quantum information thought experiments.'
+		},
+		{
+			title: 'COMPASS – a precursor to Lunaframe',
+			slug: 'compass',
+			flags: ['software', 'visual'],
+			media: `${base}/videos/feathered_peacoq.mp4`,
+			mediaType: 'video',
+			description:
+				'A design language & rendering pipeline for procedural scientific visuals later evolved into Lunaframe.'
+		},
+		{
+			title: 'Feathered PEACOQ',
+			slug: 'feathered-peacoq',
+			flags: ['quantum', 'visual'],
+			media: `${base}/videos/feathered_peacoq.mp4`,
+			mediaType: 'video',
+			description:
+				'High‑rate single photon detection visualization – pattern recognition tricks for superconducting detector signals.'
+		}
+	];
+
+	let active: Set<Flag> = $state(new Set());
+	function toggle(flag: Flag) {
+		if (active.has(flag)) active.delete(flag);
+		else active.add(flag);
+		// trigger update
+		active = new Set(active);
+	}
+
+	function shown(card: Card) {
+		if (active.size === 0) return true;
+		return card.flags.some((f) => active.has(f));
+	}
+</script>
+
+<div class="prose max-w-none w-full mx-auto mt-6 lg:pr-4 portfolio-wrapper">
+	<div class="border-y lg:border-t-0 border-gray-300 dark:border-gray-700 p-6 relative">
+		<h2 class="font-serif font-medium lg:h-4 flex flex-col lg:flex-row gap-2">
+			<span>Built with code, built with colors</span>
+		</h2>
+		<p class="font-serif font-medium text-sm dark:text-gray-400 max-w-prose">
+			Call me a computational artist, or an artistic scientist and engineer. My projects span the
+			space of design, computation, and aesthetics.
+		</p>
+		<div
+			class="intersection-diamond absolute size-2 z-10 rounded-[1px] rotate-45 border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 left-[-4.5px] bottom-[-4.5px]"
+		></div>
+	</div>
+
+	<div class="px-4 py-4 lg:px-6">
+		<div class="text-xs font-serif font-medium flex items-center gap-2 flex-wrap">
+			<span class="opacity-70">Filter by flag:</span>
+			{#each ['software', 'quantum', 'visual'] as flag}
+				<button
+					class="px-2 py-1 rounded-sm border transition-colors duration-200 focus-visible:outline-none focus-visible:ring ring-offset-1 ring-gray-400 dark:ring-gray-600
+          {active.has(flag as Flag)
+						? 'bg-gray-900 text-gray-50 dark:bg-gray-100 dark:text-gray-900 border-gray-900 dark:border-gray-100'
+						: 'border-gray-300 dark:border-gray-700 hover:border-gray-500'}"
+					onclick={() => toggle(flag as Flag)}>◇ {flag}</button
+				>
+			{/each}
+			{#if active.size > 0}
+				<button
+					class="ml-2 text-[10px] tracking-wide uppercase underline"
+					onclick={() => (active = new Set())}>reset</button
+				>
+			{/if}
+		</div>
+	</div>
+
+	<div class="space-y-6 pb-12 px-2 md:px-0">
+		{#each cards as c}
+			{#if shown(c)}
+				<a href={`${base}/portfolio/${c.slug}`} class="block group">
+					<div
+						class="group border border-gray-300 dark:border-gray-700 relative overflow-hidden rounded-sm backdrop-blur-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-mint-500 card w-full"
+					>
+						{#if c.mediaType === 'video'}
+							<video
+								src={c.media}
+								autoplay
+								muted
+								loop
+								playsinline
+								class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300"
+							></video>
+						{:else}
+							<img
+								src={c.media}
+								alt={c.title}
+								class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300"
+								loading="lazy"
+							/>
+						{/if}
+						<div
+							class="absolute inset-0 bg-gradient-to-b from-white/70 via-white/40 to-white/80 dark:from-black/60 dark:via-black/40 dark:to-black/70 pointer-events-none"
+						></div>
+						<div class="relative p-4 sm:p-6 flex flex-col gap-2">
+							<h3
+								class="font-serif font-medium text-base md:text-lg flex flex-wrap items-center gap-3"
+							>
+								<span>{c.title}</span>
+								<span class="flex gap-2 items-center">
+									{#each c.flags as f}
+										<img
+											src={iconMap[f]}
+											alt={f}
+											class="size-4 opacity-70 group-hover:opacity-100 transition-opacity"
+											loading="lazy"
+										/>
+									{/each}
+								</span>
+							</h3>
+							<p
+								class="text-[12px] md:text-sm leading-snug max-w-prose pr-4 opacity-90 dark:opacity-80"
+							>
+								{c.description}
+							</p>
+						</div>
+					</div>
+				</a>
+			{/if}
+		{/each}
+	</div>
+</div>
+
+<style>
+	.card {
+		min-height: 15rem;
+	}
+	@media (min-width: 1024px) {
+		.card {
+			min-height: 17rem;
+		}
+	}
+	/* Align diamond further left to meet shifted sidebar line */
+	.intersection-diamond {
+		left: -4.5px;
+	}
+</style>
