@@ -13,6 +13,7 @@
 
 	import { base } from '$app/paths';
 	import SectionHeader from '$lib/SectionHeader.svelte';
+	import PageWrapper from '$lib/PageWrapper.svelte';
 	const iconMap: Record<Flag, string> = {
 		software: `${base}/icons/software_icon.svg`,
 		quantum: `${base}/icons/quantum_icon.svg`,
@@ -60,90 +61,97 @@
 	}
 </script>
 
-<div class="prose max-w-none w-full mx-auto mt-6 lg:pr-4 portfolio-wrapper">
-	<SectionHeader>
-		<h2 class="font-serif font-medium lg:h-4 flex flex-col lg:flex-row gap-2 dark:[color:#99a1ad]">
-			<span class="dark:text-gray-100">Built with code, built with colors</span>
-		</h2>
-		<p class="font-serif font-medium text-sm dark:text-gray-400 max-w-prose">
-			Call me a computational artist, or an artistic scientist and engineer. My projects span the
-			space of design, computation, and aesthetics.
-		</p>
-	</SectionHeader>
+<PageWrapper>
+	<div class="space-y-6">
+		<SectionHeader>
+			<h2
+				class="font-serif font-medium lg:h-4 flex flex-col lg:flex-row gap-2 dark:[color:#99a1ad]"
+			>
+				<span class="dark:text-gray-100">Built with code, built with colors</span>
+			</h2>
+			<p class="font-serif font-medium text-sm dark:text-gray-400 max-w-prose">
+				Call me a computational artist, or an artistic scientist and engineer. My projects span the
+				space of design, computation, and aesthetics.
+			</p>
+		</SectionHeader>
 
-	<div class="px-4 py-4 lg:px-6">
-		<div class="text-xs font-serif font-medium flex items-center gap-2 flex-wrap">
-			<span class="opacity-70">Filter by flag:</span>
-			{#each ['software', 'quantum', 'visual'] as flag}
-				<button
-					class="px-2 py-1 rounded-sm border transition-colors duration-200 focus-visible:outline-none focus-visible:ring ring-offset-1 ring-gray-400 dark:ring-gray-600
+		<!-- Subtle divider -->
+		<div class="border-t border-grid opacity-50 mx-6 lg:mx-8"></div>
+
+		<div class="px-4 py-4 lg:px-6">
+			<div class="text-xs font-serif font-medium flex items-center gap-2 flex-wrap">
+				<span class="opacity-70">Filter by flag:</span>
+				{#each ['software', 'quantum', 'visual'] as flag}
+					<button
+						class="px-2 py-1 rounded-sm border transition-colors duration-200 focus-visible:outline-none focus-visible:ring ring-offset-1 ring-gray-400 dark:ring-gray-600 shadow-soft
           {active.has(flag as Flag)
-						? 'bg-gray-900 text-gray-50 dark:bg-gray-100 dark:text-gray-900 border-gray-900 dark:border-gray-100'
-						: 'border-gray-300 dark:border-gray-700 hover:border-gray-500'}"
-					onclick={() => toggle(flag as Flag)}>◇ {flag}</button
-				>
+							? 'bg-gray-900 text-gray-50 dark:bg-gray-100 dark:text-gray-900 border-gray-900 dark:border-gray-100'
+							: 'border-grid hover:border-gray-500'}"
+						onclick={() => toggle(flag as Flag)}>◇ {flag}</button
+					>
+				{/each}
+				{#if active.size > 0}
+					<button
+						class="ml-2 text-[10px] tracking-wide uppercase underline opacity-70 hover:opacity-100"
+						onclick={() => (active = new Set())}>reset</button
+					>
+				{/if}
+			</div>
+		</div>
+
+		<div class="m-7 my-0 space-y-6 pb-12 px-2 md:px-0">
+			{#each cards as c}
+				{#if shown(c)}
+					<a href={`${base}/portfolio/${c.slug}`} class="block group">
+						<div
+							class="group relative overflow-hidden rounded-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-mint-500 card w-full shadow-soft border border-grid"
+						>
+							{#if c.mediaType === 'video'}
+								<video
+									src={c.media}
+									autoplay
+									muted
+									loop
+									playsinline
+									class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300"
+								></video>
+							{:else}
+								<img
+									src={c.media}
+									alt={c.title}
+									class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300"
+									loading="lazy"
+								/>
+							{/if}
+							<div class="relative p-4 sm:p-6 flex flex-col gap-2">
+								<h3
+									class="font-serif font-medium text-base md:text-lg flex flex-wrap items-center gap-3"
+								>
+									<span>{c.title}</span>
+									<span class="flex gap-2 items-center">
+										{#each c.flags as f}
+											<img
+												src={iconMap[f]}
+												alt={f}
+												class="size-4 opacity-70 group-hover:opacity-100 transition-opacity"
+												loading="lazy"
+											/>
+										{/each}
+									</span>
+								</h3>
+								<p
+									class="text-[12px] md:text-sm leading-snug max-w-prose pr-4 opacity-90 dark:opacity-80"
+								>
+									{c.description}
+								</p>
+							</div>
+						</div>
+					</a>
+				{/if}
 			{/each}
-			{#if active.size > 0}
-				<button
-					class="ml-2 text-[10px] tracking-wide uppercase underline"
-					onclick={() => (active = new Set())}>reset</button
-				>
-			{/if}
 		</div>
 	</div>
-
-	<div class=" m-7 my-0 space-y-6 pb-12 px-2 md:px-0">
-		{#each cards as c}
-			{#if shown(c)}
-				<a href={`${base}/portfolio/${c.slug}`} class="block group">
-					<div
-						class="group relative overflow-hidden rounded-sm backdrop-blur-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-mint-500 card w-full"
-					>
-						{#if c.mediaType === 'video'}
-							<video
-								src={c.media}
-								autoplay
-								muted
-								loop
-								playsinline
-								class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300"
-							></video>
-						{:else}
-							<img
-								src={c.media}
-								alt={c.title}
-								class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300"
-								loading="lazy"
-							/>
-						{/if}
-						<div class="relative p-4 sm:p-6 flex flex-col gap-2">
-							<h3
-								class="font-serif font-medium text-base md:text-lg flex flex-wrap items-center gap-3"
-							>
-								<span>{c.title}</span>
-								<span class="flex gap-2 items-center">
-									{#each c.flags as f}
-										<img
-											src={iconMap[f]}
-											alt={f}
-											class="size-4 opacity-70 group-hover:opacity-100 transition-opacity"
-											loading="lazy"
-										/>
-									{/each}
-								</span>
-							</h3>
-							<p
-								class="text-[12px] md:text-sm leading-snug max-w-prose pr-4 opacity-90 dark:opacity-80"
-							>
-								{c.description}
-							</p>
-						</div>
-					</div>
-				</a>
-			{/if}
-		{/each}
-	</div>
-</div>
+</PageWrapper>
 
 <style>
 	.card {

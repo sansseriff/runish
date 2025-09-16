@@ -23,6 +23,40 @@
 
 @theme {
 	--color-mint-500: rgb(0, 255, 150);
+
+	/* Enhanced color palette inspired by Zed */
+	--color-blue-50: hsl(210, 40%, 98%);
+	--color-blue-100: hsl(210, 40%, 94%);
+	--color-blue-200: hsl(213, 27%, 84%);
+	--color-blue-300: hsl(215, 25%, 65%);
+	--color-blue-400: hsl(217, 19%, 45%);
+	--color-blue-500: hsl(219, 14%, 28%);
+	--color-blue-600: hsl(220, 13%, 18%);
+	--color-blue-700: hsl(218, 13%, 12%);
+	--color-blue-800: hsl(218, 13%, 8%);
+	--color-blue-900: hsl(218, 13%, 6%);
+
+	/* Cream/warm tones */
+	--color-cream-50: hsl(45, 23%, 97%);
+	--color-cream-100: hsl(45, 23%, 95%);
+	--color-cream-200: hsl(45, 18%, 88%);
+	--color-cream-300: hsl(45, 15%, 75%);
+
+	/* Neutral grays with subtle warmth */
+	--color-offgray-50: hsl(210, 6%, 97%);
+	--color-offgray-100: hsl(210, 6%, 93%);
+	--color-offgray-200: hsl(210, 6%, 83%);
+	--color-offgray-300: hsl(210, 6%, 73%);
+	--color-offgray-400: hsl(210, 6%, 63%);
+	--color-offgray-500: hsl(210, 6%, 53%);
+	--color-offgray-600: hsl(210, 6%, 43%);
+	--color-offgray-700: hsl(210, 6%, 33%);
+	--color-offgray-800: hsl(210, 6%, 23%);
+	--color-offgray-900: hsl(210, 6%, 13%);
+
+	/* Accent color - sophisticated blue */
+	--color-accent-blue: hsl(219, 93%, 40%);
+	--color-text-accent: hsl(219, 93%, 40%);
 }
 
 @layer base {
@@ -50,5 +84,222 @@
 	li {
 		margin-top: 0.4rem;
 		margin-bottom: 0.4rem;
+	}
+
+	/* Enhanced base styling */
+	body {
+		background-color: hsl(45, 23%, 97%);
+		color: hsl(210, 6%, 33%);
+	}
+
+	@media (prefers-color-scheme: dark) {
+		body {
+			background-color: hsl(218, 13%, 6%);
+			color: hsl(210, 6%, 73%);
+		}
+	}
+}
+
+@layer utilities {
+	/* Grid pattern utilities inspired by Zed */
+	.grid-pattern {
+		background-image:
+			linear-gradient(hsla(213, 27%, 84%, 0.08) 1px, transparent 1px),
+			linear-gradient(90deg, hsla(213, 27%, 84%, 0.08) 1px, transparent 1px);
+		background-size: 16px 16px;
+		opacity: 1;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.grid-pattern {
+			background-image:
+				linear-gradient(hsla(215, 25%, 65%, 0.04) 1px, transparent 1px),
+				linear-gradient(90deg, hsla(215, 25%, 65%, 0.04) 1px, transparent 1px);
+			opacity: 1;
+		}
+	}
+
+	/* Diagonal lines pattern */
+	.diagonal-pattern {
+		background-image: repeating-linear-gradient(
+			45deg,
+			transparent,
+			transparent 6px,
+			hsla(215, 25%, 65%, 0.1) 6px,
+			hsla(215, 25%, 65%, 0.1) 7px
+		);
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.diagonal-pattern {
+			background-image: repeating-linear-gradient(
+				45deg,
+				transparent,
+				transparent 6px,
+				hsla(217, 19%, 45%, 0.09) 6px,
+				hsla(217, 19%, 45%, 0.09) 7px
+			);
+		}
+	}
+
+	/* Enhanced border styles */
+	.border-grid {
+		border-color: hsla(213, 27%, 84%, 0.4);
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.border-grid {
+			border-color: hsla(215, 25%, 65%, 0.1);
+		}
+	}
+
+	/* Sophisticated shadows */
+	.shadow-soft {
+		box-shadow:
+			0 1px 3px hsla(218, 13%, 6%, 0.06),
+			0 1px 2px hsla(218, 13%, 6%, 0.1);
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.shadow-soft {
+			box-shadow:
+				0 1px 3px hsla(0, 0%, 0%, 0.3),
+				0 1px 2px hsla(0, 0%, 0%, 0.2);
+		}
+	}
+
+	/* Noise texture overlay - simplified approach */
+	.noise-texture {
+		position: relative;
+	}
+
+	.noise-texture::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background:
+			radial-gradient(
+				circle at 25% 25%,
+				transparent 2%,
+				hsla(0, 0%, 0%, 0.02) 2.5%,
+				transparent 3%
+			),
+			radial-gradient(
+				circle at 75% 75%,
+				transparent 2%,
+				hsla(0, 0%, 0%, 0.01) 2.5%,
+				transparent 3%
+			),
+			radial-gradient(
+				circle at 45% 55%,
+				transparent 1.5%,
+				hsla(0, 0%, 0%, 0.015) 2%,
+				transparent 2.5%
+			);
+		background-size:
+			20px 20px,
+			25px 25px,
+			15px 15px;
+		background-position:
+			0 0,
+			5px 5px,
+			10px 10px;
+		opacity: 0.8;
+		z-index: -1;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.noise-texture::before {
+			background:
+				radial-gradient(
+					circle at 25% 25%,
+					transparent 2%,
+					hsla(0, 0%, 100%, 0.01) 2.5%,
+					transparent 3%
+				),
+				radial-gradient(
+					circle at 75% 75%,
+					transparent 2%,
+					hsla(0, 0%, 100%, 0.008) 2.5%,
+					transparent 3%
+				),
+				radial-gradient(
+					circle at 45% 55%,
+					transparent 1.5%,
+					hsla(0, 0%, 100%, 0.012) 2%,
+					transparent 2.5%
+				);
+			opacity: 0.6;
+		}
+	}
+
+	/* Backdrop with subtle gradient */
+	.backdrop-soft {
+		background: linear-gradient(180deg, hsla(45, 23%, 97%, 0.8) 0%, hsla(210, 40%, 94%, 0.4) 100%);
+		backdrop-filter: blur(8px);
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.backdrop-soft {
+			background: linear-gradient(
+				180deg,
+				hsla(218, 13%, 8%, 0.95) 0%,
+				hsla(218, 13%, 6%, 0.8) 100%
+			);
+		}
+	}
+
+	/* Corner decorative elements like Zed */
+	.corner-decoration {
+		position: relative;
+	}
+
+	.corner-decoration::before {
+		content: '';
+		position: absolute;
+		width: 8px;
+		height: 8px;
+		background: hsl(45, 23%, 97%);
+		border: 1px solid hsl(213, 27%, 84%);
+		border-radius: 1px;
+		transform: rotate(45deg);
+		z-index: 10;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.corner-decoration::before {
+			background: hsl(218, 13%, 6%);
+			border-color: hsla(215, 25%, 65%, 0.2);
+		}
+	}
+
+	/* Corner positions */
+	.corner-tl::before {
+		top: -4.5px;
+		left: -4.5px;
+	}
+	.corner-tr::before {
+		top: -4.5px;
+		right: -4.5px;
+	}
+	.corner-bl::before {
+		bottom: -4.5px;
+		left: -4.5px;
+	}
+	.corner-br::before {
+		bottom: -4.5px;
+		right: -4.5px;
+	}
+
+	/* Text accent utilities */
+	.text-accent-blue {
+		color: hsl(219, 93%, 40%);
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.text-accent-blue {
+			color: hsl(219, 93%, 55%);
+		}
 	}
 }

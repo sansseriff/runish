@@ -27,42 +27,36 @@
 	}
 </script>
 
-<main
-	class="min-h-screen bg-gray-50 dark:bg-gray-900"
->
+<main class="min-h-screen grid-pattern noise-texture transition-colors duration-300">
 	<div
 		class="centered-content max-w-300 mx-auto transition-all"
 		class:portfolio-mode={page.url.pathname.startsWith(`${base}/portfolio`)}
 	>
 		<!-- Mobile header with hamburger -->
 		<div
-			class="sm:hidden p-4
+			class="sm:hidden p-4 border-b border-grid backdrop-soft
                     flex items-center justify-between"
 		>
 			<div class="logo inline-flex">
-				<h1 class="font-serif font-medium dark:text-gray-400">Something Runi</h1>
+				<h1 class="font-serif font-medium">Something Runi</h1>
 				<h1 class="text-gray-400 dark:text-gray-400">.</h1>
-				<h1 class="font-serif font-medium dark:text-gray-400">sh</h1>
+				<h1 class="font-serif font-medium">sh</h1>
 			</div>
 
 			<button
 				onclick={toggleMenu}
-				class="p-2
-                          hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800
-                          cursor-pointer"
+				class="p-2 hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer rounded-sm transition-colors"
 			>
 				<Diamond size={24} weight={'regular'} color={'gray'}></Diamond>
 			</button>
 		</div>
 
 		<!-- Container with three columns -->
-		<div
-			class="main-container flex flex-col lg:flex-row w-full"
-		>
+		<div class="main-container flex flex-col lg:flex-row w-full">
 			<!-- Left sidebar -->
 			<div
 				class="left-sidebar hidden sm:block w-full lg:w-50 p-4
-						lg:border-r border-gray-300 dark:border-gray-700 lg:flex lg:flex-col lg:justify-between lg:items-end
+						border-grid lg:border-r lg:flex lg:flex-col lg:justify-between lg:items-end
 						sticky top-0 lg:h-screen transition-all duration-300"
 				class:portfolio-shift={page.url.pathname.startsWith(`${base}/portfolio`)}
 			>
@@ -71,7 +65,7 @@
 						class="flex flex-row lg:flex-col
 								 justify-around lg:justify-start lg:space-y-4
 								 lg:text-right
-								 font-serif font-medium dark:text-gray-400"
+								 font-serif font-medium opacity-80 hover:opacity-100 transition-opacity"
 					>
 						<li>
 							<a
@@ -144,31 +138,44 @@
 					</ul>
 				</div>
 
-				<div class="hidden lg:flex lg:flex-col lg:items-end lg:space-y-4 lg:mt-auto">
+				<div
+					class="hidden lg:flex lg:flex-col lg:items-end lg:space-y-4 lg:mt-auto opacity-60 hover:opacity-100 transition-opacity"
+				>
 					<a href="https://bsky.app/profile/sansseriff.bsky.social">
-						<BlueSkyLogo cls="text-gray-400 hover:text-gray-600"></BlueSkyLogo>
+						<BlueSkyLogo cls="text-current hover:text-accent-blue transition-colors"></BlueSkyLogo>
 					</a>
 					<a href="https://www.instagram.com/andstermueller/" class="cursor-pointer">
-						<InstagramLogo size={24} weight={'regular'} class="text-gray-400 hover:text-gray-600"
+						<InstagramLogo
+							size={24}
+							weight={'regular'}
+							class="text-current hover:text-accent-blue transition-colors"
 						></InstagramLogo>
 					</a>
 					<a
 						href="https://scholar.google.com/citations?user=FRQbz4sAAAAJ&hl=en"
 						class="cursor-pointer"
 					>
-						<GraduationCap size={24} weight={'regular'} class="text-gray-400 hover:text-gray-600"
+						<GraduationCap
+							size={24}
+							weight={'regular'}
+							class="text-current hover:text-accent-blue transition-colors"
 						></GraduationCap>
 					</a>
 
 					<a href="https://github.com/sansseriff">
-						<GithubLogo size={24} weight={'regular'} class="text-gray-400 hover:text-gray-600"
+						<GithubLogo
+							size={24}
+							weight={'regular'}
+							class="text-current hover:text-accent-blue transition-colors"
 						></GithubLogo>
 					</a>
 				</div>
 			</div>
 
 			<!-- Main content column - Slot for page content -->
-			<div class="main-content w-full lg:w-200 lg:mt-6 sm:flex m:flex transition-all">
+			<div
+				class="main-content w-full lg:w-200 lg:mt-0 sm:flex m:flex transition-all diagonal-pattern"
+			>
 				{@render children()}
 			</div>
 		</div>
@@ -178,7 +185,7 @@
 	{#if menuOpen}
 		<div
 			class="lg:hidden fixed inset-0 z-40
-				  bg-black/30"
+				  backdrop-blur-sm bg-black/20"
 			role="button"
 			tabindex="0"
 			onclick={toggleMenu}
@@ -187,36 +194,31 @@
 		></div>
 		<div
 			class="lg:hidden fixed bottom-0 left-0 right-0 z-50
-                  bg-white shadow-lg
-                  transition-transform duration-300 ease-in-out"
+                  backdrop-soft shadow-soft border-t border-grid
+                  transition-transform duration-300 ease-in-out noise-texture"
 			class:translate-y-0={menuOpen}
 			class:translate-y-full={!menuOpen}
 		>
-			<div
-				class="flex justify-between items-center p-4
-                        border-b border-gray-300 dark:border-gray-700"
-			>
+			<div class="flex justify-between items-center p-4 border-b border-grid">
 				<h2 class="font-serif font-bold">Menu</h2>
 				<button
 					onclick={toggleMenu}
-					class="p-2
-                              hover:bg-gray-100
-                              cursor-pointer"
+					class="p-2 hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer rounded-sm transition-colors"
 				>
 					<X size={24} weight={'regular'}></X>
 				</button>
 			</div>
 			<div class="p-4">
 				<ul class="space-y-4 font-serif font-medium">
-					<li class="py-2 border-b border-gray-300 dark:border-gray-700">
+					<li class="py-2 border-b border-grid">
 						<a href="{base}/" class:font-bold={page.url.pathname === `${base}/`}> Home </a>
 					</li>
-					<li class="py-2 border-b border-gray-300 dark:border-gray-700">
+					<li class="py-2 border-b border-grid">
 						<a href="{base}/about" class:font-bold={page.url.pathname === `${base}/about`}>
 							About
 						</a>
 					</li>
-					<li class="py-2 border-b border-gray-300 dark:border-gray-700">
+					<li class="py-2 border-b border-grid">
 						<a href="{base}/portfolio" class:font-bold={page.url.pathname === `${base}/portfolio`}>
 							Portfolio
 						</a>
@@ -263,7 +265,8 @@
 			width: 56rem;
 			max-width: 56rem;
 			/* custom easing: slow start, accelerate, gentle end */
-			transition: width 650ms cubic-bezier(0.55, 0.06, 0.25, 0.95),
+			transition:
+				width 650ms cubic-bezier(0.55, 0.06, 0.25, 0.95),
 				max-width 650ms cubic-bezier(0.55, 0.06, 0.25, 0.95);
 		}
 		.portfolio-mode .main-content {
