@@ -1,19 +1,13 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+	import SectionHeader from '$lib/SectionHeader.svelte';
 	const cvHref = `${base}/AMueller_CV_MayX_2025.pdf`;
 	const resumeHref = `${base}/AMueller_CV_MayX_2025.pdf`; // placeholder points to CV for now
 	const profileSrc = `${base}/images/profile_picture.png`;
 </script>
 
 <div class="prose max-w-none w-full mx-auto mt-6 lg:pr-4">
-	<div class="border-y lg:border-t-0 border-gray-300 dark:border-gray-700 p-6 relative">
-		<h2 class="font-serif font-medium lg:h-4 justify-end flex-col block dark:text-gray-100">
-			About
-		</h2>
-		<div
-			class="absolute size-2 z-10 rounded-[1px] rotate-45 border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 left-[-4.5px] bottom-[-4.5px]"
-		></div>
-	</div>
+	<SectionHeader title="About" />
 
 	<div class="p-6 lg:p-8 flex flex-col gap-8">
 		<div class="flex flex-col sm:flex-row gap-8 items-start">

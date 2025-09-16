@@ -1,8 +1,7 @@
 ---
 layout: blog
+title: First blog post
 ---
-
-# Hello this is a svelte blog post
 
 And this is some normal text
 

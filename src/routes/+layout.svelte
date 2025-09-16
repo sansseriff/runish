@@ -28,11 +28,10 @@
 </script>
 
 <main
-	class="min-h-screen h-screen
-             bg-gray-50 overflow-y-auto dark:bg-gray-900"
+	class="min-h-screen bg-gray-50 dark:bg-gray-900"
 >
 	<div
-		class="centered-content max-w-300 mx-auto h-full transition-all"
+		class="centered-content max-w-300 mx-auto transition-all"
 		class:portfolio-mode={page.url.pathname.startsWith(`${base}/portfolio`)}
 	>
 		<!-- Mobile header with hamburger -->
@@ -58,14 +57,13 @@
 
 		<!-- Container with three columns -->
 		<div
-			class="main-container flex-1
-                      flex flex-col lg:flex-row"
+			class="main-container flex flex-col lg:flex-row w-full"
 		>
 			<!-- Left sidebar -->
 			<div
 				class="left-sidebar hidden sm:block w-full lg:w-50 p-4
-							lg:border-r border-gray-300 dark:border-gray-700 lg:flex lg:flex-col lg:justify-between lg:items-end
-							sticky top-0 lg:h-screen transition-all duration-300"
+						lg:border-r border-gray-300 dark:border-gray-700 lg:flex lg:flex-col lg:justify-between lg:items-end
+						sticky top-0 lg:h-screen transition-all duration-300"
 				class:portfolio-shift={page.url.pathname.startsWith(`${base}/portfolio`)}
 			>
 				<div class="lg:mt-48">
@@ -253,21 +251,24 @@
 		scrollbar-gutter: stable both-edges;
 	}
 	:root {
-		--portfolio-shift: 3.5rem;
+		--portfolio-shift: 10rem;
 	}
 	/* Sidebar shift now uses negative margin to reclaim layout space (no transform gap) */
 	@media (min-width: 1024px) {
 		.left-sidebar.portfolio-shift {
 			margin-left: calc(-1 * var(--portfolio-shift));
 		}
-		/* Fixed widths: normal pages use 56rem, portfolio uses 72rem */
+		/* Fixed widths: normal pages use 56rem, portfolio uses 85rem */
 		.main-content {
 			width: 56rem;
 			max-width: 56rem;
+			/* custom easing: slow start, accelerate, gentle end */
+			transition: width 650ms cubic-bezier(0.55, 0.06, 0.25, 0.95),
+				max-width 650ms cubic-bezier(0.55, 0.06, 0.25, 0.95);
 		}
 		.portfolio-mode .main-content {
-			width: 72rem;
-			max-width: 72rem;
+			width: 85rem;
+			max-width: 85rem;
 		}
 		/* Keep centered container controlling total span */
 		.centered-content {

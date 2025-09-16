@@ -12,6 +12,7 @@
 	}
 
 	import { base } from '$app/paths';
+	import SectionHeader from '$lib/SectionHeader.svelte';
 	const iconMap: Record<Flag, string> = {
 		software: `${base}/icons/software_icon.svg`,
 		quantum: `${base}/icons/quantum_icon.svg`,
@@ -23,7 +24,7 @@
 			title: 'Traversable wormholes – nature',
 			slug: 'traversable-wormholes',
 			flags: ['quantum', 'software', 'visual'],
-			media: `${base}/images/traversable_wormholes.png`,
+			media: `${base}/images/traversable_wormholes.jpeg`,
 			description:
 				'Interactive figures and tooling exploring negative energy shortcuts in spacetime via quantum information thought experiments.'
 		},
@@ -60,18 +61,15 @@
 </script>
 
 <div class="prose max-w-none w-full mx-auto mt-6 lg:pr-4 portfolio-wrapper">
-	<div class="border-y lg:border-t-0 border-gray-300 dark:border-gray-700 p-6 relative">
-		<h2 class="font-serif font-medium lg:h-4 flex flex-col lg:flex-row gap-2 dark:text-gray-100">
+	<SectionHeader>
+		<h2 class="font-serif font-medium lg:h-4 flex flex-col lg:flex-row gap-2 dark:[color:#99a1ad]">
 			<span class="dark:text-gray-100">Built with code, built with colors</span>
 		</h2>
 		<p class="font-serif font-medium text-sm dark:text-gray-400 max-w-prose">
 			Call me a computational artist, or an artistic scientist and engineer. My projects span the
 			space of design, computation, and aesthetics.
 		</p>
-		<div
-			class="intersection-diamond absolute size-2 z-10 rounded-[1px] rotate-45 border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 left-[-4.5px] bottom-[-4.5px]"
-		></div>
-	</div>
+	</SectionHeader>
 
 	<div class="px-4 py-4 lg:px-6">
 		<div class="text-xs font-serif font-medium flex items-center gap-2 flex-wrap">
@@ -94,7 +92,7 @@
 		</div>
 	</div>
 
-	<div class="space-y-6 pb-12 px-2 md:px-0">
+	<div class=" m-7 my-0 space-y-6 pb-12 px-2 md:px-0">
 		{#each cards as c}
 			{#if shown(c)}
 				<a href={`${base}/portfolio/${c.slug}`} class="block group">
@@ -118,9 +116,6 @@
 								loading="lazy"
 							/>
 						{/if}
-						<div
-							class="absolute inset-0 bg-gradient-to-b from-white/70 via-white/40 to-white/80 dark:from-black/60 dark:via-black/40 dark:to-black/70 pointer-events-none"
-						></div>
 						<div class="relative p-4 sm:p-6 flex flex-col gap-2">
 							<h3
 								class="font-serif font-medium text-base md:text-lg flex flex-wrap items-center gap-3"
@@ -158,9 +153,5 @@
 		.card {
 			min-height: 17rem;
 		}
-	}
-	/* Align diamond further left to meet shifted sidebar line */
-	.intersection-diamond {
-		left: -4.5px;
 	}
 </style>
