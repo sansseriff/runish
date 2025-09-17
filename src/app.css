@@ -1,6 +1,46 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
+/* @font-face {
+	font-family: __writer_1deb74;
+	src: url(/_next/static/media/179d7f9da167b110-s.p.woff2) format('woff2');
+	font-display: swap;
+	font-weight: 400;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: __writer_1deb74;
+	src: url(/_next/static/media/1041824d5f477f6b-s.p.woff2) format('woff2');
+	font-display: swap;
+	font-weight: 400;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: __writer_1deb74;
+	src: url(/_next/static/media/af04a9c2068a2eb2-s.p.woff2) format('woff2');
+	font-display: swap;
+	font-weight: 700;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: __writer_1deb74;
+	src: url(/_next/static/media/a08768ff0b9f433b-s.p.woff2) format('woff2');
+	font-display: swap;
+	font-weight: 700;
+	font-style: italic;
+} */
+
+/* diagonal-pattern noise-texture transition-colors duration-300 */
+
+body {
+	margin: 0;
+	padding: 0;
+	/* background-color: blueviolet; */
+}
+
 .lora {
 	font-family: 'Lora', serif;
 	font-optical-sizing: auto;

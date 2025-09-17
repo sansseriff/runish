@@ -21,23 +21,16 @@
 					style="margin: 0 !important;"
 					loading="lazy"
 				/>
-				<div class="font-serif text-m leading-snug space-y-4 max-w-prose opacity-90 mt-0">
+				<div class="font-serif text-m leading-snug space-y-4 max-w-prose opacity-90 mt-0 lg:w-full">
 					<p class="mt-0">
-						My name's Andrew Mueller. I did my undergrad in physics at UC San Diego, and my PhD in
-						applied physics at Caltech.
+						I'm Andrew Mueller. I have a physics degree from UC San Diego and a PhD in applied
+						physics from Caltech. I currently work at JPL's microdevices laboratory developing and
+						testing superconducting detectors.
 					</p>
 					<p>
-						Since then, I've been working at the JPL microdevices laboratory on superconducting
-						detector development and testing.
-					</p>
-					<p>
-						I have broad interests centered around technical research and communication. I believe
-						science publishing and communication must radically change over the next decade to
-						inspire future scientists and help them explain their work.
-					</p>
-					<p>
-						I'm developing a software suite in pursuit of this goal: enable scientists to create
-						complex stories and visuals to show the world what they do.
+						I'm passionate about transforming how scientists communicate their work. To that end,
+						I'm building software tools that help scientists create compelling stories and visuals
+						to share their research with the world.
 					</p>
 				</div>
 			</div>

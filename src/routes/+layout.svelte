@@ -48,7 +48,7 @@
 
 <main class="min-h-screen diagonal-pattern noise-texture transition-colors duration-300">
 	<div
-		class="centered-content max-w-260 mx-auto transition-all"
+		class="centered-content w-max lg:mx-auto md:m-auto transition-all duration-1000"
 		class:portfolio-mode={page.url.pathname.startsWith(`${base}/portfolio`)}
 	>
 		<!-- Mobile header with hamburger -->
@@ -71,13 +71,12 @@
 		</div>
 
 		<!-- Container with three columns -->
-		<div class="main-container flex flex-col lg:flex-row w-full lg:pb-2">
+		<div class="main-container flex flex-col lg:flex-row w-full lg:pb-0">
 			<!-- Left sidebar -->
 			<div
-				class="left-sidebar hidden sm:block w-full lg:w-40
+				class="left-sidebar hidden sm:block w-full lg:flex-none
 						border-grid lg:border-r lg:border-l lg:flex lg:flex-col lg:justify-between lg:items-end
 						sticky top-0 lg:h-screen transition-all duration-300"
-				class:portfolio-shift={page.url.pathname.startsWith(`${base}/portfolio`)}
 			>
 				<div class="block lg:h-42 w-full lg:border-b border-grid"></div>
 				<div class="block">
@@ -194,12 +193,12 @@
 
 			<!-- Main content column - Slot for page content -->
 			<div
-				class="main-content main-content-with-noise lg:w-full lg:mt-0 sm:flex m:flex transition-all bg-cream-50 dark:bg-[hsl(218,_13%,_8%)]"
+				class="main-content main-content-with-noise sm:m-auto lg:m-auto md:m-auto lg:w-full lg:mt-0 sm:flex m:flex transition-all bg-cream-50 dark:bg-[hsl(218,_13%,_8%)]"
 			>
 				{@render children()}
 			</div>
 			<div
-				class="right-sidebar hidden sm:block w-full lg:w-45
+				class="right-sidebar md:none hidden sm:block lg:flex-none
 						border-grid lg:border-r lg:border-l lg:flex lg:flex-col lg:justify-between lg:items-end
 						sticky top-0 lg:h-screen transition-all duration-300"
 			></div>
@@ -294,40 +293,49 @@
 
 <style>
 	:global(html),
-	:global(body) {
-		scrollbar-gutter: stable both-edges;
+	:global(main) {
+		scrollbar-gutter: stable;
 	}
 	:root {
-		--portfolio-shift: 10rem;
+		--sidebar-width: 10rem; /* base width each sidebar at large screens */
+		--layout-max-width: 95vw; /* target span in portfolio mode */
+		--main-width-default: 56rem; /* normal page main width */
 	}
 	/* Sidebar shift now uses negative margin to reclaim layout space (no transform gap) */
 	@media (min-width: 1024px) {
-		.left-sidebar.portfolio-shift {
-			margin-left: calc(-1 * var(--portfolio-shift));
-		}
-		/* Fixed widths: normal pages use 56rem, portfolio uses 85rem */
-		.main-content {
-			width: 56rem;
-			max-width: 56rem;
-			/* custom easing: slow start, accelerate, gentle end */
-			transition:
-				width 650ms cubic-bezier(0.55, 0.06, 0.25, 0.95),
-				max-width 650ms cubic-bezier(0.55, 0.06, 0.25, 0.95);
-		}
-		.portfolio-mode .main-content {
-			width: 85rem;
-			max-width: 85rem;
-		}
-		/* Keep centered container controlling total span */
+		/* Large screen flex layout adjustments */
 		.centered-content {
-			display: flex;
+			/* center the total layout block; we'll cap width below */
+			max-width: calc(var(--main-width-default) + (2 * var(--sidebar-width)));
+		}
+		.centered-content.portfolio-mode {
+			/* In portfolio mode allow expansion up to 95vw */
+			max-width: var(--layout-max-width);
 		}
 		.main-container {
-			width: 100%;
-			justify-content: flex-start;
+			display: flex;
+		}
+		.left-sidebar,
+		.right-sidebar {
+			width: var(--sidebar-width);
+			min-width: var(--sidebar-width);
+			flex: 0 0 var(--sidebar-width);
 		}
 		.main-content {
-			margin-left: 0;
+			/* Default fixed width main */
+			width: var(--main-width-default);
+			max-width: var(--main-width-default);
+			flex: 0 0 var(--main-width-default);
+			transition:
+				flex-basis 850ms cubic-bezier(0.55, 0.06, 0.25, 0.95),
+				max-width 850ms cubic-bezier(0.55, 0.06, 0.25, 0.95),
+				width 850ms cubic-bezier(0.55, 0.06, 0.25, 0.95);
+		}
+		.portfolio-mode .main-content {
+			/* Take remaining space after two sidebars within max layout width */
+			flex: 1 1 auto;
+			width: auto;
+			max-width: calc(var(--layout-max-width) - (2 * var(--sidebar-width)));
 		}
 	}
 	/* Ensure media inside main-content never overflow */
