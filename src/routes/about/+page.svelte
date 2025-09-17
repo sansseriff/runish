@@ -2,6 +2,7 @@
 	import { base } from '$app/paths';
 	import SectionHeader from '$lib/SectionHeader.svelte';
 	import PageWrapper from '$lib/PageWrapper.svelte';
+	import Page from '../+page.svelte';
 	const cvHref = `${base}/AMueller_CV_MayX_2025.pdf`;
 	const resumeHref = `${base}/AMueller_CV_MayX_2025.pdf`; // placeholder points to CV for now
 	const profileSrc = `${base}/images/profile_picture.png`;
@@ -20,8 +21,8 @@
 					style="margin: 0 !important;"
 					loading="lazy"
 				/>
-				<div class="font-serif text-m leading-snug space-y-4 max-w-prose opacity-90">
-					<p>
+				<div class="font-serif text-m leading-snug space-y-4 max-w-prose opacity-90 mt-0">
+					<p class="mt-0">
 						My name's Andrew Mueller. I did my undergrad in physics at UC San Diego, and my PhD in
 						applied physics at Caltech.
 					</p>
@@ -40,51 +41,47 @@
 					</p>
 				</div>
 			</div>
-
-			<!-- Subtle divider -->
-			<div class="border-t border-grid opacity-50 mx-2"></div>
-
-			<div class="py-4">
-				<ul class="flex flex-col sm:flex-row flex-wrap gap-6 justify-center font-serif text-sm">
-					<li>
-						<a
-							href={cvHref}
-							class="hover:underline hover:text-accent-blue transition-colors duration-200"
-							>◇ Curriculum Vitae</a
-						>
-					</li>
-					<li>
-						<a
-							href={resumeHref}
-							class="hover:underline hover:text-accent-blue transition-colors duration-200"
-							>◇ Resume</a
-						>
-					</li>
-					<li>
-						<a
-							href="#about-site"
-							class="hover:underline hover:text-accent-blue transition-colors duration-200"
-							>◇ About this website</a
-						>
-					</li>
-				</ul>
-			</div>
-
-			<!-- Subtle divider -->
-			<div class="border-t border-grid opacity-50 mx-2"></div>
-
-			<div id="about-site" class="font-serif text-xs leading-relaxed max-w-prose opacity-80">
-				<h3 class="font-serif font-medium mb-3 text-base opacity-90">About this website</h3>
-				<p>
-					This site is built with SvelteKit, Tailwind CSS v4, and deployed statically via GitHub
-					Pages. Typography and spacing are handled with a light custom theme. Accessibility and
-					performance are ongoing focuses &mdash; images are lazy loaded, layout avoids CLS, and
-					interactions are keyboard navigable.
-				</p>
-			</div>
 		</div>
 	</div>
 </PageWrapper>
+
+<!-- <div class="border-t border-grid opacity-50 mx-2"></div>
+
+<div class="py-4">
+	<ul class="flex flex-col sm:flex-row flex-wrap gap-6 justify-center font-serif text-sm">
+		<li>
+			<a href={cvHref} class="hover:underline hover:text-accent-blue transition-colors duration-200"
+				>◇ Curriculum Vitae</a
+			>
+		</li>
+		<li>
+			<a
+				href={resumeHref}
+				class="hover:underline hover:text-accent-blue transition-colors duration-200">◇ Resume</a
+			>
+		</li>
+		<li>
+			<a
+				href="#about-site"
+				class="hover:underline hover:text-accent-blue transition-colors duration-200"
+				>◇ About this website</a
+			>
+		</li>
+	</ul>
+</div>
+
+
+<div class="border-t border-grid opacity-50 mx-2"></div>
+
+<div id="about-site" class="font-serif text-xs leading-relaxed max-w-prose opacity-80">
+	<h3 class="font-serif font-medium mb-3 text-base opacity-90">About this website</h3>
+	<p>
+		This site is built with SvelteKit, Tailwind CSS v4, and deployed statically via GitHub Pages.
+		Typography and spacing are handled with a light custom theme. Accessibility and performance are
+		ongoing focuses &mdash; images are lazy loaded, layout avoids CLS, and interactions are keyboard
+		navigable.
+	</p>
+</div> -->
 
 <style>
 	.prose {

@@ -21,15 +21,34 @@
 
 	let { children } = $props();
 	let menuOpen = $state(false);
+	let previousPath = $state(page.url.pathname);
 
 	function toggleMenu() {
 		menuOpen = !menuOpen;
 	}
+
+	// Prevent body scrolling when the mobile menu is open
+	$effect(() => {
+		if (menuOpen) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = '';
+		}
+	});
+
+	// Auto-close ONLY when the pathname actually changes (prevents immediate self-closing)
+	$effect(() => {
+		const current = page.url.pathname;
+		if (current !== previousPath) {
+			previousPath = current;
+			if (menuOpen) menuOpen = false;
+		}
+	});
 </script>
 
 <main class="min-h-screen diagonal-pattern noise-texture transition-colors duration-300">
 	<div
-		class="centered-content max-w-300 mx-auto transition-all"
+		class="centered-content max-w-260 mx-auto transition-all"
 		class:portfolio-mode={page.url.pathname.startsWith(`${base}/portfolio`)}
 	>
 		<!-- Mobile header with hamburger -->
@@ -52,22 +71,23 @@
 		</div>
 
 		<!-- Container with three columns -->
-		<div class="main-container flex flex-col lg:flex-row w-full">
+		<div class="main-container flex flex-col lg:flex-row w-full lg:pb-2">
 			<!-- Left sidebar -->
 			<div
-				class="left-sidebar hidden sm:block w-full lg:w-50 p-4
-						border-grid lg:border-r lg:flex lg:flex-col lg:justify-between lg:items-end
+				class="left-sidebar hidden sm:block w-full lg:w-40
+						border-grid lg:border-r lg:border-l lg:flex lg:flex-col lg:justify-between lg:items-end
 						sticky top-0 lg:h-screen transition-all duration-300"
 				class:portfolio-shift={page.url.pathname.startsWith(`${base}/portfolio`)}
 			>
-				<div class="lg:mt-48">
+				<div class="block lg:h-42 w-full lg:border-b border-grid"></div>
+				<div class="block">
 					<ul
 						class="flex flex-row lg:flex-col
 								 justify-around lg:justify-start lg:space-y-4
 								 lg:text-right
-								 font-serif font-medium opacity-80 hover:opacity-100 transition-opacity"
+								 font-serif font-medium opacity-80 hover:opacity-100 transition-opacity lg:p-4 lg:pt-5"
 					>
-						<li class="relative">
+						<li class="relative my-2">
 							<a
 								href="{base}/"
 								class="relative lg:pr-4"
@@ -77,7 +97,7 @@
 								<LinkDiamond {page} path={`${base}/`}></LinkDiamond></a
 							>
 						</li>
-						<li class="relative">
+						<li class="relative my-2">
 							<a
 								href="{base}/about"
 								class="relative lg:pr-4"
@@ -87,11 +107,11 @@
 								<LinkDiamond {page} path={`${base}/about`}></LinkDiamond>
 							</a>
 						</li>
-						<li class="relative">
+						<li class="relative my-2">
 							<a
 								href="{base}/portfolio"
 								onclick={() => (portfolioOpen = !portfolioOpen)}
-								class="relative inline-block w-full text-left cursor-pointer select-none lg:pr-4"
+								class="relative lg:pr-4"
 								class:font-bold={page.url.pathname.startsWith(`${base}/portfolio`)}
 							>
 								<span class="inline-flex items-center gap-1">Portfolio</span>
@@ -125,7 +145,7 @@
 								</ul>
 							{/if}
 						</li>
-						<li class="relative">
+						<li class="relative my-2">
 							<a
 								href="{base}/blog"
 								class="relative lg:pr-4"
@@ -139,7 +159,7 @@
 				</div>
 
 				<div
-					class="hidden lg:flex lg:flex-col lg:items-end lg:space-y-4 lg:mt-auto opacity-60 hover:opacity-100 transition-opacity"
+					class="hidden lg:flex lg:flex-col lg:items-end lg:space-y-4 lg:mt-auto opacity-60 hover:opacity-100 transition-opacity lg:mr-5 lg:mb-5"
 				>
 					<a href="https://bsky.app/profile/sansseriff.bsky.social">
 						<BlueSkyLogo cls="text-current hover:text-accent-blue transition-colors"></BlueSkyLogo>
@@ -174,62 +194,87 @@
 
 			<!-- Main content column - Slot for page content -->
 			<div
-				class="main-content main-content-with-noise relative w-full lg:w-200 lg:mt-0 sm:flex m:flex transition-all bg-cream-50 dark:bg-[hsl(218,_13%,_8%)]"
+				class="main-content main-content-with-noise lg:w-full lg:mt-0 sm:flex m:flex transition-all bg-cream-50 dark:bg-[hsl(218,_13%,_8%)]"
 			>
 				{@render children()}
 			</div>
+			<div
+				class="right-sidebar hidden sm:block w-full lg:w-45
+						border-grid lg:border-r lg:border-l lg:flex lg:flex-col lg:justify-between lg:items-end
+						sticky top-0 lg:h-screen transition-all duration-300"
+			></div>
 		</div>
-	</div>
 
-	<!-- Mobile bottom modal menu -->
-	{#if menuOpen}
-		<div
-			class="lg:hidden fixed inset-0 z-40
-				  backdrop-blur-sm bg-black/20"
-			role="button"
-			tabindex="0"
-			onclick={toggleMenu}
-			onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleMenu()}
-			aria-label="Close menu overlay"
-		></div>
-		<div
-			class="lg:hidden fixed bottom-0 left-0 right-0 z-50
-                  backdrop-soft shadow-soft border-t border-grid
-                  transition-transform duration-300 ease-in-out noise-texture"
-			class:translate-y-0={menuOpen}
-			class:translate-y-full={!menuOpen}
-		>
-			<div class="flex justify-between items-center p-4 border-b border-grid">
-				<h2 class="font-serif font-bold">Menu</h2>
-				<button
-					onclick={toggleMenu}
-					class="p-2 hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer rounded-sm transition-colors"
-				>
-					<X size={24} weight={'regular'}></X>
-				</button>
+		<!-- Mobile bottom modal menu -->
+		{#if menuOpen}
+			<!-- Overlay -->
+			<div
+				class="lg:hidden fixed inset-0 z-40 backdrop-blur-sm bg-black/20"
+				role="button"
+				tabindex="0"
+				onclick={toggleMenu}
+				onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleMenu()}
+				aria-label="Close menu overlay"
+			></div>
+			<!-- Panel (explicit inline style to guarantee fixed positioning even if a parent gains transform) -->
+			<div
+				class="lg:hidden bottom-0 left-0 right-0 z-50 backdrop-soft shadow-soft border-t border-grid transition-transform duration-300 ease-in-out noise-texture"
+				class:translate-y-0={menuOpen}
+				class:translate-y-full={!menuOpen}
+				style="position:fixed"
+			>
+				<div class="flex justify-between items-center p-4 border-b border-grid">
+					<h2 class="font-serif font-bold">Menu</h2>
+					<button
+						onclick={toggleMenu}
+						class="p-2 hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer rounded-sm transition-colors"
+					>
+						<X size={24} weight={'regular'}></X>
+					</button>
+				</div>
+				<div class="p-4">
+					<ul class="space-y-4 font-serif font-medium">
+						<li class="py-2 border-b border-grid">
+							<a
+								href="{base}/"
+								onclick={() => (menuOpen = false)}
+								class:font-bold={page.url.pathname === `${base}/`}
+							>
+								Home
+							</a>
+						</li>
+						<li class="py-2 border-b border-grid">
+							<a
+								href="{base}/about"
+								onclick={() => (menuOpen = false)}
+								class:font-bold={page.url.pathname === `${base}/about`}
+							>
+								About
+							</a>
+						</li>
+						<li class="py-2 border-b border-grid">
+							<a
+								href="{base}/portfolio"
+								onclick={() => (menuOpen = false)}
+								class:font-bold={page.url.pathname === `${base}/portfolio`}
+							>
+								Portfolio
+							</a>
+						</li>
+						<li class="py-2 border-b border-grid">
+							<a
+								href="{base}/blog"
+								onclick={() => (menuOpen = false)}
+								class:font-bold={page.url.pathname === `${base}/blog`}
+							>
+								Blog
+							</a>
+						</li>
+					</ul>
+				</div>
 			</div>
-			<div class="p-4">
-				<ul class="space-y-4 font-serif font-medium">
-					<li class="py-2 border-b border-grid">
-						<a href="{base}/" class:font-bold={page.url.pathname === `${base}/`}> Home </a>
-					</li>
-					<li class="py-2 border-b border-grid">
-						<a href="{base}/about" class:font-bold={page.url.pathname === `${base}/about`}>
-							About
-						</a>
-					</li>
-					<li class="py-2 border-b border-grid">
-						<a href="{base}/portfolio" class:font-bold={page.url.pathname === `${base}/portfolio`}>
-							Portfolio
-						</a>
-					</li>
-					<li class="py-2 border-b border-grid">
-						<a href="{base}/blog" class:font-bold={page.url.pathname === `${base}/blog`}> Blog </a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	{/if}
+		{/if}
+	</div>
 </main>
 
 <!-- <style>
@@ -248,8 +293,8 @@
 </style> -->
 
 <style>
-	html,
-	body {
+	:global(html),
+	:global(body) {
 		scrollbar-gutter: stable both-edges;
 	}
 	:root {
@@ -286,10 +331,7 @@
 		}
 	}
 	/* Ensure media inside main-content never overflow */
-	.main-content img,
-	.main-content video,
-	.main-content canvas,
-	.main-content figure {
+	:global(.main-content :is(img, video, canvas, figure)) {
 		max-width: 100%;
 		height: auto;
 	}

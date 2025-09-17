@@ -63,13 +63,11 @@
 
 <PageWrapper>
 	<div class="space-y-6">
-		<SectionHeader>
-			<h2
-				class="font-serif font-medium lg:h-4 flex flex-col lg:flex-row gap-2 dark:[color:#99a1ad]"
-			>
-				<span class="dark:text-gray-100">Built with code, built with colors</span>
-			</h2>
-			<p class="font-serif font-medium text-sm dark:text-gray-400 max-w-prose">
+		<SectionHeader
+			title="Built with code, built with colors"
+			headingClass="font-serif font-medium text-lg lg:text-xl lg:mb-0 lg:mt-2"
+		>
+			<p class="font-serif font-medium text-sm dark:text-gray-400 max-w-prose mt-3">
 				Call me a computational artist, or an artistic scientist and engineer. My projects span the
 				space of design, computation, and aesthetics.
 			</p>
