@@ -10,10 +10,10 @@
 	}
 	const posts: Post[] = [
 		{
-			title: 'Designing expressive scientific visuals',
-			slug: 'designing-expressive-scientific-visuals',
+			title: "Why Science Can't Tell Stories About Itself",
+			slug: 'science-stories',
 			date: '2025-09-01',
-			summary: 'A quick tour through the goals and constraints guiding my visualization tooling.'
+			summary: 'A tour through the contemporary problems of science communication.'
 		}
 	];
 	function href(p: Post) {

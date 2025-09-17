@@ -2,7 +2,7 @@
 	let { cls } = $props();
 </script>
 
-<div class={`text-gray-400 hover:text-gray-600 ${cls}`}>
+<div class={cls}>
 	<svg
 		width="23"
 		height="23"

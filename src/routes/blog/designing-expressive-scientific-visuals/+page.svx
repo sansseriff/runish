@@ -1,8 +1,0 @@
----
-layout: blog
-title: First blog post
----
-
-And this is some normal text
-
-## Here is a subheading

@@ -12,7 +12,7 @@
 	export let containerClass = '';
 
 	const baseContainer =
-		'border-grid border-b lg:border-t-0 p-6 lg:p-8 relative corner-decoration corner-bl';
+		'border-grid border-b lg:border-t-0 p-0 px-6 lg:p-8 lg:pb-0 relative corner-decoration corner-bl ';
 </script>
 
 <div class={`${baseContainer} ${containerClass}`.trim()}>

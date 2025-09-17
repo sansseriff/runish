@@ -27,7 +27,7 @@
 	}
 </script>
 
-<main class="min-h-screen grid-pattern noise-texture transition-colors duration-300">
+<main class="min-h-screen diagonal-pattern noise-texture transition-colors duration-300">
 	<div
 		class="centered-content max-w-300 mx-auto transition-all"
 		class:portfolio-mode={page.url.pathname.startsWith(`${base}/portfolio`)}
@@ -67,7 +67,7 @@
 								 lg:text-right
 								 font-serif font-medium opacity-80 hover:opacity-100 transition-opacity"
 					>
-						<li>
+						<li class="relative">
 							<a
 								href="{base}/"
 								class="relative lg:pr-4"
@@ -77,7 +77,7 @@
 								<LinkDiamond {page} path={`${base}/`}></LinkDiamond></a
 							>
 						</li>
-						<li>
+						<li class="relative">
 							<a
 								href="{base}/about"
 								class="relative lg:pr-4"
@@ -125,7 +125,7 @@
 								</ul>
 							{/if}
 						</li>
-						<li>
+						<li class="relative">
 							<a
 								href="{base}/blog"
 								class="relative lg:pr-4"
@@ -174,7 +174,7 @@
 
 			<!-- Main content column - Slot for page content -->
 			<div
-				class="main-content w-full lg:w-200 lg:mt-0 sm:flex m:flex transition-all diagonal-pattern"
+				class="main-content main-content-with-noise relative w-full lg:w-200 lg:mt-0 sm:flex m:flex transition-all bg-cream-50 dark:bg-[hsl(218,_13%,_8%)]"
 			>
 				{@render children()}
 			</div>
@@ -223,7 +223,7 @@
 							Portfolio
 						</a>
 					</li>
-					<li class="py-2">
+					<li class="py-2 border-b border-grid">
 						<a href="{base}/blog" class:font-bold={page.url.pathname === `${base}/blog`}> Blog </a>
 					</li>
 				</ul>
@@ -292,5 +292,33 @@
 	.main-content figure {
 		max-width: 100%;
 		height: auto;
+	}
+
+	/* Noise texture for main-content */
+	.main-content-with-noise::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-image: url('/images/noise.0e24d0e5.png');
+		background-size: 180px;
+		background-repeat: repeat;
+		opacity: 0.035;
+		pointer-events: none;
+		z-index: 0;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.main-content-with-noise::before {
+			opacity: 0.012;
+		}
+	}
+
+	/* Ensure content appears above noise */
+	.main-content > :global(*) {
+		position: relative;
+		z-index: 1;
 	}
 </style>

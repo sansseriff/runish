@@ -16,10 +16,11 @@
 				<img
 					src={profileSrc}
 					alt="Profile"
-					class="w-48 sm:w-56 aspect-[3/4] object-cover flex-shrink-0 rounded-sm shadow-soft"
+					class="w-48 sm:w-56 aspect-[3/4] object-cover flex-shrink-0 rounded-sm shadow-soft block"
+					style="margin: 0 !important;"
 					loading="lazy"
 				/>
-				<div class="font-serif text-sm leading-snug space-y-4 max-w-prose opacity-90">
+				<div class="font-serif text-m leading-snug space-y-4 max-w-prose opacity-90">
 					<p>
 						My name's Andrew Mueller. I did my undergrad in physics at UC San Diego, and my PhD in
 						applied physics at Caltech.

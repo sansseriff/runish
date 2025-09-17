@@ -76,16 +76,16 @@
 		</SectionHeader>
 
 		<!-- Subtle divider -->
-		<div class="border-t border-grid opacity-50 mx-6 lg:mx-8"></div>
+		<!-- <div class="border-t border-grid opacity-50 mx-6 lg:mx-8"></div> -->
 
 		<div class="px-4 py-4 lg:px-6">
 			<div class="text-xs font-serif font-medium flex items-center gap-2 flex-wrap">
 				<span class="opacity-70">Filter by flag:</span>
 				{#each ['software', 'quantum', 'visual'] as flag}
 					<button
-						class="px-2 py-1 rounded-sm border transition-colors duration-200 focus-visible:outline-none focus-visible:ring ring-offset-1 ring-gray-400 dark:ring-gray-600 shadow-soft
+						class="px-2 py-1 rounded-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring ring-offset-1 ring-gray-400 dark:ring-gray-600
           {active.has(flag as Flag)
-							? 'bg-gray-900 text-gray-50 dark:bg-gray-100 dark:text-gray-900 border-gray-900 dark:border-gray-100'
+							? 'bg-gray-900 text-gray-50 dark:bg-gray-100 dark:text-gray-900 '
 							: 'border-grid hover:border-gray-500'}"
 						onclick={() => toggle(flag as Flag)}>◇ {flag}</button
 					>
