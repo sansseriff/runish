@@ -48,7 +48,7 @@
 
 <main class="min-h-screen diagonal-pattern noise-texture transition-colors duration-300">
 	<div
-		class="centered-content w-max lg:mx-auto md:m-auto transition-all duration-1000"
+		class="centered-content mx-auto w-full transition-[max-width] duration-700 ease-out"
 		class:portfolio-mode={page.url.pathname.startsWith(`${base}/portfolio`)}
 	>
 		<!-- Mobile header with hamburger -->
@@ -74,19 +74,19 @@
 		<div class="main-container flex flex-col lg:flex-row w-full lg:pb-0">
 			<!-- Left sidebar -->
 			<div
-				class="left-sidebar hidden sm:block w-full lg:flex-none
-						border-grid lg:border-r lg:border-l lg:flex lg:flex-col lg:justify-between lg:items-end
-						sticky top-0 lg:h-screen transition-all duration-300"
+				class="left-sidebar hidden sm:flex flex-row lg:flex-col lg:items-end items-stretch
+					w-full lg:flex-none border-grid border-b lg:border-b-0 lg:border-r sticky lg:top-0 lg:h-screen md:flex"
 			>
-				<div class="block lg:h-42 w-full lg:border-b border-grid"></div>
-				<div class="block">
+				<!-- Spacer to push vertical (lg+) menu downward; only visible at lg and above -->
+				<div class="hidden lg:block h-42 w-full border-b border-grid"></div>
+				<div class="block flex-1 lg:flex-none">
 					<ul
-						class="flex flex-row lg:flex-col
-								 justify-around lg:justify-start lg:space-y-4
-								 lg:text-right
-								 font-serif font-medium opacity-80 hover:opacity-100 transition-opacity lg:p-4 lg:pt-5"
+						class="flex flex-row lg:flex-col w-full flex-1
+							justify-between lg:justify-start gap-2 lg:gap-0 lg:space-y-4
+							lg:text-right font-serif font-medium opacity-80 hover:opacity-100 transition-opacity
+							px-4 py-3 lg:p-4 lg:pt-5"
 					>
-						<li class="relative my-2">
+						<li class="relative my-2 flex-1 text-center lg:text-right">
 							<a
 								href="{base}/"
 								class="relative lg:pr-4"
@@ -96,7 +96,7 @@
 								<LinkDiamond {page} path={`${base}/`}></LinkDiamond></a
 							>
 						</li>
-						<li class="relative my-2">
+						<li class="relative my-2 flex-1 text-center lg:text-right">
 							<a
 								href="{base}/about"
 								class="relative lg:pr-4"
@@ -106,7 +106,7 @@
 								<LinkDiamond {page} path={`${base}/about`}></LinkDiamond>
 							</a>
 						</li>
-						<li class="relative my-2">
+						<li class="relative my-2 flex-1 text-center lg:text-right">
 							<a
 								href="{base}/portfolio"
 								onclick={() => (portfolioOpen = !portfolioOpen)}
@@ -144,7 +144,7 @@
 								</ul>
 							{/if}
 						</li>
-						<li class="relative my-2">
+						<li class="relative my-2 flex-1 text-center lg:text-right">
 							<a
 								href="{base}/blog"
 								class="relative lg:pr-4"
@@ -193,14 +193,13 @@
 
 			<!-- Main content column - Slot for page content -->
 			<div
-				class="main-content main-content-with-noise sm:m-auto lg:m-auto md:m-auto lg:w-full lg:mt-0 sm:flex m:flex transition-all bg-cream-50 dark:bg-[hsl(218,_13%,_8%)]"
+				class="main-content main-content-with-noise bg-cream-50 dark:bg-[hsl(218,_13%,_8%)] transition-[flex-basis,max-width] duration-700 ease-out flex flex-col"
 			>
 				{@render children()}
 			</div>
 			<div
-				class="right-sidebar md:none hidden sm:block lg:flex-none
-						border-grid lg:border-r lg:border-l lg:flex lg:flex-col lg:justify-between lg:items-end
-						sticky top-0 lg:h-screen transition-all duration-300"
+				class="right-sidebar hidden lg:flex flex-col justify-between items-end flex-none
+					border-grid lg:border-l sticky top-0 h-screen"
 			></div>
 		</div>
 
@@ -297,7 +296,8 @@
 		scrollbar-gutter: stable;
 	}
 	:root {
-		--sidebar-width: 10rem; /* base width each sidebar at large screens */
+		--sidebars-total: 20rem; /* combined width of both sidebars as requested */
+		--sidebar-width: calc(var(--sidebars-total) / 2); /* per-sidebar width */
 		--layout-max-width: 95vw; /* target span in portfolio mode */
 		--main-width-default: 56rem; /* normal page main width */
 	}
@@ -305,8 +305,8 @@
 	@media (min-width: 1024px) {
 		/* Large screen flex layout adjustments */
 		.centered-content {
-			/* center the total layout block; we'll cap width below */
-			max-width: calc(var(--main-width-default) + (2 * var(--sidebar-width)));
+			/* Normal mode total span: fixed main + sidebars */
+			max-width: calc(var(--main-width-default) + var(--sidebars-total));
 		}
 		.centered-content.portfolio-mode {
 			/* In portfolio mode allow expansion up to 95vw */
@@ -314,6 +314,7 @@
 		}
 		.main-container {
 			display: flex;
+			/* Ensure children don't overflow the centered-content horizontal padding context */
 		}
 		.left-sidebar,
 		.right-sidebar {
@@ -322,20 +323,24 @@
 			flex: 0 0 var(--sidebar-width);
 		}
 		.main-content {
-			/* Default fixed width main */
-			width: var(--main-width-default);
-			max-width: var(--main-width-default);
-			flex: 0 0 var(--main-width-default);
-			transition:
-				flex-basis 850ms cubic-bezier(0.55, 0.06, 0.25, 0.95),
-				max-width 850ms cubic-bezier(0.55, 0.06, 0.25, 0.95),
-				width 850ms cubic-bezier(0.55, 0.06, 0.25, 0.95);
-		}
-		.portfolio-mode .main-content {
-			/* Take remaining space after two sidebars within max layout width */
+			/* Allow smooth shrink just above lg when viewport is narrower than ideal total width */
+			--main-min: 40rem;
+			--main-max: var(--main-width-default);
+			/* viewport-based preferred: remaining width after sidebars but not exceeding default */
+			--main-pref: calc(100vw - var(--sidebars-total));
 			flex: 1 1 auto;
 			width: auto;
-			max-width: calc(var(--layout-max-width) - (2 * var(--sidebar-width)));
+			max-width: clamp(var(--main-min), var(--main-pref), var(--main-max));
+			transition:
+				max-width 650ms cubic-bezier(0.55, 0.06, 0.25, 0.95),
+				flex-basis 650ms cubic-bezier(0.55, 0.06, 0.25, 0.95);
+		}
+		.portfolio-mode .main-content {
+			/* In portfolio mode we prefer a wider main area; raise upper clamp */
+			--main-min: 50rem;
+			--main-max: 90rem;
+			--main-pref: calc(var(--layout-max-width) - var(--sidebars-total));
+			max-width: clamp(var(--main-min), var(--main-pref), var(--main-max));
 		}
 	}
 	/* Ensure media inside main-content never overflow */
