@@ -71,7 +71,7 @@
 		</div>
 
 		<!-- Container with three columns -->
-		<div class="main-container flex flex-col lg:flex-row w-full lg:pb-0">
+		<div class="main-container flex flex-col lg:flex-row w-full lg:pb-0 lg:m-auto">
 			<!-- Left sidebar -->
 			<div
 				class="left-sidebar hidden sm:flex flex-row lg:flex-col lg:items-end items-stretch
@@ -299,7 +299,7 @@
 		--sidebars-total: 20rem; /* combined width of both sidebars as requested */
 		--sidebar-width: calc(var(--sidebars-total) / 2); /* per-sidebar width */
 		--layout-max-width: 95vw; /* target span in portfolio mode */
-		--main-width-default: 56rem; /* normal page main width */
+		--main-width-default: 42rem; /* normal page main width */
 	}
 	/* Sidebar shift now uses negative margin to reclaim layout space (no transform gap) */
 	@media (min-width: 1024px) {
@@ -307,13 +307,16 @@
 		.centered-content {
 			/* Normal mode total span: fixed main + sidebars */
 			max-width: calc(var(--main-width-default) + var(--sidebars-total));
+			width: calc(var(--main-width-default) + var(--sidebars-total));
 		}
 		.centered-content.portfolio-mode {
 			/* In portfolio mode allow expansion up to 95vw */
 			max-width: var(--layout-max-width);
+			width: var(--layout-max-width);
 		}
 		.main-container {
 			display: flex;
+			width: 100%;
 			/* Ensure children don't overflow the centered-content horizontal padding context */
 		}
 		.left-sidebar,
@@ -338,9 +341,13 @@
 		.portfolio-mode .main-content {
 			/* In portfolio mode we prefer a wider main area; raise upper clamp */
 			--main-min: 50rem;
-			--main-max: 90rem;
+			/* --main-max: 90rem; */
 			--main-pref: calc(var(--layout-max-width) - var(--sidebars-total));
 			max-width: clamp(var(--main-min), var(--main-pref), var(--main-max));
+		}
+
+		.portfolio-mode .main-content {
+			max-width: calc(100% - var(--sidebars-total));
 		}
 	}
 	/* Ensure media inside main-content never overflow */
