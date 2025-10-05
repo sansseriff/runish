@@ -1,1 +1,0 @@
-import{t as p,a as v}from"./DE06C066.js";import{c as e,r as i}from"./DEwcWAQg.js";import{s as d}from"./DUl_VINW.js";var m=p('<div class="prose max-w-none w-full mx-auto mt-6 relative"><div class="relative z-10"><!></div></div>');function f(t,o){var a=m(),r=e(a),s=e(r);d(s,()=>o.children),i(r),i(a),v(t,a)}export{f as P};
