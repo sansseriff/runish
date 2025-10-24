@@ -1,37 +1,42 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+@custom-variant dark (&:where(.dark, .dark *));
 
-/* @font-face {
-	font-family: __writer_1deb74;
-	src: url(/_next/static/media/179d7f9da167b110-s.p.woff2) format('woff2');
+@theme {
+	--shadow-sharp: 3px 3px 1px 1px rgb(0 0 0 / 0.07);
+}
+
+@font-face {
+	font-family: 'Writer';
+	src: url(/fonts/writer-400-normal.woff2) format('woff2');
 	font-display: swap;
 	font-weight: 400;
 	font-style: normal;
 }
 
 @font-face {
-	font-family: __writer_1deb74;
-	src: url(/_next/static/media/1041824d5f477f6b-s.p.woff2) format('woff2');
+	font-family: 'Writer';
+	src: url(/fonts/writer-400-italic.woff2) format('woff2');
 	font-display: swap;
 	font-weight: 400;
 	font-style: italic;
 }
 
 @font-face {
-	font-family: __writer_1deb74;
-	src: url(/_next/static/media/af04a9c2068a2eb2-s.p.woff2) format('woff2');
+	font-family: 'Writer';
+	src: url(/fonts/writer-700-normal.woff2) format('woff2');
 	font-display: swap;
 	font-weight: 700;
 	font-style: normal;
 }
 
 @font-face {
-	font-family: __writer_1deb74;
-	src: url(/_next/static/media/a08768ff0b9f433b-s.p.woff2) format('woff2');
+	font-family: 'Writer';
+	src: url(/fonts/writer-700-italic.woff2) format('woff2');
 	font-display: swap;
 	font-weight: 700;
 	font-style: italic;
-} */
+}
 
 /* diagonal-pattern noise-texture transition-colors duration-300 */
 
@@ -48,9 +53,15 @@ body {
 	font-style: normal;
 }
 
+/* a {
+	text-decoration: none;
+	color: inherit;
+} */
+
 @theme {
-	--font-sans: 'Inter', system-ui, sans-serif;
+	--font-sans: 'Writer', 'Inter', system-ui, sans-serif;
 	--font-serif: 'Lora', serif;
+	--font-writer: 'Writer', sans-serif;
 
 	/* Use more specific variable name for Lora */
 	--font-lora: 'Lora', serif;
@@ -80,7 +91,13 @@ body {
 	--color-cream-50: hsl(45, 23%, 97%);
 	--color-cream-100: hsl(45, 23%, 95%);
 	--color-cream-200: hsl(45, 18%, 88%);
-	--color-cream-300: hsl(45, 15%, 75%);
+	--color-cream-300: hsl(20, 15%, 75%);
+	--color-cream-400: hsl(20, 15%, 60%);
+	--color-cream-500: hsl(20, 15%, 45%);
+	--color-cream-600: hsl(20, 15%, 35%);
+	--color-cream-700: hsl(20, 15%, 25%);
+	--color-cream-800: hsl(20, 15%, 15%);
+	--color-cream-900: hsl(20, 15%, 10%);
 
 	/* Neutral grays with subtle warmth */
 	--color-offgray-50: hsl(210, 6%, 97%);
@@ -98,6 +115,18 @@ body {
 	--color-accent-blue: hsl(219, 93%, 40%);
 	--color-text-accent: hsl(219, 93%, 40%);
 }
+
+/* h1 {
+	color: var(--color-cream-500);
+} */
+
+/* h3 {
+	color: var(--color-cream-500);
+} */
+
+/* h2 {
+	color: var(--color-cream-500);
+} */
 
 @layer base {
 	h1,
@@ -162,7 +191,7 @@ body {
 	/* Diagonal lines pattern */
 	.diagonal-pattern {
 		background-image: repeating-linear-gradient(
-			45deg,
+			42deg,
 			transparent,
 			transparent 6px,
 			hsla(215, 25%, 65%, 0.1) 6px,
@@ -173,11 +202,11 @@ body {
 	@media (prefers-color-scheme: dark) {
 		.diagonal-pattern {
 			background-image: repeating-linear-gradient(
-				45deg,
+				42deg,
 				transparent,
 				transparent 6px,
-				hsla(217, 19%, 45%, 0.09) 6px,
-				hsla(217, 19%, 45%, 0.09) 7px
+				hsla(217, 19%, 45%, 0.04) 6px,
+				hsla(217, 19%, 45%, 0.04) 7px
 			);
 		}
 	}
@@ -208,6 +237,29 @@ body {
 		}
 	}
 
+	.simple-noise {
+		/* Create a stacking context for the background layer */
+		position: relative;
+	}
+
+	.simple-noise::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-image: url('/images/noise.0e24d0e5.png');
+		background-size: 180px;
+		background-repeat: repeat;
+		opacity: 0.05; /* subtle in light mode */
+		pointer-events: none; /* noise doesn't eat clicks */
+		z-index: 0; /* sit behind content */
+		border-radius: inherit; /* match rounded containers */
+	}
+
+	/* Dark mode tweaks only affect the pseudo-element */
+	:global(html.dark) .simple-noise::before {
+		opacity: 0.04;
+	}
+
 	/* Noise texture overlay - simplified approach */
 	.noise-texture {
 		position: relative;
@@ -218,7 +270,7 @@ body {
 		position: absolute;
 		inset: 0;
 		pointer-events: none;
-		background:
+		/* background:
 			radial-gradient(
 				circle at 25% 25%,
 				transparent 2%,
@@ -236,7 +288,7 @@ body {
 				transparent 1.5%,
 				hsla(0, 0%, 0%, 0.015) 2%,
 				transparent 2.5%
-			);
+			); */
 		background-size:
 			20px 20px,
 			25px 25px,
@@ -251,7 +303,7 @@ body {
 
 	@media (prefers-color-scheme: dark) {
 		.noise-texture::before {
-			background:
+			/* background:
 				radial-gradient(
 					circle at 25% 25%,
 					transparent 2%,
@@ -269,7 +321,7 @@ body {
 					transparent 1.5%,
 					hsla(0, 0%, 100%, 0.012) 2%,
 					transparent 2.5%
-				);
+				); */
 			opacity: 0.6;
 		}
 	}
@@ -291,11 +343,11 @@ body {
 	}
 
 	/* Corner decorative elements like Zed */
-	.corner-decoration {
+	/* .corner-decoration {
 		position: relative;
-	}
+	} */
 
-	.corner-decoration::before {
+	/* .corner-decoration::before {
 		content: '';
 		position: absolute;
 		width: 8px;
@@ -312,6 +364,49 @@ body {
 			background: hsl(218, 13%, 6%);
 			border-color: hsla(215, 25%, 65%, 0.2);
 		}
+	} */
+
+	.corner-diamond {
+		position: absolute;
+		width: 8px;
+		height: 8px;
+		transform: rotate(45deg);
+		border: 1px solid hsl(213, 27%, 84%);
+		background: hsl(45, 23%, 97%);
+		border-radius: 1px;
+		z-index: 20;
+	}
+	.corner-diamond-tl {
+		top: -4.5px;
+		left: -4.5px;
+	}
+	.corner-diamond-tr {
+		top: -4.5px;
+		right: -4.5px;
+	}
+	.corner-diamond-bl {
+		bottom: -4.5px;
+		left: -4.5px;
+	}
+	.corner-diamond-br {
+		bottom: -4.5px;
+		right: -4.5px;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.corner-diamond {
+			border-color: hsla(215, 25%, 65%, 0.2);
+			background: hsl(218, 13%, 6%);
+		}
+	}
+
+	html.light .corner-diamond {
+		border: 1px solid hsl(213, 27%, 84%);
+		background: hsl(45, 23%, 97%);
+	}
+	html.dark .corner-diamond {
+		border-color: hsla(215, 25%, 65%, 0.2);
+		background: hsl(218, 13%, 6%);
 	}
 
 	/* Corner positions */
@@ -331,6 +426,7 @@ body {
 		bottom: -4.5px;
 		right: -4.5px;
 	}
+	*/
 
 	/* Text accent utilities */
 	.text-accent-blue {
@@ -342,4 +438,148 @@ body {
 			color: hsl(219, 93%, 55%);
 		}
 	}
+
+	/* Writer font utilities */
+	.font-writer {
+		font-family: 'Writer', sans-serif;
+	}
+
+	.font-writer-400 {
+		font-family: 'Writer', sans-serif;
+		font-weight: 400;
+	}
+
+	.font-writer-700 {
+		font-family: 'Writer', sans-serif;
+		font-weight: 700;
+	}
+
+	/* Writer font classes for different use cases */
+	.text-writer {
+		font-family: 'Writer', sans-serif;
+		font-weight: 400;
+	}
+
+	.text-writer-bold {
+		font-family: 'Writer', sans-serif;
+		font-weight: 700;
+	}
+
+	.text-writer-italic {
+		font-family: 'Writer', sans-serif;
+		font-weight: 400;
+		font-style: italic;
+	}
+
+	.text-writer-bold-italic {
+		font-family: 'Writer', sans-serif;
+		font-weight: 700;
+		font-style: italic;
+	}
+
+	/* --------------------------------------------------------------
+	 Explicit light/dark overrides
+	 We previously relied solely on @media (prefers-color-scheme: dark) to restyle
+	 patterns, borders, etc. When a user explicitly chooses a theme we must
+	 override those media-query styles (they still match if the OS is dark).
+	 Strategy: toggle either .dark OR .light class on <html>. Add selectors
+	 that out-specify the media-query variants so the explicit choice wins.
+	 (Media query styles have specificity 0,1,0; adding html.light ... beats them.)
+-------------------------------------------------------------- */
+	html.light body {
+		background-color: hsl(45, 23%, 97%);
+		color: hsl(210, 6%, 33%);
+	}
+	html.dark body {
+		background-color: hsl(218, 13%, 6%);
+		color: hsl(210, 6%, 73%);
+	}
+
+	html.light .grid-pattern {
+		background-image:
+			linear-gradient(hsla(213, 27%, 84%, 0.2) 1px, transparent 1px),
+			linear-gradient(90deg, hsla(213, 27%, 84%, 0.2) 1px, transparent 1px);
+	}
+	html.dark .grid-pattern {
+		background-image:
+			linear-gradient(hsla(215, 25%, 65%, 0.08) 1px, transparent 1px),
+			linear-gradient(90deg, hsla(215, 25%, 65%, 0.08) 1px, transparent 1px);
+	}
+
+	/* Diagonal pattern */
+	html.light .diagonal-pattern {
+		background-image: repeating-linear-gradient(
+			42deg,
+			transparent,
+			transparent 6px,
+			hsla(215, 25%, 65%, 0.05) 6px,
+			hsla(215, 25%, 65%, 0.05) 7px
+		);
+	}
+	html.dark .diagonal-pattern {
+		background-image: repeating-linear-gradient(
+			42deg,
+			transparent,
+			transparent 6px,
+			hsla(217, 19%, 45%, 0.04) 6px,
+			hsla(217, 19%, 45%, 0.04) 7px
+		);
+	}
+
+	/* Borders */
+	html.light .border-grid {
+		border-color: hsla(213, 27%, 84%, 0.4);
+	}
+	html.dark .border-grid {
+		border-color: hsla(215, 25%, 65%, 0.1);
+	}
+
+	/* Soft shadow */
+	html.light .shadow-soft {
+		box-shadow:
+			0 1px 3px hsla(218, 13%, 6%, 0.06),
+			0 1px 2px hsla(218, 13%, 6%, 0.1);
+	}
+	html.dark .shadow-soft {
+		box-shadow:
+			0 1px 3px hsla(0, 0%, 0%, 0.3),
+			0 1px 2px hsla(0, 0%, 0%, 0.2);
+	}
+
+	/* Noise texture opacity tweak */
+	html.light .noise-texture::before {
+		opacity: 0.8;
+	}
+	html.dark .noise-texture::before {
+		opacity: 0.6;
+	}
+
+	/* Backdrop */
+	html.light .backdrop-soft {
+		background: linear-gradient(180deg, hsla(45, 23%, 97%, 0.8) 0%, hsla(210, 40%, 94%, 0.4) 100%);
+	}
+	html.dark .backdrop-soft {
+		background: linear-gradient(180deg, hsla(218, 13%, 8%, 0.95) 0%, hsla(218, 13%, 6%, 0.8) 100%);
+	}
+
+	/* Corner decoration diamond */
+	/* html.light .corner-decoration::before {
+		background: hsl(45, 23%, 97%);
+		border: 1px solid hsl(213, 27%, 84%);
+	}
+	html.dark .corner-decoration::before {
+		background: hsl(218, 13%, 6%);
+		border-color: hsla(215, 25%, 65%, 0.2);
+	} */
+
+	/* Accent text */
+	html.light .text-accent-blue {
+		color: hsl(219, 93%, 40%);
+	}
+	html.dark .text-accent-blue {
+		color: hsl(219, 93%, 55%);
+	}
+
+	/* If future components rely on variables, consider moving palette to :root and
+	 toggling a data-theme attribute instead of duplicating style blocks. */
 }

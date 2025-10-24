@@ -5,7 +5,7 @@
 </script>
 
 <section class="prose max-w-none w-full mx-auto mt-6 lg:pr-4">
-	<SectionHeader title="Traversable wormholes – nature" tag="h1" />
+	<SectionHeader title="Traversable wormholes – nature" tag="h1" headingAddition="mt-0" />
 	<div class="p-6 lg:p-8 font-serif text-sm leading-relaxed space-y-6 dark:text-gray-300">
 		<img
 			src={hero}

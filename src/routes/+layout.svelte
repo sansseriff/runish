@@ -4,6 +4,8 @@
 	import X from 'phosphor-svelte/lib/X';
 	import GraduationCap from 'phosphor-svelte/lib/GraduationCap';
 	import InstagramLogo from 'phosphor-svelte/lib/InstagramLogo';
+	import Moon from 'phosphor-svelte/lib/Moon';
+	import Sun from 'phosphor-svelte/lib/Sun';
 	// import Bluesky from 'phosphor-svelte/lib/BlueskyLogo';
 	import BlueSkyLogo from '$lib/BlueSkyLogo.svelte';
 	import GithubLogo from 'phosphor-svelte/lib/GithubLogo';
@@ -22,6 +24,55 @@
 	let { children } = $props();
 	let menuOpen = $state(false);
 	let previousPath = $state(page.url.pathname);
+
+	// Simple dark mode handling per Tailwind docs: html.dark governs dark:* utilities
+	let isDark = $state(false);
+
+	function applyDarkClass(dark: boolean) {
+		if (typeof document === 'undefined') return;
+		// We control BOTH an explicit 'dark' or 'light' class so that
+		// our custom CSS (which previously relied on @media(prefers-color-scheme))
+		// can override system preference. Media queries can't be programmatically
+		// disabled, so we out-specify them with .light / .dark selectors.
+		const root = document.documentElement;
+		root.classList.remove('dark', 'light');
+		root.classList.add(dark ? 'dark' : 'light');
+	}
+
+	function initTheme() {
+		if (typeof window === 'undefined') return;
+		const stored = localStorage.getItem('theme');
+		if (stored === 'light' || stored === 'dark') {
+			isDark = stored === 'dark';
+			applyDarkClass(isDark);
+			return;
+		}
+		// System fallback
+		isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		applyDarkClass(isDark);
+	}
+
+	$effect(() => {
+		initTheme();
+		if (typeof window !== 'undefined') {
+			const mql = window.matchMedia('(prefers-color-scheme: dark)');
+			const listener = () => {
+				// Only adjust if user hasn't explicitly chosen
+				if (!localStorage.getItem('theme')) {
+					isDark = mql.matches;
+					applyDarkClass(isDark);
+				}
+			};
+			mql.addEventListener('change', listener);
+			return () => mql.removeEventListener('change', listener);
+		}
+	});
+
+	function onThemeButtonClick() {
+		isDark = !isDark;
+		localStorage.setItem('theme', isDark ? 'dark' : 'light');
+		applyDarkClass(isDark);
+	}
 
 	function toggleMenu() {
 		menuOpen = !menuOpen;
@@ -46,9 +97,9 @@
 	});
 </script>
 
-<main class="min-h-screen diagonal-pattern noise-texture transition-colors duration-300">
+<main class="min-h-screen diagonal-pattern noise-texture transition-colors duration-10">
 	<div
-		class="centered-content mx-auto w-full transition-[max-width] duration-700 ease-out"
+		class="centered-content mx-auto w-full transition-[max-width] duration-1200 ease-in-out"
 		class:portfolio-mode={page.url.pathname.startsWith(`${base}/portfolio`)}
 	>
 		<!-- Mobile header with hamburger -->
@@ -78,18 +129,20 @@
 					w-full lg:flex-none border-grid border-b lg:border-b-0 lg:border-r sticky lg:top-0 lg:h-screen md:flex"
 			>
 				<!-- Spacer to push vertical (lg+) menu downward; only visible at lg and above -->
-				<div class="hidden lg:block h-42 w-full border-b border-grid"></div>
+				<!-- removed border-b -->
+				<div class="hidden lg:block h-32 w-full border-grid"></div>
+
 				<div class="block flex-1 lg:flex-none">
 					<ul
 						class="flex flex-row lg:flex-col w-full flex-1
 							justify-between lg:justify-start gap-2 lg:gap-0 lg:space-y-4
-							lg:text-right font-serif font-medium opacity-80 hover:opacity-100 transition-opacity
+							lg:text-right font-sans font-medium opacity-80 hover:opacity-100 transition-opacity
 							px-4 py-3 lg:p-4 lg:pt-5"
 					>
 						<li class="relative my-2 flex-1 text-center lg:text-right">
 							<a
 								href="{base}/"
-								class="relative lg:pr-4"
+								class="relative lg:pr-4 font-sans"
 								class:font-bold={page.url.pathname === `${base}/`}
 							>
 								Home
@@ -106,7 +159,10 @@
 								<LinkDiamond {page} path={`${base}/about`}></LinkDiamond>
 							</a>
 						</li>
-						<li class="relative my-2 flex-1 text-center lg:text-right">
+						<li
+							class="relative my-2 flex-1 text-center lg:text-right lg:mb-0"
+							class:lg:mb-0={portfolioOpen}
+						>
 							<a
 								href="{base}/portfolio"
 								onclick={() => (portfolioOpen = !portfolioOpen)}
@@ -117,7 +173,9 @@
 								<LinkDiamond {page} path={`${base}/portfolio`}></LinkDiamond>
 							</a>
 							{#if portfolioOpen}
-								<ul class="mt-2 space-y-2 text-sm font-normal opacity-70 dark:text-gray-300">
+								<ul
+									class="relative lg:pr-4 mt-2 space-y-2 text-sm font-normal opacity-70 dark:text-gray-300 lg:mb-0"
+								>
 									<li>
 										<a
 											href="{base}/portfolio/traversable-wormholes"
@@ -193,14 +251,48 @@
 
 			<!-- Main content column - Slot for page content -->
 			<div
-				class="main-content main-content-with-noise bg-cream-50 dark:bg-[hsl(218,_13%,_8%)] transition-[flex-basis,max-width] duration-700 ease-out flex flex-col"
+				class="main-content main-content-with-noise bg-cream-50 dark:bg-[hsl(218,_13%,_8%)] transition-[flex-basis,max-width] duration-1000 ease-out flex flex-col"
 			>
 				{@render children()}
 			</div>
 			<div
-				class="right-sidebar hidden lg:flex flex-col justify-between items-end flex-none
+				class="right-sidebar hidden lg:p-3 lg:flex flex-col justify-between items-end flex-none
 					border-grid lg:border-l sticky top-0 h-screen"
-			></div>
+			>
+				<div class="hidden lg:block h-42 w-full border-grid">
+					<div
+						class="t hidden lg:flex lg:flex-col lg:items-start lg:space-y-4 lg:mt-auto opacity-60 hover:opacity-100 transition-opacity lg:mr-5 lg:mb-5"
+					>
+						{#if isDark}
+							<button
+								class="cursor-pointer"
+								aria-label="Switch to light mode"
+								title="Switch to light mode"
+								onclick={onThemeButtonClick}
+							>
+								<Sun
+									size={24}
+									weight={'regular'}
+									class="text-current hover:text-accent-blue transition-colors"
+								></Sun>
+							</button>
+						{:else}
+							<button
+								class="cursor-pointer"
+								aria-label="Switch to dark mode"
+								title="Switch to dark mode"
+								onclick={onThemeButtonClick}
+							>
+								<Moon
+									size={24}
+									weight={'regular'}
+									class="text-current hover:text-accent-blue transition-colors"
+								></Moon>
+							</button>
+						{/if}
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<!-- Mobile bottom modal menu -->
@@ -216,13 +308,13 @@
 			></div>
 			<!-- Panel (explicit inline style to guarantee fixed positioning even if a parent gains transform) -->
 			<div
-				class="lg:hidden bottom-0 left-0 right-0 z-50 backdrop-soft shadow-soft border-t border-grid transition-transform duration-300 ease-in-out noise-texture"
+				class="lg:hidden bottom-0 left-0 right-0 z-50 backdrop-soft shadow-soft border-t border-grid transition-transform duration-1000 noise-texture"
 				class:translate-y-0={menuOpen}
 				class:translate-y-full={!menuOpen}
 				style="position:fixed"
 			>
 				<div class="flex justify-between items-center p-4 border-b border-grid">
-					<h2 class="font-serif font-bold">Menu</h2>
+					<h2 class="font-sans font-bold">Menu</h2>
 					<button
 						onclick={toggleMenu}
 						class="p-2 hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer rounded-sm transition-colors"
@@ -231,7 +323,7 @@
 					</button>
 				</div>
 				<div class="p-4">
-					<ul class="space-y-4 font-serif font-medium">
+					<ul class="space-y-4 font-sans font-medium">
 						<li class="py-2 border-b border-grid">
 							<a
 								href="{base}/"
@@ -335,19 +427,15 @@
 			width: auto;
 			max-width: clamp(var(--main-min), var(--main-pref), var(--main-max));
 			transition:
-				max-width 650ms cubic-bezier(0.55, 0.06, 0.25, 0.95),
-				flex-basis 650ms cubic-bezier(0.55, 0.06, 0.25, 0.95);
+				max-width 0ms ease-in-out,
+				flex-basis 0ms ease-in-out;
 		}
 		.portfolio-mode .main-content {
 			/* In portfolio mode we prefer a wider main area; raise upper clamp */
 			--main-min: 50rem;
-			/* --main-max: 90rem; */
+			--main-max: calc(100% - var(--sidebars-total));
 			--main-pref: calc(var(--layout-max-width) - var(--sidebars-total));
 			max-width: clamp(var(--main-min), var(--main-pref), var(--main-max));
-		}
-
-		.portfolio-mode .main-content {
-			max-width: calc(100% - var(--sidebars-total));
 		}
 	}
 	/* Ensure media inside main-content never overflow */
@@ -367,15 +455,13 @@
 		background-image: url('/images/noise.0e24d0e5.png');
 		background-size: 180px;
 		background-repeat: repeat;
-		opacity: 0.035;
+		opacity: 0.04;
 		pointer-events: none;
 		z-index: 0;
 	}
 
-	@media (prefers-color-scheme: dark) {
-		.main-content-with-noise::before {
-			opacity: 0.012;
-		}
+	:global(html.dark) .main-content-with-noise::before {
+		opacity: 0.05;
 	}
 
 	/* Ensure content appears above noise */

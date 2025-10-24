@@ -12,8 +12,15 @@
 		{
 			title: "Why Science Can't Tell Stories About Itself",
 			slug: 'science-stories',
-			date: '2025-09-01',
-			summary: 'A tour through the contemporary problems of science communication.'
+			date: '2025-07-02',
+			summary: 'Why modern science struggles to captivate like a good story.'
+		},
+		{
+			title: 'The Galileo Problem',
+			slug: 'galileo-problem',
+			date: '2025-10-11',
+			summary:
+				"The parallels between Galileo's challenges and the hurdles facing modern science education."
 		}
 	];
 	function href(p: Post) {
@@ -23,19 +30,21 @@
 
 <PageWrapper>
 	<div class="space-y-6">
-		<SectionHeader title="Blog" />
+		<SectionHeader title="Blog" containerClass="mt-0" />
 
 		<!-- Subtle divider -->
-		<div class="border-t border-grid opacity-50 mx-6 lg:mx-8"></div>
+		<!-- <div class="border-t border-grid opacity-50 mx-6 lg:mx-8"></div> -->
 
-		<div class="p-6 lg:p-8 font-serif dark:text-gray-300">
+		<div class="p-6 lg:p-8 font-sans dark:text-gray-300">
 			<ul class="space-y-6">
 				{#each posts as p}
 					<li class="group">
 						<a href={href(p)} class="block">
-							<h3 class="font-medium text-base group-hover:underline">{p.title}</h3>
-							<p class="text-xs opacity-70">{p.date}</p>
-							<p class="text-xs mt-1 max-w-prose">{p.summary}</p>
+							<h3 class="font-medium text-base dark:text-gray-400">
+								{p.title}
+							</h3>
+							<p class="text-xs opacity-70 dark:text-gray-400">{p.date}</p>
+							<p class="text-xs mt-1 max-w-prose dark:text-gray-400">{p.summary}</p>
 						</a>
 					</li>
 				{/each}

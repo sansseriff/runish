@@ -2,7 +2,38 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/courage.svg" />
+		<title>Runish</title>
+		<!-- Ensure UA knows both schemes are supported -->
+		<meta name="color-scheme" content="light dark" />
+		<script>
+			// Early theme application to avoid FOUC / flash of wrong theme.
+			// Mirrors logic in +layout.svelte but must run BEFORE paint.
+			(function () {
+				// Temporarily disable transitions to avoid flash when adding theme class
+				var css = document.createElement('style');
+				css.textContent = '*{transition:none!important}';
+				css.setAttribute('data-theme-preload', '');
+				document.head.appendChild(css);
+				try {
+					var stored = localStorage.getItem('theme');
+					var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+					var dark = stored === 'dark' || (stored === null && prefersDark);
+					var root = document.documentElement;
+					root.classList.remove('light', 'dark');
+					root.classList.add(dark ? 'dark' : 'light');
+					// Optional: set a flag so later scripts know it was pre-set.
+					root.dataset.themeApplied = 'true';
+				} catch (e) {
+					/* noop */
+				}
+				// Allow a frame then remove the no-transition style
+				requestAnimationFrame(function () {
+					var guard = document.querySelector('style[data-theme-preload]');
+					if (guard) guard.remove();
+				});
+			})();
+		</script>
+		<link rel="icon" href="%sveltekit.assets%/Runish.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		%sveltekit.head%
 		<link rel="preconnect" href="https://fonts.googleapis.com" />

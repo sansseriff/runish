@@ -65,9 +65,9 @@
 	<div class="space-y-6">
 		<SectionHeader
 			title="Built with code, built with colors"
-			headingClass="font-serif font-medium text-lg lg:text-xl lg:mb-0 lg:mt-2"
+			headingClass="font-serif font-medium text-lg lg:text-xl lg:mb-0 lg:mt-[1.7em] dark:text-gray-400"
 		>
-			<p class="font-serif font-medium text-sm dark:text-gray-400 max-w-prose mt-3">
+			<p class="font-sans font-medium text-sm dark:text-gray-400 max-w-prose mt-3">
 				Call me a computational artist, or an artistic scientist and engineer. My projects span the
 				space of design, computation, and aesthetics.
 			</p>
@@ -123,7 +123,7 @@
 							{/if}
 							<div class="relative p-4 sm:p-6 flex flex-col gap-2">
 								<h3
-									class="font-serif font-medium text-base md:text-lg flex flex-wrap items-center gap-3"
+									class="font-sans font-medium text-base md:text-lg flex flex-wrap items-center gap-3"
 								>
 									<span>{c.title}</span>
 									<span class="flex gap-2 items-center">
