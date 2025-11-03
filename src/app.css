@@ -38,6 +38,12 @@
 	font-style: italic;
 }
 
+@font-face {
+	font-family: 'Moonrune';
+	src: url(/fonts/MOONRUNE.TTF) format('truetype');
+	font-display: swap;
+}
+
 /* diagonal-pattern noise-texture transition-colors duration-300 */
 
 body {

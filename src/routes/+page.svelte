@@ -1,6 +1,7 @@
 <script lang="ts">
 	import PageWrapper from '$lib/PageWrapper.svelte';
 	import SectionHeader from '$lib/SectionHeader.svelte';
+	import RunishText from '$lib/RunishText.svelte';
 
 	let runish_mode: boolean = true;
 </script>
@@ -10,22 +11,24 @@
 		<!-- Section header with horizontal line and diamond -->
 		<SectionHeader>
 			{#if runish_mode}
-				<h1 class="mt-6 font-serif font-medium text-2xl lg:text-3xl lg:mb-0">
-					<span class="text-accent-black dark:text-gray-400">Something </span>
-					<span class="text-accent-blue">Runi</span><span
-						class="dot text-blue-300 dark:text-blue-500">.</span
-					><span class="text-accent-blue">sh</span>
-				</h1>
+				<div class="runish-header-container">
+					<h1 class="mt-6 font-serif font-medium text-2xl lg:text-3xl lg:mb-0 runish-title">
+						<span class="text-accent-black dark:text-gray-400">Something </span>
+						<span class="text-accent-blue h-[10px]">
+							<RunishText />
+						</span>
+					</h1>
 
-				<div class="">
-					<p
-						class="font-sans text-md lg:text-md leading-relaxed opacity-90 max-w-2xl lg:mt-2 dark:text-gray-600"
-					>
-						Welcome to the portfolio and blog of Andrew Mueller.
-						<br class="hidden sm:block" />
-						<!-- <br class="hidden sm:block" /> -->
-						Mildly mystical, mostly scientific.
-					</p>
+					<div class="">
+						<p
+							class="font-sans text-md lg:text-md leading-relaxed opacity-90 max-w-2xl lg:mt-2 dark:text-gray-600"
+						>
+							Welcome to the portfolio and blog of Andrew Mueller.
+							<br class="hidden sm:block" />
+							<!-- <br class="hidden sm:block" /> -->
+							Mildly mystical, mostly scientific.
+						</p>
+					</div>
 				</div>
 			{:else}
 				<h1 class="font-serif font-medium text-2xl lg:text-3xl text-accent-blue lg:mb-0">
@@ -70,8 +73,16 @@
 </PageWrapper>
 
 <style>
-	.dot {
-		margin-left: -0.02rem;
-		margin-right: -0.02rem;
+	/* Container to prevent vertical shifting of the entire header area */
+	.runish-header-container {
+		min-height: calc(1.2em + 2rem); /* Title line height + paragraph margin */
+	}
+
+	/* Ensure the title container has fixed height to prevent vertical shifting */
+	.runish-title {
+		line-height: 1.2;
+		min-height: 1.2em;
+		display: inline-block;
+		vertical-align: baseline;
 	}
 </style>
