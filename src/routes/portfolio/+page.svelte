@@ -7,13 +7,19 @@
 		flags: Flag[];
 		media: string; // background image or video path (under /static)
 		mediaType?: 'image' | 'video';
+		video?: string; // optional video path for hover
+		blurhash?: string; // optional blurhash string for placeholder
 		description: string;
+		textColorOverride?: string; // optional text color override for cards with white backgrounds
 		iconFlags?: Record<Flag, string>; // optional mapping to icon asset
 	}
 
 	import { base } from '$app/paths';
+	import { onMount } from 'svelte';
 	import SectionHeader from '$lib/SectionHeader.svelte';
 	import PageWrapper from '$lib/PageWrapper.svelte';
+	import PortfolioCard from '$lib/PortfolioCard.svelte';
+	import { blurhashes } from '$lib/blurhashes';
 	const iconMap: Record<Flag, string> = {
 		software: `${base}/icons/software_icon.svg`,
 		quantum: `${base}/icons/quantum_icon.svg`,
@@ -26,6 +32,7 @@
 			slug: 'traversable-wormholes',
 			flags: ['quantum', 'software', 'visual'],
 			media: `${base}/images/traversable_wormholes.jpeg`,
+			blurhash: blurhashes.traversable_wormholes,
 			description:
 				'Interactive figures and tooling exploring negative energy shortcuts in spacetime via quantum information thought experiments.'
 		},
@@ -34,6 +41,8 @@
 			slug: 'compass',
 			flags: ['software', 'visual'],
 			media: `${base}/images/feathered_peacoq.png`,
+			video: `${base}/videos/feathered_peacoq.mp4`,
+			blurhash: blurhashes.feathered_peacoq,
 			description:
 				'A design language & rendering pipeline for procedural scientific visuals later evolved into Lunaframe.'
 		},
@@ -42,6 +51,8 @@
 			slug: 'feathered-peacoq',
 			flags: ['quantum', 'visual'],
 			media: `${base}/images/feathered_peacoq.png`,
+			video: `${base}/videos/feathered_peacoq.mp4`,
+			blurhash: blurhashes.feathered_peacoq,
 			description:
 				'High‑rate single photon detection visualization – pattern recognition tricks for superconducting detector signals.'
 		}
@@ -59,6 +70,18 @@
 		if (active.size === 0) return true;
 		return card.flags.some((f) => active.has(f));
 	}
+
+	// Preload videos on mount
+	onMount(() => {
+		const videoUrls = cards.filter((c) => c.video).map((c) => c.video!);
+		videoUrls.forEach((url) => {
+			const video = document.createElement('video');
+			video.src = url;
+			video.preload = 'auto';
+			video.muted = true;
+			video.playsInline = true;
+		});
+	});
 </script>
 
 <PageWrapper>
@@ -100,64 +123,9 @@
 		<div class="m-7 my-0 space-y-6 pb-12 px-2 md:px-0">
 			{#each cards as c}
 				{#if shown(c)}
-					<a href={`${base}/portfolio/${c.slug}`} class="block group">
-						<div
-							class="group relative overflow-hidden rounded-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-mint-500 card w-full shadow-soft border border-grid"
-						>
-							{#if c.mediaType === 'video'}
-								<video
-									src={c.media}
-									autoplay
-									muted
-									loop
-									playsinline
-									class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300"
-								></video>
-							{:else}
-								<img
-									src={c.media}
-									alt={c.title}
-									class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300"
-									loading="lazy"
-								/>
-							{/if}
-							<div class="relative p-4 sm:p-6 flex flex-col gap-2">
-								<h3
-									class="font-sans font-medium text-base md:text-lg flex flex-wrap items-center gap-3"
-								>
-									<span>{c.title}</span>
-									<span class="flex gap-2 items-center">
-										{#each c.flags as f}
-											<img
-												src={iconMap[f]}
-												alt={f}
-												class="size-4 opacity-70 group-hover:opacity-100 transition-opacity"
-												loading="lazy"
-											/>
-										{/each}
-									</span>
-								</h3>
-								<p
-									class="text-[12px] md:text-sm leading-snug max-w-prose pr-4 opacity-90 dark:opacity-80"
-								>
-									{c.description}
-								</p>
-							</div>
-						</div>
-					</a>
+					<PortfolioCard card={c} />
 				{/if}
 			{/each}
 		</div>
 	</div>
 </PageWrapper>
-
-<style>
-	.card {
-		min-height: 15rem;
-	}
-	@media (min-width: 1024px) {
-		.card {
-			min-height: 17rem;
-		}
-	}
-</style>

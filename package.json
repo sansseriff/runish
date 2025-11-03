@@ -13,6 +13,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
 		"lint": "prettier --check .",
+		"generate:blurhash": "bun run scripts/generate-blurhash.js",
 		"deploy": "bun run build:production && bunx gh-pages -d build -t"
 	},
 	"devDependencies": {
@@ -22,6 +23,7 @@
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tailwindcss/typography": "^0.5.15",
 		"@tailwindcss/vite": "^4.0.0",
+		"canvas": "^3.2.0",
 		"gh-pages": "^6.3.0",
 		"mdsvex": "^0.12.6",
 		"prettier": "^3.4.2",
@@ -34,6 +36,7 @@
 	},
 	"dependencies": {
 		"bits-ui": "^2.11.5",
+		"blurhash": "^2.0.5",
 		"melt": "^0.40.2",
 		"phosphor-svelte": "^3.0.1"
 	}
