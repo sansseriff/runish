@@ -1,0 +1,1 @@
+import{f as v,a as m}from"./BsRVVLWd.js";import{c as e,r as i}from"./DZ91M7QS.js";import{s as p}from"./SkvcLheF.js";var d=v('<div class="prose max-w-none w-full mx-auto mt-0 relative"><div class="relative z-10"><!></div></div>');function c(o,s){var r=d(),a=e(r),t=e(a);p(t,()=>s.children),i(a),i(r),m(o,r)}export{c as P};
