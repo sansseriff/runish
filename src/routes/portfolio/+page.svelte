@@ -1,13 +1,16 @@
 <script lang="ts">
 	// Filter logic
 	type Flag = 'software' | 'quantum' | 'visual';
+	interface Media {
+		path: string; // path to media file (under /static)
+		startOffset?: number; // optional start offset in seconds (for videos only)
+	}
 	interface Card {
 		title: string;
 		slug: string; // future detail page
 		flags: Flag[];
-		media: string; // background image or video path (under /static)
-		mediaType?: 'image' | 'video';
-		video?: string; // optional video path for hover
+		media: Media; // background image
+		video?: Media; // optional video for hover
 		blurhash?: string; // optional blurhash string for placeholder
 		description: string;
 		textColorOverride?: string; // optional text color override for cards with white backgrounds
@@ -28,33 +31,48 @@
 
 	const cards: Card[] = [
 		{
-			title: 'Traversable wormholes – nature',
+			title: 'WORMHOLE',
 			slug: 'traversable-wormholes',
 			flags: ['quantum', 'software', 'visual'],
-			media: `${base}/images/traversable_wormholes.jpeg`,
+			media: {
+				path: `${base}/images/wormhole_hero.jpg`
+			},
+			video: {
+				path: `${base}/videos/wormhole_hero.webm`
+			},
 			blurhash: blurhashes.traversable_wormholes,
 			description:
 				'Interactive figures and tooling exploring negative energy shortcuts in spacetime via quantum information thought experiments.'
 		},
 		{
-			title: 'COMPASS – a precursor to Lunaframe',
+			title: 'COMPASS',
 			slug: 'compass',
 			flags: ['software', 'visual'],
-			media: `${base}/images/feathered_peacoq.png`,
-			video: `${base}/videos/feathered_peacoq.mp4`,
+			media: {
+				path: `${base}/images/peacoq_hero.jpg`
+			},
+			video: {
+				path: `${base}/videos/peacoq_hero.webm`,
+				startOffset: 0.5
+			},
 			blurhash: blurhashes.feathered_peacoq,
 			description:
 				'A design language & rendering pipeline for procedural scientific visuals later evolved into Lunaframe.'
 		},
 		{
-			title: 'Feathered PEACOQ',
+			title: 'PEACOQ',
 			slug: 'feathered-peacoq',
 			flags: ['quantum', 'visual'],
-			media: `${base}/images/feathered_peacoq.png`,
-			video: `${base}/videos/feathered_peacoq.mp4`,
+			media: {
+				path: `${base}/images/peacoq_hero.jpg`
+			},
+			video: {
+				path: `${base}/videos/peacoq_hero.webm`,
+				startOffset: 0.5
+			},
 			blurhash: blurhashes.feathered_peacoq,
 			description:
-				'High‑rate single photon detection visualization – pattern recognition tricks for superconducting detector signals.'
+				'Visualization of the Performance Enhanced Array for Counting Optical Quanta (PEACOQ). A high throughput single-mode fiber coupled SNSPD'
 		}
 	];
 
@@ -73,7 +91,7 @@
 
 	// Preload videos on mount
 	onMount(() => {
-		const videoUrls = cards.filter((c) => c.video).map((c) => c.video!);
+		const videoUrls = cards.filter((c) => c.video).map((c) => c.video!.path);
 		videoUrls.forEach((url) => {
 			const video = document.createElement('video');
 			video.src = url;

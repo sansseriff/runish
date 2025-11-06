@@ -12,6 +12,7 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import LinkDiamond from '$lib/LinkDiamond.svelte';
+	import RunishText from '$lib/RunishText.svelte';
 	// Sidebar expandable state for portfolio sub-items
 	let portfolioOpen = $state(false);
 	// Auto-open when on a portfolio page; close when leaving
@@ -104,13 +105,14 @@
 	>
 		<!-- Mobile header with hamburger -->
 		<div
-			class="sm:hidden p-4 border-b border-grid backdrop-soft
+			class="sm:hidden p-4 border-b border-grid
                     flex items-center justify-between"
 		>
-			<div class="logo inline-flex">
-				<h1 class="font-serif font-medium">Something Runi</h1>
-				<h1 class="text-gray-400 dark:text-gray-400">.</h1>
-				<h1 class="font-serif font-medium">sh</h1>
+			<div class="logo inline-flex items-center font-serif font-medium text-2xl">
+				<span class="text-accent-black dark:text-gray-400">Something</span>
+				<span class="text-accent-blue ml-1">
+					<RunishText size="sm" />
+				</span>
 			</div>
 
 			<button
@@ -174,7 +176,7 @@
 							</a>
 							{#if portfolioOpen}
 								<ul
-									class="relative lg:pr-4 mt-2 space-y-2 text-sm font-normal opacity-70 dark:text-gray-300 lg:mb-0"
+									class="hidden lg:block relative lg:pr-4 mt-2 space-y-2 text-sm font-normal opacity-70 dark:text-gray-300 lg:mb-0"
 								>
 									<li>
 										<a
@@ -383,9 +385,22 @@
 </style> -->
 
 <style>
-	:global(html),
-	:global(main) {
-		scrollbar-gutter: stable;
+	/* Prevent unwanted scrollbars on small/medium screens - only show when needed */
+	@media (max-width: 1023px) {
+		:global(html) {
+			overflow-x: hidden;
+			overflow-y: auto; /* Only show vertical scrollbar when content overflows */
+		}
+		:global(body) {
+			overflow-x: hidden;
+		}
+	}
+	/* Only reserve scrollbar space on large screens to prevent layout jump */
+	@media (min-width: 1024px) {
+		:global(html),
+		:global(main) {
+			scrollbar-gutter: stable;
+		}
 	}
 	:root {
 		--sidebars-total: 20rem; /* combined width of both sidebars as requested */
@@ -447,7 +462,7 @@
 	/* Noise texture for main-content */
 	.main-content-with-noise::before {
 		content: '';
-		position: absolute;
+		position: fixed;
 		top: 0;
 		left: 0;
 		right: 0;

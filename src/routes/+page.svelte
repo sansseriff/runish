@@ -11,10 +11,10 @@
 		<!-- Section header with horizontal line and diamond -->
 		<SectionHeader>
 			{#if runish_mode}
-				<div class="runish-header-container">
-					<h1 class="mt-6 font-serif font-medium text-2xl lg:text-3xl lg:mb-0 runish-title">
+				<div class="runish-header-container hidden sm:block">
+					<h1 class="mt-6 font-serif font-medium text-3xl sm:mb-0 runish-title tracking-normal">
 						<span class="text-accent-black dark:text-gray-400">Something </span>
-						<span class="text-accent-blue h-[10px]">
+						<span class="text-accent-blue">
 							<RunishText />
 						</span>
 					</h1>

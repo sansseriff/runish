@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
+	// Size prop to adjust spacing for different font sizes
+	let {
+		size = 'default',
+		rememberVisitor = false
+	}: { size?: 'sm' | 'default'; rememberVisitor?: boolean } = $props();
+
 	// Split "Runi.sh" into individual characters
 	const runishText = ['R', 'u', 'n', 'i', '.', 's', 'h'];
 
@@ -20,7 +26,7 @@
 		fontSize?: string;
 		width?: string;
 	}> = [
-		{ letterSpacing: '50', verticalOffset: '0.3rem', fontSize: '1em' }, // R
+		{ letterSpacing: '0', verticalOffset: '0.3rem', fontSize: '1em' }, // R
 		{ letterSpacing: '0', verticalOffset: '0.3rem', fontSize: '1em' }, // u
 		{ letterSpacing: '0', verticalOffset: '0.3rem', fontSize: '1em' }, // n
 		{ letterSpacing: '0', verticalOffset: '0.3rem', fontSize: '1em' }, // i
@@ -30,8 +36,8 @@
 	];
 
 	// State for each letter's runic font status
-	let runicFlourish: boolean[] = Array(runishText.length).fill(false);
-	let runicHover: boolean[] = Array(runishText.length).fill(false);
+	let runicFlourish = $state<boolean[]>(Array(runishText.length).fill(false));
+	let runicHover = $state<boolean[]>(Array(runishText.length).fill(false));
 
 	// Track timeout IDs for cleanup
 	const flourishTimeouts: (number | null)[][] = Array.from({ length: runishText.length }, () => [
@@ -40,9 +46,9 @@
 	]);
 
 	// Store character widths to prevent layout shift
-	let characterWidths: number[] = Array(runishText.length).fill(0);
+	let characterWidths = $state<number[]>(Array(runishText.length).fill(0));
 	let characterRefs: (HTMLSpanElement | null)[] = Array(runishText.length).fill(null);
-	let containerRef: HTMLSpanElement | null = null;
+	let containerRef = $state<HTMLSpanElement | null>(null);
 
 	// Check if this is the first visit
 	onMount(() => {
@@ -103,15 +109,26 @@
 				setTimeout(measureWidths, 200);
 			}
 
-			const hasVisited = localStorage.getItem('runish_has_visited');
-			if (!hasVisited) {
-				// Mark as visited
-				localStorage.setItem('runish_has_visited', 'true');
+			// Determine if we should trigger the flourish
+			let shouldFlourish = false;
+			if (rememberVisitor) {
+				// Check localStorage if rememberVisitor is enabled
+				const hasVisited = localStorage.getItem('runish_has_visited');
+				if (!hasVisited) {
+					// Mark as visited
+					localStorage.setItem('runish_has_visited', 'true');
+					shouldFlourish = true;
+				}
+			} else {
+				// If rememberVisitor is disabled, always trigger flourish
+				shouldFlourish = true;
+			}
 
+			if (shouldFlourish) {
 				// Trigger flourish effect for each letter
 				runishText.forEach((_, index) => {
 					// Random delay between 0 and 3 seconds
-					const delay = Math.random() * 3000;
+					const delay = Math.random() * 1000;
 
 					const startTimeoutId = setTimeout(() => {
 						// Activate runic font
@@ -157,10 +174,12 @@
 	}
 
 	// Computed: letter shows runic if either hovered or in flourish
-	$: runicActive = runishText.map((_, index) => runicFlourish[index] || runicHover[index]);
+	let runicActive = $derived(
+		runishText.map((_, index) => runicFlourish[index] || runicHover[index])
+	);
 </script>
 
-<span class="runish-container" bind:this={containerRef}>
+<span class="runish-container" class:runish-sm={size === 'sm'} bind:this={containerRef}>
 	{#each runishText as letter, index}
 		<span
 			bind:this={characterRefs[index]}
@@ -192,6 +211,13 @@
 		line-height: 1.2;
 		height: 1.2em;
 		vertical-align: baseline;
+		/* Reset letter spacing to ensure consistency across screen sizes */
+		letter-spacing: normal;
+	}
+
+	/* Small size variant - tighter spacing for smaller text */
+	.runish-container.runish-sm {
+		letter-spacing: -0.02em;
 	}
 
 	.runish-letter {

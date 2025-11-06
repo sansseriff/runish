@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import SectionHeader from '$lib/SectionHeader.svelte';
-	const hero = `${base}/videos/feathered_peacoq.mp4`;
+	const hero = `${base}/videos/peacoq_hero.webm`;
 </script>
 
 <section class="prose max-w-none w-full mx-auto mt-6 lg:pr-4">

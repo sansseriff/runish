@@ -243,9 +243,26 @@ body {
 		}
 	}
 
+	/* ============================================================
+		Noise Texture Utilities
+		Centralized noise texture system with CSS variables for opacity control
+	============================================================ */
+
+	/* Base noise texture - placeholder class (noise is applied via main-content-with-noise) */
+	/* .noise-texture class is kept for compatibility but doesn't apply noise itself */
+	/* The actual noise comes from .main-content-with-noise or .simple-noise */
+
+	/* Subtle noise variant - for overlays on top of existing noise */
+	.noise-texture-subtle {
+		--noise-opacity-light: 0.02;
+		--noise-opacity-dark: 0.015;
+	}
+
+	/* Simple noise - applies noise image overlay */
 	.simple-noise {
-		/* Create a stacking context for the background layer */
 		position: relative;
+		--noise-opacity-light: 0.04;
+		--noise-opacity-dark: 0.05;
 	}
 
 	.simple-noise::before {
@@ -255,80 +272,15 @@ body {
 		background-image: url('/images/noise.0e24d0e5.png');
 		background-size: 180px;
 		background-repeat: repeat;
-		opacity: 0.05; /* subtle in light mode */
-		pointer-events: none; /* noise doesn't eat clicks */
-		z-index: 0; /* sit behind content */
-		border-radius: inherit; /* match rounded containers */
-	}
-
-	/* Dark mode tweaks only affect the pseudo-element */
-	:global(html.dark) .simple-noise::before {
-		opacity: 0.04;
-	}
-
-	/* Noise texture overlay - simplified approach */
-	.noise-texture {
-		position: relative;
-	}
-
-	.noise-texture::before {
-		content: '';
-		position: absolute;
-		inset: 0;
+		opacity: var(--noise-opacity-light);
 		pointer-events: none;
-		/* background:
-			radial-gradient(
-				circle at 25% 25%,
-				transparent 2%,
-				hsla(0, 0%, 0%, 0.02) 2.5%,
-				transparent 3%
-			),
-			radial-gradient(
-				circle at 75% 75%,
-				transparent 2%,
-				hsla(0, 0%, 0%, 0.01) 2.5%,
-				transparent 3%
-			),
-			radial-gradient(
-				circle at 45% 55%,
-				transparent 1.5%,
-				hsla(0, 0%, 0%, 0.015) 2%,
-				transparent 2.5%
-			); */
-		background-size:
-			20px 20px,
-			25px 25px,
-			15px 15px;
-		background-position:
-			0 0,
-			5px 5px,
-			10px 10px;
-		opacity: 0.8;
-		z-index: -1;
+		z-index: 0;
+		border-radius: inherit;
 	}
 
 	@media (prefers-color-scheme: dark) {
-		.noise-texture::before {
-			/* background:
-				radial-gradient(
-					circle at 25% 25%,
-					transparent 2%,
-					hsla(0, 0%, 100%, 0.01) 2.5%,
-					transparent 3%
-				),
-				radial-gradient(
-					circle at 75% 75%,
-					transparent 2%,
-					hsla(0, 0%, 100%, 0.008) 2.5%,
-					transparent 3%
-				),
-				radial-gradient(
-					circle at 45% 55%,
-					transparent 1.5%,
-					hsla(0, 0%, 100%, 0.012) 2%,
-					transparent 2.5%
-				); */
-			opacity: 0.6;
+		.simple-noise::before {
+			opacity: var(--noise-opacity-dark);
 		}
 	}
 
@@ -500,6 +452,12 @@ body {
 		background-color: hsl(218, 13%, 6%);
 		color: hsl(210, 6%, 73%);
 	}
+	html.light {
+		--color-hovered-bg: #f5f3ed; /* Light mode: darker than hsl(45, 23%, 97%) */
+	}
+	html.dark {
+		--color-hovered-bg: hsl(206, 15%, 9%); /* Dark mode: brighter than hsl(218, 13%, 6%) */
+	}
 
 	html.light .grid-pattern {
 		background-image:
@@ -552,12 +510,12 @@ body {
 			0 1px 2px hsla(0, 0%, 0%, 0.2);
 	}
 
-	/* Noise texture opacity tweak */
-	html.light .noise-texture::before {
-		opacity: 0.8;
+	/* Simple noise - explicit theme overrides */
+	html.light .simple-noise::before {
+		opacity: var(--noise-opacity-light, 0.04);
 	}
-	html.dark .noise-texture::before {
-		opacity: 0.6;
+	html.dark .simple-noise::before {
+		opacity: var(--noise-opacity-dark, 0.05);
 	}
 
 	/* Backdrop */

@@ -3,13 +3,16 @@
 	import { decode } from 'blurhash';
 
 	type Flag = 'software' | 'quantum' | 'visual';
+	interface Media {
+		path: string; // path to media file (under /static)
+		startOffset?: number; // optional start offset in seconds (for videos only)
+	}
 	interface Card {
 		title: string;
 		slug: string;
 		flags: Flag[];
-		media: string;
-		mediaType?: 'image' | 'video';
-		video?: string;
+		media: Media; // background image
+		video?: Media; // optional video for hover
 		blurhash?: string; // Optional blurhash string for placeholder
 		description: string;
 		textColorOverride?: string; // Optional text color override for cards with white backgrounds
@@ -28,7 +31,8 @@
 		placeholderLoaded: false,
 		fullImageLoaded: false,
 		placeholderSrc: null as string | null,
-		isHovered: false
+		isHovered: false,
+		videoElement: null as HTMLVideoElement | null
 	});
 
 	// Helper function to decode blurhash into a data URL
@@ -59,7 +63,7 @@
 
 	// Load placeholder when component mounts
 	$effect(() => {
-		if (typeof window !== 'undefined' && card.mediaType !== 'video') {
+		if (typeof window !== 'undefined') {
 			if (card.blurhash) {
 				// Use blurhash if available
 				const dataUrl = decodeBlurhash(card.blurhash);
@@ -71,6 +75,19 @@
 			}
 		} else {
 			cardState.placeholderLoaded = true;
+		}
+	});
+
+	// Control video playback based on hover state
+	$effect(() => {
+		if (cardState.videoElement) {
+			if (cardState.isHovered) {
+				cardState.videoElement.play().catch(() => {
+					// Ignore play errors (e.g., autoplay restrictions)
+				});
+			} else {
+				cardState.videoElement.pause();
+			}
 		}
 	});
 </script>
@@ -99,46 +116,44 @@
 		{/if}
 
 		<!-- Full resolution image -->
-		{#if card.mediaType !== 'video'}
-			<img
-				src={card.media}
-				alt={card.title}
-				class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 m-0"
-				style:opacity={cardState.fullImageLoaded
-					? cardState.isHovered && card.video
-						? '0'
-						: '0.7'
-					: '0'}
+		<img
+			src={card.media.path}
+			alt={card.title}
+			class="absolute inset-0 transition-opacity duration-300 m-0"
+			style:margin="0"
+			style:width="100%"
+			style:height="100%"
+			style:object-fit="cover"
+			style:opacity={cardState.fullImageLoaded
+				? cardState.isHovered && card.video
+					? '0'
+					: '0.7'
+				: '0'}
+			onload={() => {
+				cardState.fullImageLoaded = true;
+			}}
+		/>
+
+		<!-- Optional hover video overlay -->
+		{#if card.video}
+			<video
+				bind:this={cardState.videoElement}
+				src={card.video.path}
+				muted
+				loop
+				playsinline
+				class="absolute inset-0 z-10 m-0 pointer-events-none"
 				style:margin="0"
-				onload={() => {
-					cardState.fullImageLoaded = true;
+				style:width="100%"
+				style:height="100%"
+				style:object-fit="cover"
+				style:opacity={cardState.isHovered ? '1' : '0'}
+				style:transition="opacity 0.4s ease-out"
+				onloadedmetadata={(e) => {
+					if (card.video?.startOffset !== undefined) {
+						e.currentTarget.currentTime = card.video.startOffset;
+					}
 				}}
-			/>
-		{/if}
-
-		<!-- Video overlay (shown on hover) -->
-		{#if card.video && cardState.isHovered}
-			<video
-				src={card.video}
-				autoplay
-				muted
-				loop
-				playsinline
-				class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 z-10 m-0"
-				style:margin="0"
-				style:opacity="1"
-			></video>
-		{/if}
-
-		{#if card.mediaType === 'video'}
-			<video
-				src={card.media}
-				autoplay
-				muted
-				loop
-				playsinline
-				class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300 m-0"
-				style:margin="0"
 			></video>
 		{/if}
 

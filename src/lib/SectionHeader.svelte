@@ -14,7 +14,7 @@
 	export let containerClass = '';
 
 	const baseContainer =
-		'block lg:h-42 border-grid border-b lg:border-t-0 p-0 px-6 lg:p-6 lg:px-8 lg:pb-0 relative mb-0 bg-linear-to-t from-blue-100/20 dark:from-blue-900/5';
+		'block lg:h-42 border-grid border-b lg:border-t-0 p-0 px-6 lg:p-6 lg:px-8 lg:pb-0 relative mb-0 bg-linear-to-t from-blue-100/20 dark:from-blue-900/5 overflow-visible';
 </script>
 
 <div class={`${baseContainer} ${containerClass}`.trim()}>
