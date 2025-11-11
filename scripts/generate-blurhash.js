@@ -1,23 +1,27 @@
 import { encode } from 'blurhash';
-import { writeFileSync } from 'fs';
-import { createCanvas, loadImage } from 'canvas';
+import { writeFileSync, readdirSync, statSync } from 'fs';
+import { join, dirname, basename } from 'path';
+import sharp from 'sharp';
 
 /**
  * Generate blurhash string from an image file
  * @param {string} imagePath - Path to the image file
- * @param {number} componentX - X component count (default: 4)
- * @param {number} componentY - Y component count (default: 4)
+ * @param {number} componentX - X component count (default: 9)
+ * @param {number} componentY - Y component count (default: 9)
  * @returns {Promise<string>} - Blurhash string
  */
 async function generateBlurhash(imagePath, componentX = 9, componentY = 9) {
 	try {
-		const image = await loadImage(imagePath);
-		const canvas = createCanvas(image.width, image.height);
-		const ctx = canvas.getContext('2d');
-		ctx.drawImage(image, 0, 0);
+		// Use sharp to load image and get raw RGBA pixel data
+		const { data, info } = await sharp(imagePath)
+			.ensureAlpha()
+			.raw()
+			.toBuffer({ resolveWithObject: true });
 
-		const imageData = ctx.getImageData(0, 0, image.width, image.height);
-		const hash = encode(imageData.data, imageData.width, imageData.height, componentX, componentY);
+		// Convert Uint8Array to regular array for blurhash encoder
+		const pixels = Array.from(data);
+		
+		const hash = encode(pixels, info.width, info.height, componentX, componentY);
 		return hash;
 	} catch (error) {
 		console.error(`Error generating blurhash for ${imagePath}:`, error);
@@ -26,18 +30,82 @@ async function generateBlurhash(imagePath, componentX = 9, componentY = 9) {
 }
 
 /**
- * Generate blurhash strings for all portfolio images
+ * Recursively find all hero images in a directory
+ * @param {string} dir - Directory to search
+ * @param {string[]} imageExtensions - Array of image file extensions to look for
+ * @returns {Array<{path: string, key: string}>} - Array of image paths and keys
+ */
+function findHeroImages(dir, imageExtensions = ['.jpg', '.jpeg', '.webp', '.png']) {
+	const heroImages = [];
+
+	function scanDirectory(currentDir, relativePath = '') {
+		try {
+			const entries = readdirSync(currentDir);
+
+			for (const entry of entries) {
+				const fullPath = join(currentDir, entry);
+				const relativeEntryPath = relativePath ? join(relativePath, entry) : entry;
+
+				try {
+					const stat = statSync(fullPath);
+
+					if (stat.isDirectory()) {
+						// Recursively scan subdirectories
+						scanDirectory(fullPath, relativeEntryPath);
+					} else if (stat.isFile()) {
+						// Check if it's a hero image
+						const lowerEntry = entry.toLowerCase();
+						const ext = lowerEntry.substring(lowerEntry.lastIndexOf('.'));
+						
+						if (
+							lowerEntry.includes('hero') &&
+							imageExtensions.includes(ext)
+						) {
+							// Extract key from directory name (e.g., 'wormhole' from 'portfolio/wormhole/wormhole_hero.jpg')
+							const dirName = dirname(relativeEntryPath).split('/').pop() || '';
+							const key = dirName || basename(entry, ext).replace('_hero', '').replace('-', '_');
+							
+							heroImages.push({
+								path: fullPath,
+								key: key
+							});
+						}
+					}
+				} catch (err) {
+					// Skip files/directories we can't access
+					console.warn(`Warning: Could not access ${fullPath}:`, err.message);
+				}
+			}
+		} catch (err) {
+			console.error(`Error scanning directory ${currentDir}:`, err.message);
+		}
+	}
+
+	scanDirectory(dir);
+	return heroImages;
+}
+
+/**
+ * Generate blurhash strings for all portfolio hero images
  */
 async function main() {
-	const images = [
-		{ path: './static/images/traversable_wormholes.jpeg', key: 'traversable_wormholes' },
-		{ path: './static/images/feathered_peacoq.png', key: 'feathered_peacoq' }
-	];
+	const portfolioDir = './static/portfolio';
+	
+	console.log(`Scanning ${portfolioDir} for hero images...`);
+	const heroImages = findHeroImages(portfolioDir);
+
+	if (heroImages.length === 0) {
+		console.warn('No hero images found in portfolio directory.');
+		return;
+	}
+
+	console.log(`Found ${heroImages.length} hero image(s):`);
+	heroImages.forEach(img => console.log(`  - ${img.path} (key: ${img.key})`));
 
 	const results = {};
 
-	for (const image of images) {
-		console.log(`Generating blurhash for ${image.path}...`);
+	for (const image of heroImages) {
+		console.log(`\nGenerating blurhash for ${image.path}...`);
 		const hash = await generateBlurhash(image.path);
 		if (hash) {
 			results[image.key] = hash;

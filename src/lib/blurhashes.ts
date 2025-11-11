@@ -2,6 +2,9 @@
 // Run: bun run scripts/generate-blurhash.js
 
 export const blurhashes = {
-	"traversable_wormholes": "|78NYmoh56WCbwS5xBt5RjxA9wWCxaoeNKWBocfR00NK^%t6xHn~NbWCs,R%?G$y57Rj%1t6NGazxvxaEAIpk7j@s:axs:WYNER:~B%1E2WBkCocjKW9I-%1IqIqs:bHR-jd$*NGIpIp-n%1oLjbNcxaxWbHkC%0E3M|t6",
-	"feathered_peacoq": "|A7-sfNG?KWB-=sX%et8kQx^M|RiRlR~RlbWRkRPt8RjRiaxNFj=f9obM|xvt7axxtozt7tRoyoft8RjW-WBkWV@bHV@WEo#k9WUoeWUk9ozbFayoga}WBbGWVaykDj[WBfhf6j]j[j]j@fia{kCfifkoffjj?a#j[fikC"
+	"science-viz": "|A7-seNG?KWB%gsX%et8kQx^M|RiRlR~RlbWRkRPt8RjRiaxNFj=f9obM|xvt7axxtozt7tRoyoft8RjW-WBkVV@bHV@WEozk9WUoeWUk9ozbFayoga}WBbGWVaykCj[WBfif6j]j[j]j[fia{kCj?fkoffjj?azj[fikC",
+	"invariant": "|LGRSORj0fWBV@WqNHayWB~qRkM{WVWBj[f6j[WC0Nf7%0oebHoLoej[WVICkBbboLj?kCkBjuoL$~s:RkWDayoej[a#oftRWCV@j[a#j[ayjufkR-R+j@s:j[fkj[f7a}w]s.WXa}ofj[a#a}oLSgayaebHofoLjZoej@",
+	"tpwhb": "|EA9~Fa0D%?FRQRl%2V@oL~AMxIp?aM{RjxuV@ae?aE2Ip-:M{NGxuf5js%ME2EMx]M|R+t7adjY%MM|NGtRRjR*S4ayof%2adjFt7WBWDNbbbj]xajFn%ofjZoMR+bHbHofjZj?WCoet6V[oeofbIj@j[WCs.s.V@s.oe",
+	"wormhole": "|46H]jM@4-j[%4j.D~oixvRosz%QE0oEtWV=j[M{D|NO?GbK5Boit1ohWExRR@W9-mxaD#NH%3RjxvnxRhW9$_xtEERhouR:WAoebKNH-okBE1RkRjbJj=s+ahWZbDxoIdoaofjcs%WZawj_xYW?bJj=aiWFbcxVoMR:oH",
+	"gwp": "|24eQYTeDzv0ELpf^,EJH;MvaIp0pKogVXRNo#tnInent8kqs:V?NFt7xupJogVrRNofp0o~i]RNI-s8t8OZsAnMNFxbo$g4ogjEV?ayo#g4fPi^n$WBbIs;WqWAnhWUkDwcS2W=xGS2WUw{ShW=s;W;WBniW;bcs:WBWA"
 } as const;

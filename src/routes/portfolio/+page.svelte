@@ -32,47 +32,72 @@
 	const cards: Card[] = [
 		{
 			title: 'WORMHOLE',
-			slug: 'traversable-wormholes',
+			slug: 'wormhole',
 			flags: ['quantum', 'software', 'visual'],
 			media: {
-				path: `${base}/images/wormhole_hero.jpg`
+				path: `${base}/portfolio/wormhole/wormhole_hero.jpg`
 			},
 			video: {
-				path: `${base}/videos/wormhole_hero.webm`
+				path: `${base}/portfolio/wormhole/wormhole_hero.webm`
 			},
 			blurhash: blurhashes.traversable_wormholes,
-			description:
-				'Interactive figures and tooling exploring negative energy shortcuts in spacetime via quantum information thought experiments.'
+			description: 'Cover image for Nature issue 612, and accompanying press-release visualizations'
 		},
 		{
-			title: 'COMPASS',
-			slug: 'compass',
-			flags: ['software', 'visual'],
-			media: {
-				path: `${base}/images/peacoq_hero.jpg`
-			},
-			video: {
-				path: `${base}/videos/peacoq_hero.webm`,
-				startOffset: 0.5
-			},
-			blurhash: blurhashes.feathered_peacoq,
-			description:
-				'A design language & rendering pipeline for procedural scientific visuals later evolved into Lunaframe.'
-		},
-		{
-			title: 'PEACOQ',
-			slug: 'feathered-peacoq',
+			title: 'SCIENTIFIC VISUALIZATION',
+			slug: 'science-viz',
 			flags: ['quantum', 'visual'],
 			media: {
-				path: `${base}/images/peacoq_hero.jpg`
+				path: `${base}/portfolio/science-viz/peacoq_hero.jpg`
 			},
 			video: {
-				path: `${base}/videos/peacoq_hero.webm`,
+				path: `${base}/portfolio/science-viz/peacoq_hero.webm`,
 				startOffset: 0.5
 			},
 			blurhash: blurhashes.feathered_peacoq,
-			description:
-				'Visualization of the Performance Enhanced Array for Counting Optical Quanta (PEACOQ). A high throughput single-mode fiber coupled SNSPD'
+			description: 'Scientific Visualization using 3D graphics and animation'
+		},
+		{
+			title: 'INVARIANT',
+			slug: 'invariant',
+			flags: ['visual'],
+			media: {
+				path: `${base}/portfolio/invariant/invariant_hero.webp`
+			},
+			video: {
+				path: `${base}/portfolio/invariant/invariant_hero.webm`,
+				startOffset: 0.5
+			},
+			blurhash: blurhashes.feathered_peacoq,
+			description: 'My 3rd aerial short film featuring UCSD views and students'
+		},
+		{
+			title: 'GAMES WE PLAY',
+			slug: 'gwp',
+			flags: ['visual'],
+			media: {
+				path: `${base}/portfolio/gwp/gwp_hero.webp`
+			},
+			video: {
+				path: `${base}/portfolio/gwp/gwp_hero.webm`,
+				startOffset: 0.5
+			},
+			blurhash: blurhashes.feathered_peacoq,
+			description: 'What if college breakup arguments involved lightsabers?'
+		},
+		{
+			title: 'THE PLACES WE HAVE BEEN',
+			slug: 'tpwhb',
+			flags: ['visual'],
+			media: {
+				path: `${base}/portfolio/tpwhb/tpwhb_hero.webp`
+			},
+			video: {
+				path: `${base}/portfolio/tpwhb/tpwhb_hero.webm`,
+				startOffset: 0.5
+			},
+			blurhash: blurhashes.feathered_peacoq,
+			description: 'My first aerial short film that garnered widespread attention around campus'
 		}
 	];
 

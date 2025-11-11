@@ -15,7 +15,7 @@
 					<h1 class="mt-6 font-serif font-medium text-3xl sm:mb-0 runish-title tracking-normal">
 						<span class="text-accent-black dark:text-gray-400">Something </span>
 						<span class="text-accent-blue">
-							<RunishText />
+							<RunishText rememberVisitor={false} />
 						</span>
 					</h1>
 

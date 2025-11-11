@@ -32,7 +32,7 @@ The average scientific paper is as devoid of common sense and easily understanda
 
 It’s no surprise that science innovation has slowed down. Reaching the frontier of human knowledge takes a really really long time – a typical PhD takes 5-7 years of intensive study after completing an undergraduate degree, meaning someone might invest 9-11 years of higher education just to reach the boundary of what's known in their narrow field. It also takes far too long to move from one place on that boundary to another. That's why we hardly see the modern equivalent of a renaissance man - someone with broad depth and breadth of knowledge who’s able to contribute meaningfully to many research fields in a single lifetime. There's far too much prior knowledge to be consumed.
 
-<PlacedImage src="{base}/images/galileo-book.webp" alt="Title page of Sidereus Nuncius" height={20} class="mx-auto my-8">
+<PlacedImage src="{base}/blog/galileo-problem/galileo-book.webp" alt="Title page of Sidereus Nuncius" height={20} class="mx-auto my-8">
 	Pages from Sidereus Nuncius <a href="https://www.abebooks.com/first-edition/Sidereus-Nuncius-Starry-Messenger-facsimile-1610/31791860127/bd" class="text-cream-300 dark:text-cream-700">[source]</a>
 </PlacedImage>
 
@@ -53,6 +53,6 @@ Venice, 1610 <br>
 Galileo Galilei <br>
 </div>
 
-<PlacedImage src="{base}/images/moons.webp" alt="Title page of Sidereus Nuncius" height={30} class="mx-auto my-8">
+<PlacedImage src="{base}/blog/galileo-problem/moons.webp" alt="Title page of Sidereus Nuncius" height={30} class="mx-auto my-8">
 	Moons from Sidereus Nuncius <a href="https://smithsonianlibraries.tumblr.com/post/157278543315/galileo-galileis-sidereus-nuncius-1610-was-an" class="text-cream-300 dark:text-cream-700">[source]</a>
 </PlacedImage>

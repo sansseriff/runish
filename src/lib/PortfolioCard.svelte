@@ -99,7 +99,7 @@
 	onmouseleave={() => (cardState.isHovered = false)}
 >
 	<div
-		class="group relative overflow-hidden rounded-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-mint-500 card w-full shadow-soft border border-grid"
+		class="group relative overflow-hidden rounded-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-mint-500 card w-full border border-grid"
 		style:opacity={cardState.placeholderLoaded ? '1' : '0'}
 		style:transform={cardState.placeholderLoaded ? 'translateY(0)' : 'translateY(10px)'}
 		style:transition="opacity 0.3s ease-out, transform 0.3s ease-out"
@@ -127,7 +127,7 @@
 			style:opacity={cardState.fullImageLoaded
 				? cardState.isHovered && card.video
 					? '0'
-					: '0.7'
+					: '1.0'
 				: '0'}
 			onload={() => {
 				cardState.fullImageLoaded = true;
@@ -175,7 +175,7 @@
 						<img
 							src={iconMap[f]}
 							alt={f}
-							class="size-4 opacity-70 group-hover:opacity-100 transition-opacity"
+							class="size-4 opacity-100 group-hover:opacity-100 transition-opacity"
 							loading="lazy"
 							style:filter={card.textColorOverride ? 'none' : 'brightness(0) invert(1)'}
 						/>

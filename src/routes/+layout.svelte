@@ -180,10 +180,10 @@
 								>
 									<li>
 										<a
-											href="{base}/portfolio/traversable-wormholes"
+											href="{base}/portfolio/wormhole"
 											class="hover:opacity-100 transition-opacity"
 											class:font-bold={page.url.pathname ===
-												`${base}/portfolio/traversable-wormholes`}>wormhole</a
+												`${base}/portfolio/wormhole`}>wormhole</a
 										>
 									</li>
 									<li>
@@ -467,7 +467,7 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background-image: url('/images/noise.0e24d0e5.png');
+		background-image: url('/shared/noise.0e24d0e5.png');
 		background-size: 180px;
 		background-repeat: repeat;
 		opacity: 0.04;

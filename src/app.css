@@ -269,7 +269,7 @@ body {
 		content: '';
 		position: absolute;
 		inset: 0;
-		background-image: url('/images/noise.0e24d0e5.png');
+		background-image: url('/shared/noise.0e24d0e5.png');
 		background-size: 180px;
 		background-repeat: repeat;
 		opacity: var(--noise-opacity-light);

@@ -5,7 +5,7 @@
 	import Page from '../+page.svelte';
 	const cvHref = `${base}/AMueller_CV_MayX_2025.pdf`;
 	const resumeHref = `${base}/AMueller_CV_MayX_2025.pdf`; // placeholder points to CV for now
-	const profileSrc = `${base}/images/profile_picture.png`;
+	const profileSrc = `${base}/shared/profile_picture.png`;
 </script>
 
 <PageWrapper>
