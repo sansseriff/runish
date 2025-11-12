@@ -1,1 +1,0 @@
-import{w as x,x as T,y as c,z as q,S as w}from"./DZ91M7QS.js";function k(i,r){return i===r||(i==null?void 0:i[w])===r}function z(i={},r,S,h){return x(()=>{var s,f;return T(()=>{s=f,f=(h==null?void 0:h())||[],c(()=>{i!==S(...f)&&(r(i,...f),s&&k(S(...s),i)&&r(null,...s))})}),()=>{q(()=>{f&&k(S(...f),i)&&r(null,...f)})}}),i}export{z as b};
