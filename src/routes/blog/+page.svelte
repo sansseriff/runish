@@ -64,9 +64,9 @@
 </PageWrapper>
 
 <style>
-	.prose {
+	/* .prose {
 		overflow-y: unset;
-	}
+	} */
 	.blog-card {
 		/* Match page background color - start with page bg, hover transitions to hovered-bg */
 		background-color: hsl(45, 23%, 97%);

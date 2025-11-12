@@ -75,8 +75,8 @@
 	</p>
 </div> -->
 
-<style>
+<!-- <style>
 	.prose {
 		overflow-y: unset;
 	}
-</style>
+</style> -->

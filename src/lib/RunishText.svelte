@@ -47,7 +47,7 @@
 
 	// Store character widths to prevent layout shift
 	let characterWidths = $state<number[]>(Array(runishText.length).fill(0));
-	let characterRefs: (HTMLSpanElement | null)[] = Array(runishText.length).fill(null);
+	let characterRefs = $state<(HTMLSpanElement | null)[]>(Array(runishText.length).fill(null));
 	let containerRef = $state<HTMLSpanElement | null>(null);
 
 	// Check if this is the first visit
@@ -124,19 +124,17 @@
 				shouldFlourish = true;
 			}
 
-			if (shouldFlourish) {
+			const startFlourish = () => {
+				if (!shouldFlourish) return;
 				// Trigger flourish effect for each letter
 				runishText.forEach((_, index) => {
-					// Random delay between 0 and 3 seconds
+					// Random delay between 0 and 1 second
 					const delay = Math.random() * 1000;
-
 					const startTimeoutId = setTimeout(() => {
 						// Activate runic font
 						runicFlourish[index] = true;
-
 						// Duration between 0.3 and 2 seconds
 						const duration = 300 + Math.random() * 1700;
-
 						const endTimeoutId = setTimeout(() => {
 							// Only deactivate if not being hovered
 							if (!runicHover[index]) {
@@ -144,12 +142,21 @@
 							}
 							flourishTimeouts[index][1] = null;
 						}, duration);
-
 						flourishTimeouts[index][1] = endTimeoutId as unknown as number;
 					}, delay);
-
 					flourishTimeouts[index][0] = startTimeoutId as unknown as number;
 				});
+			};
+
+			// Start flourish only after fonts are ready; fallback with small delay
+			if (document.fonts && document.fonts.ready) {
+				document.fonts.ready.then(() => {
+					startFlourish();
+				});
+			} else {
+				setTimeout(() => {
+					startFlourish();
+				}, 200);
 			}
 		}
 
@@ -263,3 +270,4 @@
 		color: rgb(59, 130, 246);
 	}
 </style>
+

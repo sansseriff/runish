@@ -18,7 +18,6 @@
 	}
 
 	import { base } from '$app/paths';
-	import { onMount } from 'svelte';
 	import SectionHeader from '$lib/SectionHeader.svelte';
 	import PageWrapper from '$lib/PageWrapper.svelte';
 	import PortfolioCard from '$lib/PortfolioCard.svelte';
@@ -35,26 +34,26 @@
 			slug: 'wormhole',
 			flags: ['quantum', 'software', 'visual'],
 			media: {
-				path: `${base}/portfolio/wormhole/wormhole_hero.jpg`
+				path: `${base}/portfolio/wormhole/wormhole_hero.webp`
 			},
 			video: {
 				path: `${base}/portfolio/wormhole/wormhole_hero.webm`
 			},
-			blurhash: blurhashes.traversable_wormholes,
+			blurhash: blurhashes.wormhole,
 			description: 'Cover image for Nature issue 612, and accompanying press-release visualizations'
 		},
 		{
 			title: 'SCIENTIFIC VISUALIZATION',
-			slug: 'science-viz',
+			slug: 'scienceviz',
 			flags: ['quantum', 'visual'],
 			media: {
-				path: `${base}/portfolio/science-viz/peacoq_hero.jpg`
+				path: `${base}/portfolio/scienceviz/peacoq_hero.jpg`
 			},
 			video: {
-				path: `${base}/portfolio/science-viz/peacoq_hero.webm`,
+				path: `${base}/portfolio/scienceviz/peacoq_hero.webm`,
 				startOffset: 0.5
 			},
-			blurhash: blurhashes.feathered_peacoq,
+			blurhash: blurhashes.scienceviz,
 			description: 'Scientific Visualization using 3D graphics and animation'
 		},
 		{
@@ -68,7 +67,7 @@
 				path: `${base}/portfolio/invariant/invariant_hero.webm`,
 				startOffset: 0.5
 			},
-			blurhash: blurhashes.feathered_peacoq,
+			blurhash: blurhashes.invariant,
 			description: 'My 3rd aerial short film featuring UCSD views and students'
 		},
 		{
@@ -82,7 +81,7 @@
 				path: `${base}/portfolio/gwp/gwp_hero.webm`,
 				startOffset: 0.5
 			},
-			blurhash: blurhashes.feathered_peacoq,
+			blurhash: blurhashes.gwp,
 			description: 'What if college breakup arguments involved lightsabers?'
 		},
 		{
@@ -96,7 +95,7 @@
 				path: `${base}/portfolio/tpwhb/tpwhb_hero.webm`,
 				startOffset: 0.5
 			},
-			blurhash: blurhashes.feathered_peacoq,
+			blurhash: blurhashes.tpwhb,
 			description: 'My first aerial short film that garnered widespread attention around campus'
 		}
 	];
@@ -114,16 +113,50 @@
 		return card.flags.some((f) => active.has(f));
 	}
 
-	// Preload videos on mount
-	onMount(() => {
-		const videoUrls = cards.filter((c) => c.video).map((c) => c.video!.path);
-		videoUrls.forEach((url) => {
-			const video = document.createElement('video');
-			video.src = url;
-			video.preload = 'auto';
-			video.muted = true;
-			video.playsInline = true;
+	// Video loading state - track which card indices should load their videos
+	let cardsToLoad = $state<Set<number>>(new Set());
+	// Initialize cardElements with the correct length filled with nulls
+	let cardElements: (HTMLElement | null)[] = $state(new Array(cards.length).fill(null));
+
+	// Intersection observer to detect visible cards
+	$effect(() => {
+		if (typeof window === 'undefined') return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				// Collect all visible card indices
+				const visibleIndices: number[] = [];
+
+				entries.forEach((entry) => {
+					const index = parseInt(entry.target.getAttribute('data-card-index') || '-1');
+					if (index >= 0 && entry.isIntersecting) {
+						visibleIndices.push(index);
+					}
+				});
+
+				// Sort by priority (lower index = higher priority) and add to load queue
+				visibleIndices.sort((a, b) => a - b);
+				visibleIndices.forEach((index) => {
+					cardsToLoad.add(index);
+				});
+
+				// Trigger reactive update
+				cardsToLoad = new Set(cardsToLoad);
+			},
+			{
+				rootMargin: '50px', // Start loading slightly before the card enters viewport
+				threshold: 0.1
+			}
+		);
+
+		// Observe all card elements
+		cardElements.forEach((el) => {
+			if (el) observer.observe(el);
 		});
+
+		return () => {
+			observer.disconnect();
+		};
 	});
 </script>
 
@@ -164,9 +197,14 @@
 		</div>
 
 		<div class="m-7 my-0 space-y-6 pb-12 px-2 md:px-0">
-			{#each cards as c}
+			{#each cards as c, i}
 				{#if shown(c)}
-					<PortfolioCard card={c} />
+					<PortfolioCard
+						card={c}
+						cardIndex={i}
+						shouldLoadVideo={cardsToLoad.has(i)}
+						bind:cardElement={cardElements[i]}
+					/>
 				{/if}
 			{/each}
 		</div>

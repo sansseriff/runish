@@ -25,14 +25,25 @@
 		visual: `${base}/icons/visual_icon.svg`
 	};
 
-	let { card }: { card: Card } = $props();
+	let {
+		card,
+		cardIndex,
+		shouldLoadVideo = false,
+		cardElement = $bindable()
+	}: {
+		card: Card;
+		cardIndex: number;
+		shouldLoadVideo?: boolean;
+		cardElement?: HTMLElement | null;
+	} = $props();
 
 	const cardState = $state({
 		placeholderLoaded: false,
 		fullImageLoaded: false,
 		placeholderSrc: null as string | null,
 		isHovered: false,
-		videoElement: null as HTMLVideoElement | null
+		videoElement: null as HTMLVideoElement | null,
+		videoLoaded: false
 	});
 
 	// Helper function to decode blurhash into a data URL
@@ -78,9 +89,19 @@
 		}
 	});
 
+	// Load video when shouldLoadVideo becomes true
+	$effect(() => {
+		if (shouldLoadVideo && card.video && !cardState.videoLoaded && cardState.videoElement) {
+			// Set the src to trigger loading
+			cardState.videoElement.src = card.video.path;
+			cardState.videoElement.load();
+			cardState.videoLoaded = true;
+		}
+	});
+
 	// Control video playback based on hover state
 	$effect(() => {
-		if (cardState.videoElement) {
+		if (cardState.videoElement && cardState.videoLoaded) {
 			if (cardState.isHovered) {
 				cardState.videoElement.play().catch(() => {
 					// Ignore play errors (e.g., autoplay restrictions)
@@ -99,6 +120,8 @@
 	onmouseleave={() => (cardState.isHovered = false)}
 >
 	<div
+		bind:this={cardElement}
+		data-card-index={cardIndex}
 		class="group relative overflow-hidden rounded-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-mint-500 card w-full border border-grid"
 		style:opacity={cardState.placeholderLoaded ? '1' : '0'}
 		style:transform={cardState.placeholderLoaded ? 'translateY(0)' : 'translateY(10px)'}
@@ -138,16 +161,16 @@
 		{#if card.video}
 			<video
 				bind:this={cardState.videoElement}
-				src={card.video.path}
 				muted
 				loop
 				playsinline
+				preload="auto"
 				class="absolute inset-0 z-10 m-0 pointer-events-none"
 				style:margin="0"
 				style:width="100%"
 				style:height="100%"
 				style:object-fit="cover"
-				style:opacity={cardState.isHovered ? '1' : '0'}
+				style:opacity={cardState.isHovered && cardState.videoLoaded ? '1' : '0'}
 				style:transition="opacity 0.4s ease-out"
 				onloadedmetadata={(e) => {
 					if (card.video?.startOffset !== undefined) {
