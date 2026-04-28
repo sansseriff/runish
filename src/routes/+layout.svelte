@@ -1,40 +1,23 @@
 <script lang="ts">
 	import '../app.css';
-	import Diamond from 'phosphor-svelte/lib/DiamondsFour';
 	import X from 'phosphor-svelte/lib/X';
+	import Diamond from 'phosphor-svelte/lib/DiamondsFour';
 	import GraduationCap from 'phosphor-svelte/lib/GraduationCap';
 	import InstagramLogo from 'phosphor-svelte/lib/InstagramLogo';
-	import Moon from 'phosphor-svelte/lib/Moon';
-	import Sun from 'phosphor-svelte/lib/Sun';
-	// import Bluesky from 'phosphor-svelte/lib/BlueskyLogo';
-	import BlueSkyLogo from '$lib/BlueSkyLogo.svelte';
 	import GithubLogo from 'phosphor-svelte/lib/GithubLogo';
+	import BlueSkyLogo from '$lib/BlueSkyLogo.svelte';
+	import BrandLockup from '$lib/BrandLockup.svelte';
+	import ThemeChip from '$lib/ThemeChip.svelte';
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
-	import LinkDiamond from '$lib/LinkDiamond.svelte';
-	import RunishText from '$lib/RunishText.svelte';
-	// Sidebar expandable state for portfolio sub-items
-	let portfolioOpen = $state(false);
-	// Auto-open when on a portfolio page; close when leaving
-	$effect(() => {
-		const onPortfolio = page.url.pathname.startsWith(`${base}/portfolio`);
-		if (onPortfolio) portfolioOpen = true;
-		else portfolioOpen = false;
-	});
 
 	let { children } = $props();
 	let menuOpen = $state(false);
-	let previousPath = $state(page.url.pathname);
-
-	// Simple dark mode handling per Tailwind docs: html.dark governs dark:* utilities
 	let isDark = $state(false);
+	let previousPath = $state(page.url.pathname);
 
 	function applyDarkClass(dark: boolean) {
 		if (typeof document === 'undefined') return;
-		// We control BOTH an explicit 'dark' or 'light' class so that
-		// our custom CSS (which previously relied on @media(prefers-color-scheme))
-		// can override system preference. Media queries can't be programmatically
-		// disabled, so we out-specify them with .light / .dark selectors.
 		const root = document.documentElement;
 		root.classList.remove('dark', 'light');
 		root.classList.add(dark ? 'dark' : 'light');
@@ -48,7 +31,6 @@
 			applyDarkClass(isDark);
 			return;
 		}
-		// System fallback
 		isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 		applyDarkClass(isDark);
 	}
@@ -58,7 +40,6 @@
 		if (typeof window !== 'undefined') {
 			const mql = window.matchMedia('(prefers-color-scheme: dark)');
 			const listener = () => {
-				// Only adjust if user hasn't explicitly chosen
 				if (!localStorage.getItem('theme')) {
 					isDark = mql.matches;
 					applyDarkClass(isDark);
@@ -69,7 +50,7 @@
 		}
 	});
 
-	function onThemeButtonClick() {
+	function toggleTheme() {
 		isDark = !isDark;
 		localStorage.setItem('theme', isDark ? 'dark' : 'light');
 		applyDarkClass(isDark);
@@ -79,16 +60,11 @@
 		menuOpen = !menuOpen;
 	}
 
-	// Prevent body scrolling when the mobile menu is open
 	$effect(() => {
-		if (menuOpen) {
-			document.body.style.overflow = 'hidden';
-		} else {
-			document.body.style.overflow = '';
-		}
+		if (typeof document === 'undefined') return;
+		document.body.style.overflow = menuOpen ? 'hidden' : '';
 	});
 
-	// Auto-close ONLY when the pathname actually changes (prevents immediate self-closing)
 	$effect(() => {
 		const current = page.url.pathname;
 		if (current !== previousPath) {
@@ -96,371 +72,302 @@
 			if (menuOpen) menuOpen = false;
 		}
 	});
+
+	const navItems = [
+		{ label: 'Home', path: '/' },
+		{ label: 'About', path: '/about' },
+		{ label: 'Portfolio', path: '/portfolio' },
+		{ label: 'Blog', path: '/blog' }
+	];
+
+	function isActive(path: string): boolean {
+		const current = page.url.pathname;
+		const target = `${base}${path}`;
+		if (path === '/') return current === target || current === `${base}` || current === '/';
+		return current === target || current.startsWith(`${target}/`);
+	}
 </script>
 
-<main class="min-h-screen diagonal-pattern noise-texture transition-colors duration-10">
-	<div
-		class="centered-content mx-auto w-full transition-[max-width] duration-1200 ease-in-out"
-		class:portfolio-mode={page.url.pathname.startsWith(`${base}/portfolio`)}
-	>
-		<!-- Mobile header with hamburger -->
-		<div
-			class="sm:hidden p-4 border-b border-grid
-                    flex items-center justify-between"
-		>
-			<div class="logo inline-flex items-center font-serif font-medium text-2xl">
-				<span class="text-accent-black dark:text-gray-400">Something</span>
-				<span class="text-accent-blue ml-1">
-					<RunishText size="sm" />
-				</span>
+<main class="rs-shell">
+	<!-- Mobile header -->
+	<div class="mobile-header">
+		<BrandLockup compact />
+		<button onclick={toggleMenu} class="menu-btn" aria-label="Open menu">
+			<Diamond size={22} weight={'regular'} />
+		</button>
+	</div>
+
+	<div class="rs-shell-inner">
+		<!-- Left sidebar -->
+		<aside class="rs-left">
+			<div class="brand-row">
+				<BrandLockup />
 			</div>
-
-			<button
-				onclick={toggleMenu}
-				class="p-2 hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer rounded-sm transition-colors"
-			>
-				<Diamond size={24} weight={'regular'} color={'gray'}></Diamond>
-			</button>
-		</div>
-
-		<!-- Container with three columns -->
-		<div class="main-container flex flex-col lg:flex-row w-full lg:pb-0 lg:m-auto">
-			<!-- Left sidebar -->
-			<div
-				class="left-sidebar hidden sm:flex flex-row lg:flex-col lg:items-end items-stretch
-					w-full lg:flex-none border-grid border-b lg:border-b-0 lg:border-r sticky lg:top-0 lg:h-screen md:flex"
-			>
-				<!-- Spacer to push vertical (lg+) menu downward; only visible at lg and above -->
-				<!-- removed border-b -->
-				<div class="hidden lg:block h-32 w-full border-grid"></div>
-
-				<div class="block flex-1 lg:flex-none">
-					<ul
-						class="flex flex-row lg:flex-col w-full flex-1
-							justify-between lg:justify-start gap-2 lg:gap-0 lg:space-y-4
-							lg:text-right font-sans font-medium opacity-80 hover:opacity-100 transition-opacity
-							px-4 py-3 lg:p-4 lg:pt-5"
-					>
-						<li class="relative my-2 flex-1 text-center lg:text-right">
-							<a
-								href="{base}/"
-								class="relative lg:pr-4 font-sans"
-								class:font-bold={page.url.pathname === `${base}/`}
-							>
-								Home
-								<LinkDiamond {page} path={`${base}/`}></LinkDiamond></a
-							>
-						</li>
-						<li class="relative my-2 flex-1 text-center lg:text-right">
-							<a
-								href="{base}/about"
-								class="relative lg:pr-4"
-								class:font-bold={page.url.pathname === `${base}/about`}
-							>
-								About
-								<LinkDiamond {page} path={`${base}/about`}></LinkDiamond>
-							</a>
-						</li>
-						<li
-							class="relative my-2 flex-1 text-center lg:text-right lg:mb-0"
-							class:lg:mb-0={portfolioOpen}
+			<ul class="nav-list">
+				{#each navItems as item}
+					<li>
+						<a
+							href="{base}{item.path === '/' ? '/' : item.path}"
+							class="nav-item"
+							class:active={isActive(item.path)}
 						>
-							<a
-								href="{base}/portfolio"
-								onclick={() => (portfolioOpen = !portfolioOpen)}
-								class="relative lg:pr-4"
-								class:font-bold={page.url.pathname.startsWith(`${base}/portfolio`)}
-							>
-								<span class="inline-flex items-center gap-1">Portfolio</span>
-								<LinkDiamond {page} path={`${base}/portfolio`}></LinkDiamond>
-							</a>
-							{#if portfolioOpen}
-								<ul
-									class="hidden lg:block relative lg:pr-4 mt-2 space-y-2 text-sm font-normal opacity-70 dark:text-gray-300 lg:mb-0"
-								>
-									<li>
-										<a
-											href="{base}/portfolio/wormhole"
-											class="hover:opacity-100 transition-opacity"
-											class:font-bold={page.url.pathname ===
-												`${base}/portfolio/wormhole`}>wormhole</a
-										>
-									</li>
-									<li>
-										<a
-											href="{base}/portfolio/compass"
-											class="hover:opacity-100 transition-opacity"
-											class:font-bold={page.url.pathname === `${base}/portfolio/compass`}>compass</a
-										>
-									</li>
-									<li>
-										<a
-											href="{base}/portfolio/feathered-peacoq"
-											class="hover:opacity-100 transition-opacity"
-											class:font-bold={page.url.pathname === `${base}/portfolio/feathered-peacoq`}
-											>peacoq</a
-										>
-									</li>
-								</ul>
+							{item.label}
+							{#if isActive(item.path)}
+								<span class="active-marker" aria-hidden="true"></span>
 							{/if}
-						</li>
-						<li class="relative my-2 flex-1 text-center lg:text-right">
-							<a
-								href="{base}/blog"
-								class="relative lg:pr-4"
-								class:font-bold={page.url.pathname === `${base}/blog`}
-							>
-								Blog
-								<LinkDiamond {page} path={`${base}/blog`}></LinkDiamond>
-							</a>
-						</li>
-					</ul>
-				</div>
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</aside>
 
-				<div
-					class="hidden lg:flex lg:flex-col lg:items-end lg:space-y-4 lg:mt-auto opacity-60 hover:opacity-100 transition-opacity lg:mr-5 lg:mb-5"
-				>
-					<a href="https://bsky.app/profile/sansseriff.bsky.social">
-						<BlueSkyLogo cls="text-current hover:text-accent-blue transition-colors"></BlueSkyLogo>
+		<!-- Main column -->
+		<section class="rs-main rs-main-noise">
+			{@render children()}
+		</section>
+
+		<!-- Right sidebar -->
+		<aside class="rs-right">
+			<div class="right-top">
+				<ThemeChip {isDark} onToggle={toggleTheme} />
+			</div>
+			<div class="right-bottom">
+				<div class="socials">
+					<a href="https://github.com/sansseriff" aria-label="GitHub">
+						<GithubLogo size={20} weight={'regular'} />
 					</a>
-					<a href="https://www.instagram.com/andstermueller/" class="cursor-pointer">
-						<InstagramLogo
-							size={24}
-							weight={'regular'}
-							class="text-current hover:text-accent-blue transition-colors"
-						></InstagramLogo>
+					<a href="https://bsky.app/profile/sansseriff.bsky.social" aria-label="Bluesky">
+						<BlueSkyLogo cls="theme-color" />
+					</a>
+					<a href="https://www.instagram.com/andstermueller/" aria-label="Instagram">
+						<InstagramLogo size={20} weight={'regular'} />
 					</a>
 					<a
 						href="https://scholar.google.com/citations?user=FRQbz4sAAAAJ&hl=en"
-						class="cursor-pointer"
+						aria-label="Google Scholar"
 					>
-						<GraduationCap
-							size={24}
-							weight={'regular'}
-							class="text-current hover:text-accent-blue transition-colors"
-						></GraduationCap>
-					</a>
-
-					<a href="https://github.com/sansseriff">
-						<GithubLogo
-							size={24}
-							weight={'regular'}
-							class="text-current hover:text-accent-blue transition-colors"
-						></GithubLogo>
+						<GraduationCap size={20} weight={'regular'} />
 					</a>
 				</div>
+				<div class="copyright">© {new Date().getFullYear()} · AM</div>
 			</div>
-
-			<!-- Main content column - Slot for page content -->
-			<div
-				class="main-content main-content-with-noise bg-cream-50 dark:bg-[hsl(218,_13%,_8%)] transition-[flex-basis,max-width] duration-1000 ease-out flex flex-col"
-			>
-				{@render children()}
-			</div>
-			<div
-				class="right-sidebar hidden lg:p-3 lg:flex flex-col justify-between items-end flex-none
-					border-grid lg:border-l sticky top-0 h-screen"
-			>
-				<div class="hidden lg:block h-42 w-full border-grid">
-					<div
-						class="t hidden lg:flex lg:flex-col lg:items-start lg:space-y-4 lg:mt-auto opacity-60 hover:opacity-100 transition-opacity lg:mr-5 lg:mb-5"
-					>
-						{#if isDark}
-							<button
-								class="cursor-pointer"
-								aria-label="Switch to light mode"
-								title="Switch to light mode"
-								onclick={onThemeButtonClick}
-							>
-								<Sun
-									size={24}
-									weight={'regular'}
-									class="text-current hover:text-accent-blue transition-colors"
-								></Sun>
-							</button>
-						{:else}
-							<button
-								class="cursor-pointer"
-								aria-label="Switch to dark mode"
-								title="Switch to dark mode"
-								onclick={onThemeButtonClick}
-							>
-								<Moon
-									size={24}
-									weight={'regular'}
-									class="text-current hover:text-accent-blue transition-colors"
-								></Moon>
-							</button>
-						{/if}
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Mobile bottom modal menu -->
-		{#if menuOpen}
-			<!-- Overlay -->
-			<div
-				class="lg:hidden fixed inset-0 z-40 backdrop-blur-sm bg-black/20"
-				role="button"
-				tabindex="0"
-				onclick={toggleMenu}
-				onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleMenu()}
-				aria-label="Close menu overlay"
-			></div>
-			<!-- Panel (explicit inline style to guarantee fixed positioning even if a parent gains transform) -->
-			<div
-				class="lg:hidden bottom-0 left-0 right-0 z-50 backdrop-soft shadow-soft border-t border-grid transition-transform duration-1000 noise-texture"
-				class:translate-y-0={menuOpen}
-				class:translate-y-full={!menuOpen}
-				style="position:fixed"
-			>
-				<div class="flex justify-between items-center p-4 border-b border-grid">
-					<h2 class="font-sans font-bold">Menu</h2>
-					<button
-						onclick={toggleMenu}
-						class="p-2 hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer rounded-sm transition-colors"
-					>
-						<X size={24} weight={'regular'}></X>
-					</button>
-				</div>
-				<div class="p-4">
-					<ul class="space-y-4 font-sans font-medium">
-						<li class="py-2 border-b border-grid">
-							<a
-								href="{base}/"
-								onclick={() => (menuOpen = false)}
-								class:font-bold={page.url.pathname === `${base}/`}
-							>
-								Home
-							</a>
-						</li>
-						<li class="py-2 border-b border-grid">
-							<a
-								href="{base}/about"
-								onclick={() => (menuOpen = false)}
-								class:font-bold={page.url.pathname === `${base}/about`}
-							>
-								About
-							</a>
-						</li>
-						<li class="py-2 border-b border-grid">
-							<a
-								href="{base}/portfolio"
-								onclick={() => (menuOpen = false)}
-								class:font-bold={page.url.pathname === `${base}/portfolio`}
-							>
-								Portfolio
-							</a>
-						</li>
-						<li class="py-2 border-b border-grid">
-							<a
-								href="{base}/blog"
-								onclick={() => (menuOpen = false)}
-								class:font-bold={page.url.pathname === `${base}/blog`}
-							>
-								Blog
-							</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		{/if}
+		</aside>
 	</div>
+
+	<!-- Mobile bottom modal menu -->
+	{#if menuOpen}
+		<div
+			class="m-overlay"
+			role="button"
+			tabindex="0"
+			onclick={toggleMenu}
+			onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleMenu()}
+			aria-label="Close menu overlay"
+		></div>
+		<div class="m-panel">
+			<div class="m-head">
+				<h2 class="m-head-title">Menu</h2>
+				<button onclick={toggleMenu} class="m-close" aria-label="Close menu">
+					<X size={22} weight={'regular'} />
+				</button>
+			</div>
+			<ul class="m-list">
+				{#each navItems as item}
+					<li>
+						<a
+							href="{base}{item.path === '/' ? '/' : item.path}"
+							class="m-link"
+							class:active={isActive(item.path)}
+							onclick={() => (menuOpen = false)}
+						>
+							{item.label}
+						</a>
+					</li>
+				{/each}
+				<li class="m-theme-row">
+					<ThemeChip {isDark} onToggle={toggleTheme} />
+				</li>
+			</ul>
+		</div>
+	{/if}
 </main>
 
-<!-- <style>
-    /* Add this to ensure the transition works properly */
-    .translate-y-full {
-        transform: translateY(100%);
-    }
-    .translate-y-0 {
-        transform: translateY(0);
-    }
-
-    /* Make sure the menu transitions smoothly */
-    .transform {
-        will-change: transform;
-    }
-</style> -->
-
 <style>
-	/* Prevent unwanted scrollbars on small/medium screens - only show when needed */
-	@media (max-width: 1023px) {
-		:global(html) {
-			overflow-x: hidden;
-			overflow-y: auto; /* Only show vertical scrollbar when content overflows */
-		}
-		:global(body) {
-			overflow-x: hidden;
-		}
-	}
-	/* Only reserve scrollbar space on large screens to prevent layout jump */
-	@media (min-width: 1024px) {
-		:global(html),
-		:global(main) {
-			scrollbar-gutter: stable;
-		}
-	}
-	:root {
-		--sidebars-total: 20rem; /* combined width of both sidebars as requested */
-		--sidebar-width: calc(var(--sidebars-total) / 2); /* per-sidebar width */
-		--layout-max-width: 95vw; /* target span in portfolio mode */
-		--main-width-default: 42rem; /* normal page main width */
-	}
-	/* Sidebar shift now uses negative margin to reclaim layout space (no transform gap) */
-	@media (min-width: 1024px) {
-		/* Large screen flex layout adjustments */
-		.centered-content {
-			/* Normal mode total span: fixed main + sidebars */
-			max-width: calc(var(--main-width-default) + var(--sidebars-total));
-			width: calc(var(--main-width-default) + var(--sidebars-total));
-		}
-		.centered-content.portfolio-mode {
-			/* In portfolio mode allow expansion up to 95vw */
-			max-width: var(--layout-max-width);
-			width: var(--layout-max-width);
-		}
-		.main-container {
-			display: flex;
-			width: 100%;
-			/* Ensure children don't overflow the centered-content horizontal padding context */
-		}
-		.left-sidebar,
-		.right-sidebar {
-			width: var(--sidebar-width);
-			min-width: var(--sidebar-width);
-			flex: 0 0 var(--sidebar-width);
-		}
-		.main-content {
-			/* Allow smooth shrink just above lg when viewport is narrower than ideal total width */
-			--main-min: 40rem;
-			--main-max: var(--main-width-default);
-			/* viewport-based preferred: remaining width after sidebars but not exceeding default */
-			--main-pref: calc(100vw - var(--sidebars-total));
-			flex: 1 1 auto;
-			width: auto;
-			max-width: clamp(var(--main-min), var(--main-pref), var(--main-max));
-			transition:
-				max-width 0ms ease-in-out,
-				flex-basis 0ms ease-in-out;
-		}
-		.portfolio-mode .main-content {
-			/* In portfolio mode we prefer a wider main area; raise upper clamp */
-			--main-min: 50rem;
-			--main-max: calc(100% - var(--sidebars-total));
-			--main-pref: calc(var(--layout-max-width) - var(--sidebars-total));
-			max-width: clamp(var(--main-min), var(--main-pref), var(--main-max));
-		}
-	}
-	/* Ensure media inside main-content never overflow */
-	:global(.main-content :is(img, video, canvas, figure)) {
-		max-width: 100%;
-		height: auto;
+	.rs-shell {
+		min-height: 100vh;
+		background: var(--rs-bg);
+		color: var(--rs-fg);
+		font-family: var(--font-sans-rs);
 	}
 
-	/* Noise texture for main-content */
-	.main-content-with-noise::before {
+	.rs-shell-inner {
+		max-width: min(1200px, 100vw);
+		margin: 0 auto;
+		display: flex;
+	}
+
+	/* Mobile header */
+	.mobile-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 14px 18px;
+		border-bottom: 1px solid var(--rs-rule);
+	}
+	.menu-btn {
+		background: transparent;
+		border: 0;
+		padding: 6px;
+		color: var(--rs-fg-muted);
+		cursor: pointer;
+		border-radius: 2px;
+	}
+	.menu-btn:hover {
+		color: var(--rs-fg-strong);
+		background: var(--rs-bg-hover);
+	}
+
+	@media (min-width: 768px) {
+		.mobile-header {
+			display: none;
+		}
+	}
+
+	/* Sidebars */
+	.rs-left,
+	.rs-right {
+		display: none;
+	}
+
+	@media (min-width: 768px) {
+		.rs-left {
+			display: flex;
+			flex-direction: column;
+			width: 168px;
+			flex: 0 0 168px;
+			border-right: 1px solid var(--rs-rule);
+			padding: 48px 0 24px;
+			align-self: stretch;
+			position: sticky;
+			top: 0;
+			min-height: 100vh;
+		}
+		.rs-right {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			width: 168px;
+			flex: 0 0 168px;
+			border-left: 1px solid var(--rs-rule);
+			padding: 48px 18px 24px 12px;
+			align-self: stretch;
+			position: sticky;
+			top: 0;
+			min-height: 100vh;
+		}
+	}
+
+	.brand-row {
+		padding: 0 36px 28px 0;
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.nav-list {
+		list-style: none;
+		margin: 0;
+		padding: 4px 18px 20px 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.nav-item {
+		display: inline-block;
+		position: relative;
+		font-family: var(--font-mono-rs);
+		font-size: 11px;
+		font-weight: 400;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--rs-fg-muted);
+		text-decoration: none;
+		padding: 10px 0;
+		transition: color 0.18s ease;
+		text-align: right;
+		background-image: none;
+	}
+	.nav-list li {
+		text-align: right;
+	}
+	.nav-item:hover {
+		color: var(--rs-fg-strong);
+		background-size: 0 1px;
+	}
+	.nav-item.active {
+		color: var(--rs-fg-strong);
+		font-weight: 600;
+	}
+	.active-marker {
+		position: absolute;
+		right: calc(100% + 8px);
+		top: 50%;
+		width: 6px;
+		height: 6px;
+		transform: translateY(-50%) rotate(45deg);
+		background: var(--rs-fg-accent);
+		border-radius: 1px;
+	}
+
+	.right-top {
+		display: flex;
+		justify-content: flex-start;
+	}
+	.right-bottom {
+		margin-top: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		font-family: var(--font-mono-rs);
+		font-size: 10px;
+		color: var(--rs-fg-subtle);
+		letter-spacing: 0.06em;
+	}
+	.socials {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		color: var(--rs-fg-muted);
+		opacity: 0.75;
+	}
+	.socials a {
+		color: inherit;
+		background-image: none;
+	}
+	.socials a:hover {
+		color: var(--rs-fg-accent);
+		background-size: 0 1px;
+	}
+	.copyright {
+		color: var(--rs-fg-subtle);
+	}
+
+	/* Main column */
+	.rs-main {
+		flex: 1 1 auto;
+		min-width: 0;
+		position: relative;
+		min-height: 100vh;
+	}
+	@media (min-width: 768px) {
+		.rs-main {
+			border-left: 1px solid var(--rs-rule);
+			border-right: 1px solid var(--rs-rule);
+		}
+	}
+
+	/* Paper noise texture — preserved from prior design for character */
+	.rs-main-noise::before {
 		content: '';
 		position: fixed;
 		top: 0;
@@ -474,14 +381,89 @@
 		pointer-events: none;
 		z-index: 0;
 	}
-
-	:global(html.dark) .main-content-with-noise::before {
+	:global(html.dark) .rs-main-noise::before {
 		opacity: 0.05;
 	}
-
-	/* Ensure content appears above noise */
-	.main-content > :global(*) {
+	.rs-main > :global(*) {
 		position: relative;
 		z-index: 1;
+	}
+
+	/* Mobile bottom modal menu */
+	.m-overlay {
+		position: fixed;
+		inset: 0;
+		z-index: 40;
+		backdrop-filter: blur(6px);
+		background: rgba(0, 0, 0, 0.2);
+	}
+	.m-panel {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 50;
+		background: var(--rs-bg);
+		border-top: 1px solid var(--rs-rule);
+		box-shadow: var(--rs-shadow-2);
+	}
+	.m-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 14px 18px;
+		border-bottom: 1px solid var(--rs-rule);
+	}
+	.m-head-title {
+		font-family: var(--font-sans-rs);
+		font-weight: 600;
+		font-size: 14px;
+		margin: 0;
+		color: var(--rs-fg-strong);
+	}
+	.m-close {
+		background: transparent;
+		border: 0;
+		padding: 6px;
+		color: var(--rs-fg-muted);
+		cursor: pointer;
+	}
+	.m-list {
+		list-style: none;
+		margin: 0;
+		padding: 8px 18px 20px;
+	}
+	.m-list li {
+		padding: 0;
+		border-bottom: 1px solid var(--rs-rule);
+	}
+	.m-list li:last-child {
+		border-bottom: 0;
+	}
+	.m-link {
+		display: block;
+		padding: 14px 0;
+		font-family: var(--font-mono-rs);
+		font-size: 12px;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--rs-fg-muted);
+		text-decoration: none;
+		background-image: none;
+	}
+	.m-link.active {
+		color: var(--rs-fg-strong);
+		font-weight: 600;
+	}
+	.m-theme-row {
+		padding: 14px 0 0;
+		border-bottom: 0 !important;
+	}
+
+	:global(.theme-color) {
+		color: currentColor;
+	}
+	:global(.theme-color):hover {
+		color: var(--rs-fg-accent);
 	}
 </style>

@@ -1,111 +1,135 @@
 <script lang="ts">
-	import { base } from '$app/paths';
-	import SectionHeader from '$lib/SectionHeader.svelte';
-	import PageWrapper from '$lib/PageWrapper.svelte';
-	interface Post {
-		title: string;
-		slug: string;
-		date: string;
-		summary: string;
-	}
-	const posts: Post[] = [
-		{
-			title: 'The Problem with Three Minute Thesis',
-			slug: 'three-minute-thesis',
-			date: '2025-11-04',
-			summary:
-				'Why the popular 3MT competition fails to capture what makes science communication truly effective.'
-		},
-		{
-			title: "Why Science Can't Tell Stories About Itself",
-			slug: 'science-stories',
-			date: '2025-07-02',
-			summary: 'Why modern science struggles to captivate like a good story.'
-		},
-		{
-			title: 'The Galileo Problem',
-			slug: 'galileo-problem',
-			date: '2025-10-11',
-			summary:
-				"The parallels between Galileo's challenges and the hurdles facing modern science education."
-		}
-	];
-	function href(p: Post) {
-		return `${base}/blog/${p.slug}`;
-	}
+	import { posts, postsSorted, blogHref, formatDate } from '$lib/data/blog';
+
+	const sorted = postsSorted();
 </script>
 
-<PageWrapper>
-	<div class="space-y-6">
-		<SectionHeader title="Blog" containerClass="mt-0" />
-
-		<!-- Subtle divider -->
-		<!-- <div class="border-t border-grid opacity-50 mx-6 lg:mx-8"></div> -->
-
-		<div class="p-4 lg:p-4 font-sans dark:text-gray-300">
-			<div>
-				{#each posts as p}
-					<div class="blog-card transition-colors duration-200 p-4">
-						<a href={href(p)} class="block no-underline">
-							<h3 class="font-medium text-base dark:text-gray-100 mt-0">
-								{p.title}
-							</h3>
-							<p class="text-xs opacity-70 dark:text-gray-400">{p.date}</p>
-							<p class="text-xs mt-1 max-w-prose dark:text-gray-400">{p.summary}</p>
-						</a>
-					</div>
-					{#if p !== posts[posts.length - 1]}
-						<div class="blog-divider border-b border-gray-200/50 dark:border-gray-700/30"></div>
-					{/if}
-				{/each}
-			</div>
+<article class="blog-list">
+	<header class="page-header">
+		<div>
+			<div class="eyebrow">Notes</div>
+			<h1 class="page-title">From the desk.</h1>
 		</div>
-	</div>
-</PageWrapper>
+		<div class="meta">{posts.length} {posts.length === 1 ? 'entry' : 'entries'}</div>
+	</header>
+
+	{#each sorted as p, i}
+		<a class="row" href={blogHref(p)}>
+			<time class="date">{formatDate(p.date)}</time>
+			<div class="row-body">
+				<h3 class="row-title">{p.title}</h3>
+				<p class="row-summary">{p.summary}</p>
+			</div>
+			<span class="tag">{p.tag}</span>
+		</a>
+		{#if i < sorted.length - 1}
+			<div class="row-divider"></div>
+		{/if}
+	{/each}
+</article>
 
 <style>
-	/* .prose {
-		overflow-y: unset;
-	} */
-	.blog-card {
-		/* Match page background color - start with page bg, hover transitions to hovered-bg */
-		background-color: hsl(45, 23%, 97%);
-		position: relative;
-		transition: background-color 0.2s ease;
-		border-radius: 0.5rem;
+	.blog-list {
+		display: flex;
+		flex-direction: column;
+		font-family: var(--font-sans-rs);
 	}
-	:global(html.light) .blog-card {
-		background-color: hsl(45, 23%, 97%);
-	}
-	:global(html.dark) .blog-card {
-		background-color: hsla(218, 13%, 8%, 0.95);
-	}
-	.blog-card::before {
-		/* Always show noise texture on cards */
-		content: '';
-		position: absolute;
-		inset: 0;
 
-		background-image: url('/shared/noise.0e24d0e5.png');
-		background-size: 180px;
-		background-repeat: repeat;
-		opacity: var(--noise-opacity-light, 0.04);
-		pointer-events: none;
-		z-index: 0;
-		border-radius: inherit;
+	.page-header {
+		padding: 40px 28px 22px;
+		border-bottom: 1px solid var(--rs-rule);
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 14px;
 	}
-	:global(html.dark) .blog-card::before {
-		opacity: var(--noise-opacity-dark, 0.05);
+	.eyebrow {
+		font-family: var(--font-mono-rs);
+		font-size: 11px;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--rs-fg-subtle);
+		margin-bottom: 6px;
 	}
-	.blog-card:hover {
-		background-color: var(--color-hovered-bg) !important;
+	.page-title {
+		font-family: var(--font-serif-rs);
+		font-weight: 500;
+		font-size: 24px;
+		letter-spacing: -0.01em;
+		color: var(--rs-fg-strong);
+		margin: 0;
 	}
-	.blog-card > a {
-		position: relative;
-		z-index: 1;
+	.meta {
+		font-family: var(--font-mono-rs);
+		font-size: 10px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--rs-fg-subtle);
 	}
-	.blog-divider {
-		margin-top: 0.6rem;
-		margin-bottom: 0.6rem;
+
+	.row {
+		padding: 18px 28px;
+		display: grid;
+		grid-template-columns: 96px 1fr auto;
+		gap: 18px;
+		align-items: baseline;
+		min-height: 84px;
+		text-decoration: none;
+		color: inherit;
+		background-image: none;
+		transition: background-color 0.18s ease;
+	}
+	.row:hover {
+		background-color: var(--rs-bg-hover);
+		background-size: 0 1px;
+	}
+	.row:hover .row-title {
+		color: var(--rs-fg-accent);
+	}
+	.date {
+		font-family: var(--font-mono-rs);
+		font-size: 11px;
+		color: var(--rs-fg-subtle);
+		letter-spacing: 0.04em;
+	}
+	.row-title {
+		font-family: var(--font-serif-rs);
+		font-weight: 500;
+		font-size: 17px;
+		margin: 0 0 4px;
+		color: var(--rs-fg-strong);
+		letter-spacing: -0.01em;
+		transition: color 0.18s ease;
+	}
+	.row-summary {
+		font-family: var(--font-sans-rs);
+		font-size: 13px;
+		line-height: 1.55;
+		margin: 0;
+		color: var(--rs-fg-muted);
+		max-width: 60ch;
+	}
+	.tag {
+		font-family: var(--font-mono-rs);
+		font-size: 10px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--rs-fg-subtle);
+		align-self: start;
+		padding-top: 4px;
+	}
+	.row-divider {
+		margin: 0 28px;
+		border-bottom: 1px solid var(--rs-rule);
+	}
+
+	@media (max-width: 640px) {
+		.row {
+			grid-template-columns: 1fr auto;
+		}
+		.date {
+			grid-column: 1 / -1;
+			margin-bottom: 4px;
+		}
 	}
 </style>

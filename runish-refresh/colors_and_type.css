@@ -1,0 +1,314 @@
+/* =============================================================
+   Runish Design System — Tokens
+   Refined to align with zed.dev conventions: muted palette,
+   disciplined 8pt grid, one accent, one display family.
+   ============================================================= */
+
+/* ----- Web fonts ---------------------------------------------- */
+/* Inter — UI / body. Closest commonly-licensed match to "Writer" (humanist
+   sans with strong x-height, open terminals). Flagged as a substitute in
+   README; swap in Writer .woff2 files to fonts/ when available. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* IBM Plex Serif — editorial / display. Used for the wordmark, essay titles,
+   and any serif text. Chosen over Lora because its sharper, narrower axis
+   reads tighter next to Inter and aligns with Zed's typographic discipline
+   (Zed uses Plex across marketing). */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+/* IBM Plex Mono — code, keyboard-hints, metadata. Matches Zed's `P` `D` `S`
+   keycap chips on the home page. */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+/* Local brand fonts (drop .woff2 / .TTF into fonts/ to activate) */
+@font-face {
+	font-family: 'Writer';
+	src: url('fonts/writer-400-normal.woff2') format('woff2');
+	font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+	font-family: 'Writer';
+	src: url('fonts/writer-700-normal.woff2') format('woff2');
+	font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+	font-family: 'Moonrune';
+	src: url('fonts/MOONRUNE.TTF') format('truetype');
+	font-display: swap;
+}
+
+:root {
+	/* -------------------------------------------------------------
+	   TYPE FAMILIES
+	   Single sans, single serif, single mono — no wildcards.
+	------------------------------------------------------------- */
+	--font-sans:    'Writer', 'Inter', system-ui, -apple-system, sans-serif;
+	--font-serif:   'IBM Plex Serif', Georgia, 'Times New Roman', serif;
+	--font-mono:    'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+	--font-rune:    'Moonrune', 'IBM Plex Serif', serif;
+
+	/* -------------------------------------------------------------
+	   PALETTE — warm ink on cream paper.
+	   Hue-stable families, perceptually spaced.
+	   Cream and ink are the only two "everywhere" surfaces;
+	   everything else is earned.
+	------------------------------------------------------------- */
+
+	/* Paper — warm neutral, light surface family */
+	--paper-50:  #FBF9F4;   /* body bg */
+	--paper-100: #F5F2EA;   /* raised surface, hover */
+	--paper-200: #EAE6DA;   /* rule / subtle border */
+	--paper-300: #D4CEBD;   /* strong border */
+
+	/* Ink — near-black with a warm undertone, dark surfaces + body text */
+	--ink-50:    #6E6E70;   /* muted text (light mode) */
+	--ink-100:   #4A4A4C;   /* strong text (light mode) */
+	--ink-200:   #2B2B2E;   /* near-black copy, headings */
+	--ink-300:   #1C1C1F;   /* raised dark surface */
+	--ink-400:   #141417;   /* darkest body bg (dark mode) */
+	--ink-500:   #0E0E10;   /* page bg (dark mode) */
+
+	/* Cool grays — UI chrome only (borders, disabled, rarely fill) */
+	--gray-100:  #F1F1F2;
+	--gray-200:  #E5E5E7;
+	--gray-300:  #CACACE;
+	--gray-400:  #9A9AA0;
+	--gray-500:  #6C6C72;
+	--gray-700:  #3F3F44;
+
+	/* Accent — one blue, used on hover / active / link only. Muted. */
+	--accent-500: #3B5BDB;   /* hover / link / active tick */
+	--accent-600: #2F48AC;   /* pressed */
+	--accent-300: #8EA1E8;   /* dark-mode hover */
+	--accent-100: #E4E8F7;   /* accent tint for selected chip bg */
+
+	/* Category flags — muted, from original runish iconography, retained
+	   only because they're brand primitives. Never as fills or backgrounds. */
+	--flag-quantum:  #9F4D4D;
+	--flag-software: #965E27;
+	--flag-visual:   #9A619C;
+
+	/* -------------------------------------------------------------
+	   SEMANTIC ROLES (light theme)
+	------------------------------------------------------------- */
+	--bg:          var(--paper-50);
+	--bg-raised:   var(--paper-50);
+	--bg-hover:    var(--paper-100);
+	--bg-inverse:  var(--ink-400);
+
+	--fg:          var(--ink-100);   /* body */
+	--fg-strong:   var(--ink-200);   /* headings */
+	--fg-muted:    var(--ink-50);    /* meta, captions */
+	--fg-subtle:   var(--gray-400);  /* placeholder */
+	--fg-accent:   var(--accent-500);
+	--fg-inverse:  var(--paper-50);
+
+	--border:          var(--paper-200);
+	--border-strong:   var(--paper-300);
+	--rule:            var(--paper-200);
+
+	--shadow-1:    0 1px 2px rgba(20, 20, 23, 0.04),
+	               0 1px 1px rgba(20, 20, 23, 0.03);
+	--shadow-2:    0 2px 6px rgba(20, 20, 23, 0.06),
+	               0 1px 2px rgba(20, 20, 23, 0.04);
+
+	/* -------------------------------------------------------------
+	   TYPE SCALE — 1.125 (major-second) modular scale from 14px base
+	   Deliberately narrow range. No display >40px on the real site.
+	------------------------------------------------------------- */
+	--fs-xs:    12px;  /* meta, captions, keycap */
+	--fs-sm:    14px;  /* UI, small body */
+	--fs-base:  16px;  /* body */
+	--fs-md:    18px;  /* lead paragraph, h4 */
+	--fs-lg:    20px;  /* h3 */
+	--fs-xl:    24px;  /* h2 */
+	--fs-2xl:   32px;  /* h1 */
+	--fs-3xl:   40px;  /* rare hero */
+
+	--lh-tight:   1.15;
+	--lh-snug:    1.35;
+	--lh-body:    1.55;
+	--lh-reading: 1.7;
+
+	--tracking-tight:  -0.015em;
+	--tracking-normal: 0;
+	--tracking-loose:  0.04em;
+
+	/* -------------------------------------------------------------
+	   SPACING — strict 4/8pt grid
+	------------------------------------------------------------- */
+	--s-1:  4px;
+	--s-2:  8px;
+	--s-3:  12px;
+	--s-4:  16px;
+	--s-5:  20px;
+	--s-6:  24px;
+	--s-8:  32px;
+	--s-10: 40px;
+	--s-12: 48px;
+	--s-16: 64px;
+	--s-20: 80px;
+
+	/* -------------------------------------------------------------
+	   RADII — tight, geometric. No pills.
+	------------------------------------------------------------- */
+	--r-1: 2px;    /* default: cards, inputs, buttons */
+	--r-2: 4px;    /* slightly softer */
+	--r-3: 6px;    /* blog list item */
+
+	/* -------------------------------------------------------------
+	   LAYOUT
+	------------------------------------------------------------- */
+	--col-reading: 36rem;      /* 576px — body */
+	--col-page:    42rem;      /* 672px — default main column */
+	--col-wide:    min(95vw, 1280px);
+	--sidebar:     11rem;      /* 176px — each */
+}
+
+/* =============================================================
+   DARK THEME
+   Assumes html.dark. Warm dark — avoid pure black.
+   ============================================================= */
+html.dark, :root.dark {
+	--bg:         var(--ink-500);
+	--bg-raised:  var(--ink-400);
+	--bg-hover:   var(--ink-300);
+	--bg-inverse: var(--paper-50);
+
+	--fg:         var(--gray-300);
+	--fg-strong:  #EDEDF0;
+	--fg-muted:   var(--gray-400);
+	--fg-subtle:  var(--gray-500);
+	--fg-accent:  var(--accent-300);
+	--fg-inverse: var(--ink-200);
+
+	--border:        #26262A;
+	--border-strong: #34343A;
+	--rule:          #26262A;
+
+	--shadow-1: 0 1px 2px rgba(0,0,0,.3);
+	--shadow-2: 0 2px 8px rgba(0,0,0,.45);
+}
+
+/* =============================================================
+   BASE ELEMENTS
+   ============================================================= */
+body {
+	font-family: var(--font-sans);
+	font-size: var(--fs-base);
+	line-height: var(--lh-body);
+	color: var(--fg);
+	background: var(--bg);
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--font-serif);
+	font-weight: 500;
+	line-height: var(--lh-tight);
+	letter-spacing: var(--tracking-tight);
+	color: var(--fg-strong);
+	margin: 0;
+}
+h1 { font-size: var(--fs-2xl); }
+h2 { font-size: var(--fs-xl); }
+h3 { font-size: var(--fs-lg); }
+h4 { font-size: var(--fs-md); font-family: var(--font-sans); font-weight: 600; letter-spacing: 0; }
+h5 { font-size: var(--fs-base); font-family: var(--font-sans); font-weight: 600; letter-spacing: 0; }
+
+p { margin: 0; max-width: 70ch; text-wrap: pretty; }
+ul, ol { margin: 0; padding-left: 1.25rem; }
+li { margin: 0.35rem 0; }
+
+code, pre, kbd, samp {
+	font-family: var(--font-mono);
+	font-size: 0.9em;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+	background-image: linear-gradient(to right, var(--fg-accent), var(--fg-accent));
+	background-repeat: no-repeat;
+	background-size: 0 1px;
+	background-position: 0 100%;
+	transition: color .18s ease, background-size .25s ease;
+}
+a:hover {
+	color: var(--fg-accent);
+	background-size: 100% 1px;
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid var(--rule);
+	margin: var(--s-8) 0;
+}
+
+::selection { background: var(--accent-100); color: var(--ink-200); }
+html.dark ::selection { background: #2A3562; color: #EDEDF0; }
+
+/* =============================================================
+   UTILITIES — lean, named for intent, no pattern zoo.
+   ============================================================= */
+.text-muted   { color: var(--fg-muted); }
+.text-subtle  { color: var(--fg-subtle); }
+.text-accent  { color: var(--fg-accent); }
+.font-serif   { font-family: var(--font-serif); }
+.font-mono    { font-family: var(--font-mono); }
+.font-rune    { font-family: var(--font-rune); }
+
+.rule         { border-top: 1px solid var(--rule); }
+.rule-v       { border-left: 1px solid var(--rule); }
+
+/* Keyboard-hint chip — Zed homepage signature element */
+.kbd {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 20px; padding: 0 6px; height: 20px;
+	font-family: var(--font-mono);
+	font-size: var(--fs-xs);
+	color: var(--fg-muted);
+	background: var(--bg-raised);
+	border: 1px solid var(--border);
+	border-bottom-width: 2px;
+	border-radius: var(--r-2);
+	line-height: 1;
+}
+
+/* Diamond — used SPARINGLY on section headings + marker for active nav only.
+   No longer on every rectangle. */
+.diamond {
+	position: absolute;
+	width: 6px; height: 6px;
+	transform: rotate(45deg);
+	background: var(--bg);
+	border: 1px solid var(--border-strong);
+	border-radius: 1px;
+	z-index: 20;
+}
+.diamond-bl { bottom: -3.5px; left: -3.5px; }
+.diamond-br { bottom: -3.5px; right: -3.5px; }
+
+/* Subtle horizontal rule between sections — replaces heavy borders */
+.section-rule {
+	height: 1px;
+	background: var(--rule);
+	margin: 0;
+}
+
+/* Container */
+.container-page {
+	max-width: var(--col-page);
+	margin: 0 auto;
+	padding: 0 var(--s-6);
+}
+
+/* Focus — uniform accent ring */
+:focus-visible {
+	outline: 2px solid var(--accent-500);
+	outline-offset: 2px;
+	border-radius: 2px;
+}

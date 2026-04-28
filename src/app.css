@@ -2,6 +2,9 @@
 @plugin '@tailwindcss/typography';
 @custom-variant dark (&:where(.dark, .dark *));
 
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+
 @theme {
 	--shadow-sharp: 3px 3px 1px 1px rgb(0 0 0 / 0.07);
 }
@@ -546,4 +549,93 @@ body {
 
 	/* If future components rely on variables, consider moving palette to :root and
 	 toggling a data-theme attribute instead of duplicating style blocks. */
+}
+
+/* =============================================================
+   Runish design-system tokens
+   Warm ink on cream paper. Tokens used by the new layout & home.
+============================================================= */
+:root {
+	--font-serif-rs: 'IBM Plex Serif', Georgia, 'Times New Roman', serif;
+	--font-mono-rs: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+	--font-sans-rs: 'Writer', 'Inter', system-ui, -apple-system, sans-serif;
+	--font-rune-rs: 'Moonrune', 'IBM Plex Serif', serif;
+
+	--paper-50: #fbf9f4;
+	--paper-100: #f5f2ea;
+	--paper-200: #eae6da;
+	--paper-300: #d4cebd;
+
+	--ink-50: #6e6e70;
+	--ink-100: #4a4a4c;
+	--ink-200: #2b2b2e;
+	--ink-300: #1c1c1f;
+	--ink-400: #141417;
+	--ink-500: #0e0e10;
+
+	--accent-100: #e4e8f7;
+	--accent-300: #8ea1e8;
+	--accent-500: #3b5bdb;
+	--accent-600: #2f48ac;
+
+	--flag-quantum: #9f4d4d;
+	--flag-software: #965e27;
+	--flag-visual: #9a619c;
+
+	--rs-bg: var(--paper-50);
+	--rs-bg-raised: var(--paper-50);
+	--rs-bg-hover: var(--paper-100);
+	--rs-fg: var(--ink-100);
+	--rs-fg-strong: var(--ink-200);
+	--rs-fg-muted: var(--ink-50);
+	--rs-fg-subtle: #9a9aa0;
+	--rs-fg-accent: var(--accent-500);
+	--rs-fg-inverse: var(--paper-50);
+
+	--rs-border: var(--paper-200);
+	--rs-border-strong: var(--paper-300);
+	--rs-rule: var(--paper-200);
+
+	--rs-shadow-1:
+		0 1px 2px rgba(20, 20, 23, 0.04),
+		0 1px 1px rgba(20, 20, 23, 0.03);
+	--rs-shadow-2:
+		0 2px 6px rgba(20, 20, 23, 0.06),
+		0 1px 2px rgba(20, 20, 23, 0.04);
+}
+
+html.dark {
+	--rs-bg: var(--ink-500);
+	--rs-bg-raised: var(--ink-400);
+	--rs-bg-hover: var(--ink-300);
+	--rs-fg: #cacace;
+	--rs-fg-strong: #ededf0;
+	--rs-fg-muted: #9a9aa0;
+	--rs-fg-subtle: #6c6c72;
+	--rs-fg-accent: var(--accent-300);
+	--rs-fg-inverse: var(--ink-200);
+
+	--rs-border: #26262a;
+	--rs-border-strong: #34343a;
+	--rs-rule: #26262a;
+
+	--rs-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3);
+	--rs-shadow-2: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not(.light) {
+		--rs-bg: var(--ink-500);
+		--rs-bg-raised: var(--ink-400);
+		--rs-bg-hover: var(--ink-300);
+		--rs-fg: #cacace;
+		--rs-fg-strong: #ededf0;
+		--rs-fg-muted: #9a9aa0;
+		--rs-fg-subtle: #6c6c72;
+		--rs-fg-accent: var(--accent-300);
+		--rs-fg-inverse: var(--ink-200);
+		--rs-border: #26262a;
+		--rs-border-strong: #34343a;
+		--rs-rule: #26262a;
+	}
 }

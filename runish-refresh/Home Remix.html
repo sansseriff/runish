@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html class="light">
+<head>
+<meta charset="utf-8">
+<title>Runish — Home (remix)</title>
+<link rel="icon" href="assets/Runish.svg">
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  html, body { margin: 0; min-height: 100%; }
+  body { overflow-x: hidden; }
+  * { box-sizing: border-box; }
+
+  /* Tweaks panel */
+  .tweaks {
+    position: fixed; right: 16px; bottom: 16px; z-index: 100;
+    width: 280px; max-width: calc(100vw - 32px);
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: 2px;
+    box-shadow: var(--shadow-2);
+    font-family: var(--font-sans); font-size: 13px;
+    color: var(--fg);
+    transform: translateY(calc(100% + 24px));
+    transition: transform .28s ease;
+  }
+  .tweaks.open { transform: translateY(0); }
+  .tweaks-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: .08em; text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  .tweaks-body { padding: 14px; display: flex; flex-direction: column; gap: 16px; }
+  .tweak-row { display: flex; flex-direction: column; gap: 6px; }
+  .tweak-row label {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: .08em; text-transform: uppercase;
+    color: var(--fg-subtle);
+    display: flex; justify-content: space-between;
+  }
+  .seg {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 0;
+    border: 1px solid var(--border); border-radius: 2px; overflow: hidden;
+  }
+  .seg button {
+    font-family: var(--font-sans); font-size: 12px;
+    padding: 6px 8px;
+    border: 0;
+    border-right: 1px solid var(--border);
+    border-top: 1px solid var(--border);
+    background: transparent; color: var(--fg-muted);
+    cursor: pointer; transition: background .15s, color .15s;
+    text-align: left;
+  }
+  .seg button:nth-child(odd) { border-right: 1px solid var(--border); }
+  .seg button:nth-child(even) { border-right: 0; }
+  .seg button:nth-child(1), .seg button:nth-child(2) { border-top: 0; }
+  .seg button.on {
+    background: var(--ink-200); color: var(--fg-inverse);
+  }
+  html.dark .seg button.on { background: var(--paper-50); color: var(--ink-200); }
+  .seg button:hover:not(.on) { background: var(--bg-hover); color: var(--fg-strong); }
+  input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; background: transparent; height: 20px;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    height: 1px; background: var(--border-strong);
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 10px; height: 10px; border-radius: 1px;
+    background: var(--fg-accent);
+    margin-top: -5px; transform: rotate(45deg);
+    border: 1px solid var(--fg-accent);
+  }
+  input[type=range]::-moz-range-track { height: 1px; background: var(--border-strong); }
+  input[type=range]::-moz-range-thumb {
+    width: 10px; height: 10px; border-radius: 1px;
+    background: var(--fg-accent); border: 1px solid var(--fg-accent);
+    transform: rotate(45deg);
+  }
+  .tweaks-toggle {
+    position: fixed; right: 16px; bottom: 16px; z-index: 101;
+    width: 36px; height: 36px;
+    background: var(--bg); color: var(--fg-muted);
+    border: 1px solid var(--border-strong);
+    border-radius: 2px;
+    display: none; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-family: var(--font-mono); font-size: 16px;
+    box-shadow: var(--shadow-1);
+  }
+  .tweaks-toggle.visible { display: inline-flex; }
+  .tweaks-toggle:hover { color: var(--fg-accent); }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="./src/Primitives.jsx"></script>
+<script type="text/babel" src="./src/Layout.jsx"></script>
+<script type="text/babel" src="./src/Shader.jsx"></script>
+<script type="text/babel" src="./src/HomeRemix.jsx"></script>
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "preset": "plasma",
+  "density": 0.8,
+  "speed": 0.35,
+  "accent": 0.36,
+  "dark": false
+}/*EDITMODE-END*/;
+
+function Tweaks({ open, onClose, value, onChange }) {
+  const presets = [
+    { k: 'ascii',  label: 'ASCII' },
+    { k: 'plasma', label: 'Plasma' },
+    { k: 'ember',  label: 'Ember' },
+    { k: 'weave',  label: 'Weave' },
+    { k: 'jormun', label: 'Jörmungandr' },
+    { k: 'rune',   label: 'Runestone' },
+    { k: 'valk',   label: 'Valknut' },
+  ];
+  return (
+    <div className={'tweaks' + (open ? ' open' : '')}>
+      <div className="tweaks-head">
+        <span>Tweaks</span>
+        <button onClick={onClose} style={{
+          border: 0, background: 'transparent', color: 'var(--fg-muted)',
+          cursor: 'pointer', fontFamily: 'var(--font-mono)', fontSize: 14,
+        }}>×</button>
+      </div>
+      <div className="tweaks-body">
+        <div className="tweak-row">
+          <label><span>Visualization</span><span>◇</span></label>
+          <div className="seg">
+            {presets.map(p => (
+              <button key={p.k}
+                className={value.preset === p.k ? 'on' : ''}
+                onClick={() => onChange({ preset: p.k })}>
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="tweak-row">
+          <label><span>Theme</span><span>{value.dark ? 'dark' : 'light'}</span></label>
+          <div className="seg">
+            <button className={!value.dark ? 'on' : ''} onClick={() => onChange({ dark: false })}>Light</button>
+            <button className={value.dark ? 'on' : ''} onClick={() => onChange({ dark: true })}>Dark</button>
+          </div>
+        </div>
+
+        <div className="tweak-row">
+          <label><span>Density</span><span>{value.density.toFixed(2)}</span></label>
+          <input type="range" min="0.5" max="2.0" step="0.05"
+            value={value.density} onChange={(e) => onChange({ density: parseFloat(e.target.value) })} />
+        </div>
+        <div className="tweak-row">
+          <label><span>Speed</span><span>{value.speed.toFixed(2)}×</span></label>
+          <input type="range" min="0.1" max="2.0" step="0.05"
+            value={value.speed} onChange={(e) => onChange({ speed: parseFloat(e.target.value) })} />
+        </div>
+        <div className="tweak-row">
+          <label><span>Accent intensity</span><span>{Math.round(value.accent*100)}%</span></label>
+          <input type="range" min="0" max="1" step="0.02"
+            value={value.accent} onChange={(e) => onChange({ accent: parseFloat(e.target.value) })} />
+        </div>
+
+        <div style={{
+          fontFamily: 'var(--font-mono)', fontSize: 10,
+          color: 'var(--fg-subtle)', letterSpacing: '.06em',
+          borderTop: '1px solid var(--rule)', paddingTop: 10,
+        }}>
+          Click the hero to emit a pulse. Try all three presets.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [tweaks, setTweaks] = React.useState(TWEAK_DEFAULTS);
+  const [tweaksOpen, setTweaksOpen] = React.useState(false);
+  const [editorAvailable, setEditorAvailable] = React.useState(false);
+
+  const update = (partial) => {
+    setTweaks(t => {
+      const next = { ...t, ...partial };
+      // persist to parent (if hosted inside editor)
+      try {
+        window.parent.postMessage({ type: '__edit_mode_set_keys', edits: partial }, '*');
+      } catch {}
+      return next;
+    });
+  };
+
+  // Apply theme class to <html>
+  React.useEffect(() => {
+    document.documentElement.classList.remove('dark', 'light');
+    document.documentElement.classList.add(tweaks.dark ? 'dark' : 'light');
+  }, [tweaks.dark]);
+
+  // Edit-mode protocol: listener first, then announce
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const d = e.data || {};
+      if (d.type === '__activate_edit_mode') setTweaksOpen(true);
+      else if (d.type === '__deactivate_edit_mode') setTweaksOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    try { window.parent.postMessage({ type: '__edit_mode_available' }, '*'); } catch {}
+    // Fallback: if we're not hosted, show a small floating toggle
+    setTimeout(() => {
+      if (window.parent === window) setEditorAvailable(true);
+    }, 300);
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const [route, setRoute] = React.useState('home');
+
+  return (
+    <>
+      <Layout current={route} onNav={setRoute}
+        isDark={tweaks.dark}
+        onToggleTheme={() => update({ dark: !tweaks.dark })}
+        wide={true}>
+        <HomeRemix
+          isDark={tweaks.dark}
+          preset={tweaks.preset}
+          density={tweaks.density}
+          speed={tweaks.speed}
+          accent={tweaks.accent}
+          onToggleTheme={() => update({ dark: !tweaks.dark })}
+        />
+      </Layout>
+
+      <Tweaks open={tweaksOpen}
+        onClose={() => setTweaksOpen(false)}
+        value={tweaks} onChange={update} />
+
+      {editorAvailable && !tweaksOpen && (
+        <button className="tweaks-toggle visible"
+          onClick={() => setTweaksOpen(true)} title="Open tweaks">◇</button>
+      )}
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
