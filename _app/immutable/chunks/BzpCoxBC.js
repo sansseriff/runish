@@ -1,0 +1,1 @@
+import{a9 as t,a4 as o,l as e,aa as u,u as c}from"./BodG447m.js";function f(a){e===null&&t(),u&&e.l!==null?l(e).m.push(a):o(()=>{const n=c(a);if(typeof n=="function")return n})}function l(a){var n=a.l;return n.u??(n.u={a:[],b:[],m:[]})}export{f as o};
