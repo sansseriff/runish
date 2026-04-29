@@ -1,13 +1,11 @@
 <script lang="ts">
 	import '../app.css';
+	import { setContext } from 'svelte';
 	import X from 'phosphor-svelte/lib/X';
 	import Diamond from 'phosphor-svelte/lib/DiamondsFour';
-	import GraduationCap from 'phosphor-svelte/lib/GraduationCap';
-	import InstagramLogo from 'phosphor-svelte/lib/InstagramLogo';
-	import GithubLogo from 'phosphor-svelte/lib/GithubLogo';
-	import BlueSkyLogo from '$lib/BlueSkyLogo.svelte';
 	import BrandLockup from '$lib/BrandLockup.svelte';
 	import ThemeChip from '$lib/ThemeChip.svelte';
+	import SocialLink from '$lib/SocialLink.svelte';
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
 
@@ -86,6 +84,15 @@
 		if (path === '/') return current === target || current === `${base}` || current === '/';
 		return current === target || current.startsWith(`${target}/`);
 	}
+
+	const onPortfolio = $derived(page.url.pathname.startsWith(`${base}/portfolio`));
+
+	setContext('rs-theme', {
+		get isDark() {
+			return isDark;
+		},
+		toggleTheme
+	});
 </script>
 
 <main class="rs-shell">
@@ -97,7 +104,7 @@
 		</button>
 	</div>
 
-	<div class="rs-shell-inner">
+	<div class="rs-shell-inner" class:portfolio-mode={onPortfolio}>
 		<!-- Left sidebar -->
 		<aside class="rs-left">
 			<div class="brand-row">
@@ -124,31 +131,21 @@
 		<!-- Main column -->
 		<section class="rs-main rs-main-noise">
 			{@render children()}
+			<footer class="site-footer">
+				<span>© {new Date().getFullYear()} · runi.sh · AM</span>
+				<div class="footer-socials">
+					<SocialLink platform="github" mode="text" />
+					<SocialLink platform="bluesky" mode="text" />
+					<SocialLink platform="instagram" mode="text" />
+					<SocialLink platform="scholar" mode="text" />
+				</div>
+				<ThemeChip {isDark} onToggle={toggleTheme} mode="text" />
+			</footer>
 		</section>
 
 		<!-- Right sidebar -->
 		<aside class="rs-right">
-			<div class="right-top">
-				<ThemeChip {isDark} onToggle={toggleTheme} />
-			</div>
 			<div class="right-bottom">
-				<div class="socials">
-					<a href="https://github.com/sansseriff" aria-label="GitHub">
-						<GithubLogo size={20} weight={'regular'} />
-					</a>
-					<a href="https://bsky.app/profile/sansseriff.bsky.social" aria-label="Bluesky">
-						<BlueSkyLogo cls="theme-color" />
-					</a>
-					<a href="https://www.instagram.com/andstermueller/" aria-label="Instagram">
-						<InstagramLogo size={20} weight={'regular'} />
-					</a>
-					<a
-						href="https://scholar.google.com/citations?user=FRQbz4sAAAAJ&hl=en"
-						aria-label="Google Scholar"
-					>
-						<GraduationCap size={20} weight={'regular'} />
-					</a>
-				</div>
 				<div class="copyright">© {new Date().getFullYear()} · AM</div>
 			</div>
 		</aside>
@@ -201,9 +198,16 @@
 	}
 
 	.rs-shell-inner {
-		max-width: min(1200px, 100vw);
+		--shell-default: min(1100px, 100vw);
+		--shell-wide: min(2100px, 95vw);
+		max-width: var(--shell-default);
+		width: 100%;
 		margin: 0 auto;
 		display: flex;
+		transition: max-width 700ms cubic-bezier(0.4, 0, 0.2, 1);
+	}
+	.rs-shell-inner.portfolio-mode {
+		max-width: var(--shell-wide);
 	}
 
 	/* Mobile header */
@@ -319,34 +323,12 @@
 		border-radius: 1px;
 	}
 
-	.right-top {
-		display: flex;
-		justify-content: flex-start;
-	}
 	.right-bottom {
 		margin-top: auto;
-		display: flex;
-		flex-direction: column;
-		gap: 14px;
 		font-family: var(--font-mono-rs);
 		font-size: 10px;
 		color: var(--rs-fg-subtle);
 		letter-spacing: 0.06em;
-	}
-	.socials {
-		display: flex;
-		flex-direction: column;
-		gap: 12px;
-		color: var(--rs-fg-muted);
-		opacity: 0.75;
-	}
-	.socials a {
-		color: inherit;
-		background-image: none;
-	}
-	.socials a:hover {
-		color: var(--rs-fg-accent);
-		background-size: 0 1px;
 	}
 	.copyright {
 		color: var(--rs-fg-subtle);
@@ -379,7 +361,7 @@
 		background-repeat: repeat;
 		opacity: 0.04;
 		pointer-events: none;
-		z-index: 0;
+		z-index: 2;
 	}
 	:global(html.dark) .rs-main-noise::before {
 		opacity: 0.05;
@@ -387,6 +369,25 @@
 	.rs-main > :global(*) {
 		position: relative;
 		z-index: 1;
+	}
+
+	.site-footer {
+		padding: 18px 28px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		flex-wrap: wrap;
+		font-family: var(--font-mono-rs);
+		font-size: 11px;
+		color: var(--rs-fg-subtle);
+		letter-spacing: 0.06em;
+		border-top: 1px solid var(--rs-rule);
+	}
+	.footer-socials {
+		display: flex;
+		gap: 16px;
+		align-items: center;
 	}
 
 	/* Mobile bottom modal menu */

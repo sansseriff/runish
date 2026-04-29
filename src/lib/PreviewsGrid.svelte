@@ -19,7 +19,7 @@
 		<header class="col-header">
 			<div>
 				<div class="eyebrow">Notes</div>
-				<h2 class="col-title">From the desk.</h2>
+				<h2 class="col-title">From the Desk</h2>
 			</div>
 			<div class="meta">Blog · {blogPreview.length} of {allPosts.length}</div>
 		</header>
@@ -39,7 +39,7 @@
 		{/each}
 
 		<div class="col-footer">
-			<a class="all-link" href="{base}/blog">All notes →</a>
+			<a class="all-link rs-flourish" href="{base}/blog">All notes →</a>
 		</div>
 	</div>
 
@@ -47,18 +47,14 @@
 		<header class="col-header">
 			<div>
 				<div class="eyebrow">Projects</div>
-				<h2 class="col-title">Built with code, built with colors.</h2>
+				<h2 class="col-title">Code & Colors</h2>
 			</div>
 			<div class="meta">Portfolio · {projectPreview.length} of {allProjects.length}</div>
 		</header>
 
 		{#each projectPreview as p, i}
 			<a class="row project-row" href={projectHref(p)}>
-				<span
-					class="fragment"
-					style:background-image={`url(${p.media.path})`}
-					aria-hidden="true"
-				>
+				<span class="fragment" style:background-image={`url(${p.media.path})`} aria-hidden="true">
 					<span class="frag-overlay"></span>
 					<span class="frag-tick"></span>
 				</span>
@@ -77,7 +73,7 @@
 		{/each}
 
 		<div class="col-footer">
-			<a class="all-link" href="{base}/portfolio">All projects →</a>
+			<a class="all-link rs-flourish" href="{base}/portfolio">All projects →</a>
 		</div>
 	</div>
 </section>

@@ -1,19 +1,35 @@
 <script lang="ts">
+	type Mode = 'chip' | 'text';
+
 	let {
 		isDark = false,
+		mode = 'chip',
 		onToggle
-	}: { isDark?: boolean; onToggle?: () => void } = $props();
+	}: { isDark?: boolean; mode?: Mode; onToggle?: () => void } = $props();
+
+	const label = $derived(isDark ? 'dark' : 'light');
 </script>
 
-<button
-	type="button"
-	onclick={onToggle}
-	aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-	class="theme-chip"
->
-	<span class="dot" aria-hidden="true" class:filled={isDark}></span>
-	{isDark ? 'dark' : 'light'}
-</button>
+{#if mode === 'chip'}
+	<button
+		type="button"
+		onclick={onToggle}
+		aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+		class="theme-chip"
+	>
+		<span class="dot" aria-hidden="true" class:filled={isDark}></span>
+		{label}
+	</button>
+{:else}
+	<button
+		type="button"
+		onclick={onToggle}
+		aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+		class="theme-text rs-flourish"
+	>
+		[{label}]
+	</button>
+{/if}
 
 <style>
 	.theme-chip {
@@ -50,5 +66,22 @@
 	}
 	.dot.filled {
 		background: var(--rs-fg-muted);
+	}
+
+	.theme-text {
+		background: transparent;
+		border: 0;
+		padding: 0;
+		cursor: pointer;
+		color: inherit;
+		font-family: var(--font-mono-rs);
+		font-size: 11px;
+		letter-spacing: 0.04em;
+		opacity: 0.9;
+		display: inline-flex;
+		align-items: center;
+	}
+	.theme-text:hover {
+		opacity: 1;
 	}
 </style>

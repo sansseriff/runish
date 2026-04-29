@@ -2,7 +2,7 @@
 	import RunishText from '$lib/RunishText.svelte';
 	import ShaderCanvas from '$lib/ShaderCanvas.svelte';
 	import ThemeChip from '$lib/ThemeChip.svelte';
-	import { posts as blogPosts, formatDate } from '$lib/data/blog';
+	import { posts as blogPosts } from '$lib/data/blog';
 
 	type Preset = 'ascii' | 'plasma' | 'ember' | 'weave' | 'jormun' | 'rune' | 'valk';
 
@@ -43,11 +43,15 @@
 
 	<div class="hero-content">
 		<div class="hero-eyebrow">
-			<span class="diamond-mark" aria-hidden="true"></span>
-			<span>live</span>
-			<span class="theme-slot">
-				<ThemeChip {isDark} onToggle={onToggleTheme} />
-			</span>
+			<div class="eyebrow-left">
+				<span class="diamond-mark" aria-hidden="true"></span>
+				<span>live</span>
+			</div>
+			{#if onToggleTheme}
+				<div class="eyebrow-right">
+					<ThemeChip {isDark} onToggle={onToggleTheme} />
+				</div>
+			{/if}
 		</div>
 
 		<div class="kicker">Something</div>
@@ -58,14 +62,12 @@
 
 		<p class="hero-lede">
 			Portfolio and blog of Andrew Mueller — mildly mystical, mostly scientific.
-			Superconducting single‑photon detectors, quantum networks, and the occasional
-			attempt to tell a story about either.
 		</p>
 
 		<div class="transmission-log">
 			<span>v0.5</span>
 			<span class="sep">·</span>
-			<span>latest: <a href="#latest" class="log-link">{latest?.title ?? '—'}</a></span>
+			<span>latest: <a href="#latest" class="log-link rs-flourish">{latest?.title ?? '—'}</a></span>
 			<span class="sep">·</span>
 			<span>click anywhere in the field to emit a pulse</span>
 			<span class="preset-label">{preset} · ch 1</span>
@@ -78,7 +80,7 @@
 		position: relative;
 		border-bottom: 1px solid var(--rs-rule);
 		overflow: hidden;
-		min-height: 520px;
+		min-height: 480px;
 	}
 	.shader-layer {
 		position: absolute;
@@ -90,7 +92,11 @@
 		inset: 0;
 		z-index: 1;
 		pointer-events: none;
-		background: linear-gradient(180deg, rgba(251, 249, 244, 0.18) 0%, rgba(251, 249, 244, 0.32) 100%);
+		background: linear-gradient(
+			180deg,
+			rgba(251, 249, 244, 0.18) 0%,
+			rgba(251, 249, 244, 0.32) 100%
+		);
 	}
 	.paper-overlay.dark {
 		background: linear-gradient(180deg, rgba(14, 14, 16, 0.1) 0%, rgba(14, 14, 16, 0.25) 100%);
@@ -103,20 +109,10 @@
 		height: 55%;
 		z-index: 1;
 		pointer-events: none;
-		background: linear-gradient(
-			180deg,
-			rgba(251, 249, 244, 0) 0%,
-			rgba(251, 249, 244, 0.55) 55%,
-			var(--rs-bg) 100%
-		);
+		background: linear-gradient(180deg, rgba(251, 249, 244, 0) 0%, var(--rs-bg) 100%);
 	}
 	.bottom-fade.dark {
-		background: linear-gradient(
-			180deg,
-			rgba(14, 14, 16, 0) 0%,
-			rgba(14, 14, 16, 0.55) 55%,
-			var(--rs-bg) 100%
-		);
+		background: linear-gradient(180deg, rgba(14, 14, 16, 0) 0%, var(--rs-bg) 100%);
 	}
 
 	.corner {
@@ -158,8 +154,8 @@
 		padding: 56px 28px 36px;
 		display: flex;
 		flex-direction: column;
-		gap: 28px;
-		min-height: 520px;
+		gap: 7px;
+		min-height: 480px;
 		pointer-events: none;
 	}
 
@@ -171,8 +167,16 @@
 		color: var(--rs-fg-muted);
 		margin-bottom: 22px;
 		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.eyebrow-left {
+		display: flex;
 		gap: 10px;
 		align-items: center;
+	}
+	.eyebrow-right {
+		pointer-events: auto;
 	}
 	.diamond-mark {
 		width: 6px;
@@ -182,11 +186,6 @@
 		background: var(--rs-fg-accent);
 		display: inline-block;
 	}
-	.theme-slot {
-		margin-left: auto;
-		pointer-events: auto;
-	}
-
 	.kicker {
 		font-family: var(--font-serif-rs);
 		font-weight: 400;
@@ -206,6 +205,7 @@
 		color: var(--rs-fg-strong);
 		display: inline-block;
 		pointer-events: auto;
+		margin-top: -3rem;
 	}
 
 	.hero-lede {

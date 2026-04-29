@@ -43,8 +43,44 @@
 		placeholderSrc: null as string | null,
 		isHovered: false,
 		videoElement: null as HTMLVideoElement | null,
-		videoLoaded: false
+		videoLoaded: false,
+		grainCanvas: null as HTMLCanvasElement | null
 	});
+
+	let grainRafId: number | null = null;
+
+	function drawGrain(canvas: HTMLCanvasElement) {
+		const ctx = canvas.getContext('2d');
+		if (!ctx) return;
+		const { width, height } = canvas;
+		const imageData = ctx.createImageData(width, height);
+		const data = imageData.data;
+		for (let i = 0; i < data.length; i += 4) {
+			const v = (Math.random() * 255) | 0;
+			data[i] = v;
+			data[i + 1] = v;
+			data[i + 2] = v;
+			data[i + 3] = (Math.random() * 38) | 0; // max ~15% opacity per pixel
+		}
+		ctx.putImageData(imageData, 0, 0);
+	}
+
+	function startGrain() {
+		if (grainRafId !== null || !cardState.grainCanvas) return;
+		const canvas = cardState.grainCanvas;
+		function loop() {
+			drawGrain(canvas);
+			grainRafId = requestAnimationFrame(loop);
+		}
+		grainRafId = requestAnimationFrame(loop);
+	}
+
+	function stopGrain() {
+		if (grainRafId !== null) {
+			cancelAnimationFrame(grainRafId);
+			grainRafId = null;
+		}
+	}
 
 	// Helper function to decode blurhash into a data URL
 	// Use a larger size for better quality when scaled up
@@ -103,11 +139,10 @@
 	$effect(() => {
 		if (cardState.videoElement && cardState.videoLoaded) {
 			if (cardState.isHovered) {
-				cardState.videoElement.play().catch(() => {
-					// Ignore play errors (e.g., autoplay restrictions)
-				});
+				cardState.videoElement.play().catch(() => {});
 			} else {
 				cardState.videoElement.pause();
+				stopGrain();
 			}
 		}
 	});
@@ -177,7 +212,19 @@
 						e.currentTarget.currentTime = card.video.startOffset;
 					}
 				}}
+				onplay={startGrain}
+				onpause={stopGrain}
+				onended={stopGrain}
 			></video>
+			<!-- Film grain canvas — animates only while video plays -->
+			<canvas
+				bind:this={cardState.grainCanvas}
+				width="128"
+				height="128"
+				class="absolute inset-0 z-20 pointer-events-none grain-canvas"
+				style:opacity={cardState.isHovered && cardState.videoLoaded ? '1' : '0'}
+				style:transition="opacity 0.4s ease-out"
+			></canvas>
 		{/if}
 
 		<!-- Title in upper left corner -->
@@ -249,5 +296,12 @@
 	.card video {
 		margin: 0;
 		display: block;
+	}
+
+	.grain-canvas {
+		width: 100%;
+		height: 100%;
+		image-rendering: pixelated; /* keep grain chunky, not blurred */
+		mix-blend-mode: overlay;
 	}
 </style>

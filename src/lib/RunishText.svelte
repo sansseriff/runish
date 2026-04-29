@@ -26,13 +26,13 @@
 		fontSize?: string;
 		width?: string;
 	}> = [
-		{ letterSpacing: '0', verticalOffset: '0.3rem', fontSize: '1em' }, // R
-		{ letterSpacing: '0', verticalOffset: '0.3rem', fontSize: '1em' }, // u
-		{ letterSpacing: '0', verticalOffset: '0.3rem', fontSize: '1em' }, // n
-		{ letterSpacing: '0', verticalOffset: '0.3rem', fontSize: '1em' }, // i
-		{ letterSpacing: '-0.02rem', verticalOffset: '0.3rem', fontSize: '1em' }, // .
-		{ letterSpacing: '0', verticalOffset: '0.3rem', fontSize: '1em' }, // s
-		{ letterSpacing: '0', verticalOffset: '0.3rem', fontSize: '1em' } // h
+		{ letterSpacing: '0', verticalOffset: '0.15em', fontSize: '1em' }, // R
+		{ letterSpacing: '0', verticalOffset: '0.15em', fontSize: '1em' }, // u
+		{ letterSpacing: '0', verticalOffset: '0.15em', fontSize: '1em' }, // n
+		{ letterSpacing: '0', verticalOffset: '0.15em', fontSize: '1em' }, // i
+		{ letterSpacing: '-0.029rem', verticalOffset: '0.09em', fontSize: '1.4em' }, // .
+		{ letterSpacing: '0', verticalOffset: '0.15em', fontSize: '1em' }, // s
+		{ letterSpacing: '0', verticalOffset: '0.15em', fontSize: '1em' } // h
 	];
 
 	// State for each letter's runic font status
@@ -270,4 +270,3 @@
 		color: rgb(59, 130, 246);
 	}
 </style>
-
