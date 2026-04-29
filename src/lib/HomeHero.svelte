@@ -1,10 +1,10 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import RunishText from '$lib/RunishText.svelte';
 	import ShaderCanvas from '$lib/ShaderCanvas.svelte';
 	import ThemeChip from '$lib/ThemeChip.svelte';
 	import { posts as blogPosts } from '$lib/data/blog';
-
-	type Preset = 'ascii' | 'plasma' | 'ember' | 'weave' | 'jormun' | 'rune' | 'valk';
+	import { PRESETS, nextPreset, type Preset } from '$lib/shaders';
 
 	let {
 		isDark = false,
@@ -23,11 +23,16 @@
 	} = $props();
 
 	const latest = blogPosts[0];
+	let activePreset = $state<Preset>(preset);
+	const cyclePreset = () => {
+		activePreset = nextPreset(activePreset);
+	};
+	const ch = $derived(PRESETS.indexOf(activePreset) + 1);
 </script>
 
 <section class="hero-band">
 	<div class="shader-layer">
-		<ShaderCanvas {preset} {isDark} {density} {speed} {accent} />
+		<ShaderCanvas preset={activePreset} {isDark} {density} {speed} {accent} />
 	</div>
 
 	<!-- Faint paper overlay for legibility -->
@@ -48,7 +53,7 @@
 				<span>live</span>
 			</div>
 			{#if onToggleTheme}
-				<div class="eyebrow-right">
+				<div class="eyebrow-right" data-no-pulse>
 					<ThemeChip {isDark} onToggle={onToggleTheme} />
 				</div>
 			{/if}
@@ -67,10 +72,23 @@
 		<div class="transmission-log">
 			<span>v0.5</span>
 			<span class="sep">·</span>
-			<span>latest: <a href="#latest" class="log-link rs-flourish">{latest?.title ?? '—'}</a></span>
+			<span
+				>latest: <a href={latest ? `${base}/blog/${latest.slug}` : '#'} class="log-link rs-flourish"
+					>{latest?.title ?? '—'}</a
+				></span
+			>
 			<span class="sep">·</span>
 			<span>click anywhere in the field to emit a pulse</span>
-			<span class="preset-label">{preset} · ch 1</span>
+			<button
+				type="button"
+				class="preset-label"
+				data-no-pulse
+				onclick={cyclePreset}
+				aria-label="Cycle shader preset"
+			>
+				<span class="preset-name">{activePreset}</span>
+				<span class="preset-meta">· ch {ch}</span>
+			</button>
 		</div>
 	</div>
 </section>
@@ -84,7 +102,11 @@
 	}
 	.shader-layer {
 		position: absolute;
-		inset: 0;
+		top: 0;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 100vw;
 		z-index: 0;
 	}
 	.paper-overlay {
@@ -206,6 +228,7 @@
 		display: inline-block;
 		pointer-events: auto;
 		margin-top: -3rem;
+		height: 1.2em;
 	}
 
 	.hero-lede {
@@ -235,6 +258,36 @@
 	}
 	.preset-label {
 		margin-left: auto;
+		color: var(--rs-fg-subtle);
+		font: inherit;
+		letter-spacing: inherit;
+		background: transparent;
+		border: 1px solid var(--rs-rule);
+		padding: 4px 9px;
+		border-radius: 2px;
+		cursor: pointer;
+		display: inline-flex;
+		gap: 6px;
+		align-items: baseline;
+		pointer-events: auto;
+		transition:
+			color 0.15s ease,
+			border-color 0.15s ease,
+			background 0.15s ease;
+	}
+	.preset-label:hover {
+		color: var(--rs-fg-strong);
+		border-color: var(--rs-fg-muted);
+		background: color-mix(in srgb, var(--rs-fg-accent) 8%, transparent);
+	}
+	.preset-label:focus-visible {
+		outline: 1px solid var(--rs-fg-accent);
+		outline-offset: 2px;
+	}
+	.preset-name {
+		text-transform: lowercase;
+	}
+	.preset-meta {
 		color: var(--rs-fg-subtle);
 	}
 	.log-link {
