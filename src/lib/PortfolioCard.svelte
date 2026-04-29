@@ -50,6 +50,12 @@
 	let grainRafId: number | null = null;
 
 	function drawGrain(canvas: HTMLCanvasElement) {
+		const w = canvas.offsetWidth;
+		const h = canvas.offsetHeight;
+		if (w > 0 && h > 0 && (canvas.width !== w || canvas.height !== h)) {
+			canvas.width = w;
+			canvas.height = h;
+		}
 		const ctx = canvas.getContext('2d');
 		if (!ctx) return;
 		const { width, height } = canvas;
@@ -60,7 +66,7 @@
 			data[i] = v;
 			data[i + 1] = v;
 			data[i + 2] = v;
-			data[i + 3] = (Math.random() * 38) | 0; // max ~15% opacity per pixel
+			data[i + 3] = (Math.random() * 70) | 0; // max ~15% opacity per pixel
 		}
 		ctx.putImageData(imageData, 0, 0);
 	}
@@ -219,8 +225,6 @@
 			<!-- Film grain canvas — animates only while video plays -->
 			<canvas
 				bind:this={cardState.grainCanvas}
-				width="128"
-				height="128"
 				class="absolute inset-0 z-20 pointer-events-none grain-canvas"
 				style:opacity={cardState.isHovered && cardState.videoLoaded ? '1' : '0'}
 				style:transition="opacity 0.4s ease-out"
