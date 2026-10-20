@@ -45,6 +45,12 @@
 					target="_blank"
 					rel="noopener noreferrer">GitHub ↗</a
 				>
+				<a
+					class="cta"
+					href="https://scholar.google.com/citations?user=FRQbz4sAAAAJ&hl=en"
+					target="_blank"
+					rel="noopener noreferrer">Google Scholar ↗</a
+				>
 			</div>
 		{/snippet}
 	</HomeHero>
