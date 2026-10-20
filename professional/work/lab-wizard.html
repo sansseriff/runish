@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Runish</title>
+		<!-- Ensure UA knows both schemes are supported -->
+		<meta name="color-scheme" content="light dark" />
+		<script>
+			// Early theme application to avoid FOUC / flash of wrong theme.
+			// Mirrors logic in +layout.svelte but must run BEFORE paint.
+			(function () {
+				// Temporarily disable transitions to avoid flash when adding theme class
+				var css = document.createElement('style');
+				css.textContent = '*{transition:none!important}';
+				css.setAttribute('data-theme-preload', '');
+				document.head.appendChild(css);
+				try {
+					var stored = localStorage.getItem('theme');
+					var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+					var dark = stored === 'dark' || (stored === null && prefersDark);
+					var root = document.documentElement;
+					root.classList.remove('light', 'dark');
+					root.classList.add(dark ? 'dark' : 'light');
+					// Optional: set a flag so later scripts know it was pre-set.
+					root.dataset.themeApplied = 'true';
+				} catch (e) {
+					/* noop */
+				}
+				// Allow a frame then remove the no-transition style
+				requestAnimationFrame(function () {
+					var guard = document.querySelector('style[data-theme-preload]');
+					if (guard) guard.remove();
+				});
+			})();
+		</script>
+		<link rel="icon" href="../../Runish.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link href="../../_app/immutable/entry/start.EpxenjM5.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/B9Y7Wt-g.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Cycwh32k.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/nXVDEMKB.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.azTkXyG0.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D1uEVMja.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DG2htuIH.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DPe9tPn4.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/EV_s_IUS.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C8YD1G85.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CCp9pxr5.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.CnV1LL8d.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DlByRsf2.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CzCdcxpK.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/fyusfYvg.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/i6A41toh.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DmoT5Sdx.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D934swkt.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CTrze0q8.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BSNJ8v2v.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/5.LXRtaL__.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DG2jgDBW.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/VC3FcmE_.js" rel="modulepreload">
+		<!--1b0igck--><meta name="description" content="Experiment setup for SNSPD measurement labs: typed instrument models, a version-controllable config tree, and generated, runnable measurement projects."/><!----><title>Lab Wizard · Andrew Mueller</title>
+		<link href="../../_app/immutable/assets/ThemeChip.B4TPI-qx.css" rel="stylesheet">
+		<link href="../../_app/immutable/assets/0.Q1r8My7-.css" rel="stylesheet">
+		<link href="../../_app/immutable/assets/work.DfIV7kYA.css" rel="stylesheet">
+		<link href="../../_app/immutable/assets/5.DzH42r8i.css" rel="stylesheet">
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body
+		data-sveltekit-preload-data="hover"
+		class="diagonal-pattern noise-texture transition-colors duration-300"
+	>
+		<div style="display: contents"><!--[--><!--[0--><!--[--><main class="rs-shell svelte-12qhfyh"><div class="mobile-header svelte-12qhfyh"><a href="/professional" class="brand-lockup svelte-j6ls9a compact" aria-label="runi.sh — Home"><img src="../../Runish.svg" width="18" height="18" alt=""/> <span class="wordmark svelte-j6ls9a"><span class="runish-container svelte-6yu6wb runish-sm"><!--[--><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">R</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">u</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">n</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">i</span><span class="runish-letter svelte-6yu6wb dot dot-color" role="presentation" style=" --letter-spacing: -0.029rem; --vertical-offset: 0.09em; --font-size: 1.4em; --char-width: auto; ">.</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">s</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">h</span><!--]--></span><!----></span></a><!----> <button class="menu-btn svelte-12qhfyh" aria-label="Open menu"><svg xmlns="http://www.w3.org/2000/svg" role="img" width="22" height="22" fill="currentColor" viewBox="0 0 256 256"><!--[-1--><!--]--><rect width="256" height="256" fill="none"></rect><!--[4--><path d="M122.34,109.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0,0-11.32l-40-40a8,8,0,0,0-11.32,0l-40,40a8,8,0,0,0,0,11.32ZM128,35.31,156.69,64,128,92.69,99.31,64Zm5.66,111a8,8,0,0,0-11.32,0l-40,40a8,8,0,0,0,0,11.32l40,40a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0,0-11.32ZM128,220.69,99.31,192,128,163.31,156.69,192Zm109.66-98.35-40-40a8,8,0,0,0-11.32,0l-40,40a8,8,0,0,0,0,11.32l40,40a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,237.66,122.34ZM192,156.69,163.31,128,192,99.31,220.69,128Zm-82.34-34.35-40-40a8,8,0,0,0-11.32,0l-40,40a8,8,0,0,0,0,11.32l40,40a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,109.66,122.34ZM64,156.69,35.31,128,64,99.31,92.69,128Z"></path><!--]--></svg><!----></button></div> <div class="rs-shell-inner svelte-12qhfyh"><aside class="rs-left svelte-12qhfyh"><div class="brand-row svelte-12qhfyh"><a href="/professional" class="brand-lockup svelte-j6ls9a" aria-label="runi.sh — Home"><img src="../../Runish.svg" width="18" height="18" alt=""/> <span class="wordmark svelte-j6ls9a"><span class="runish-container svelte-6yu6wb runish-sm"><!--[--><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">R</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">u</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">n</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">i</span><span class="runish-letter svelte-6yu6wb dot dot-color" role="presentation" style=" --letter-spacing: -0.029rem; --vertical-offset: 0.09em; --font-size: 1.4em; --char-width: auto; ">.</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">s</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">h</span><!--]--></span><!----></span></a><!----></div> <ul class="nav-list svelte-12qhfyh"><!--[--><li class="svelte-12qhfyh"><a href="../../professional" class="nav-item svelte-12qhfyh">Home <!--[-1--><!--]--></a></li><li class="svelte-12qhfyh"><a href="../../professional/work" class="nav-item svelte-12qhfyh">Work <!--[-1--><!--]--></a></li><li class="svelte-12qhfyh"><a href="../../professional/cv" class="nav-item svelte-12qhfyh">CV <!--[-1--><!--]--></a></li><li class="svelte-12qhfyh"><a href="../../blog" class="nav-item svelte-12qhfyh">Writing <!--[-1--><!--]--></a></li><li class="svelte-12qhfyh"><a href="../../about" class="nav-item svelte-12qhfyh">About <!--[-1--><!--]--></a></li><!--]--></ul></aside> <section class="rs-main rs-main-noise svelte-12qhfyh"><!--[--><article class="work-detail svelte-1b0igck"><header class="page-header svelte-1b0igck"><a class="crumb rs-flourish svelte-1b0igck" href="../../professional/work">← Work</a> <div class="eyebrow svelte-1b0igck">Software · 2025 – now</div> <h1 class="page-title svelte-1b0igck">Lab Wizard</h1> <p class="lede svelte-1b0igck">Experiment setup for SNSPD measurement labs: typed instrument models, a version-controllable config tree, and generated, runnable measurement projects.</p> <!--[0--><div class="links svelte-1b0igck"><!--[--><a class="link-btn svelte-1b0igck" href="https://sansseriff.github.io/lab-wizard/" target="_blank" rel="noopener noreferrer">Docs ↗</a><a class="link-btn svelte-1b0igck" href="https://github.com/sansseriff/lab-wizard" target="_blank" rel="noopener noreferrer">GitHub ↗</a><!--]--></div><!--]--></header> <figure class="hero svelte-1b0igck"><img src="/work/lab-wizard/overview.avif" alt="Lab Wizard overview page" loading="eager" class="hero-img themed-light svelte-1nsahor"/> <!--[-1--><!--]--><!----> <!--[0--><figcaption class="svelte-1b0igck">The workspace overview: configured instruments, the instrument server, and recent projects.</figcaption><!--]--></figure> <div class="content svelte-1b0igck"><div class="body svelte-1b0igck"><!--[--><p class="svelte-1b0igck">Lab measurement code tends to grow as a pile of one-off scripts, each with instrument addresses and settings hard-coded inside. Lab Wizard replaces that with a structured workflow: add instruments to a configuration tree, edit their parameters to match the bench, then create a measurement by picking a template and assigning compatible instruments to it.</p><p class="svelte-1b0igck">Each measurement becomes its own project folder with exactly the configuration it used and a generated Python file that wires everything up. The generated code is meant to be read and edited, so the tool speeds up setup without hiding what it does.</p><p class="svelte-1b0igck">The app is a FastAPI backend serving a SvelteKit frontend inside a pywebview window. Procedures can be composed in the UI from reusable steps, with parameters, presets and instrument roles, and exported to plain Python.</p><!--]--> <!--[0--><h2 class="sub svelte-1b0igck">Highlights</h2> <ul class="highlights svelte-1b0igck"><!--[--><li class="svelte-1b0igck">Typed Python models for instruments, including parent/child and channel-based hardware.</li><li class="svelte-1b0igck">A user-owned YAML configuration tree per workspace, so a lab’s hardware setup is explicit, diffable and reviewable.</li><li class="svelte-1b0igck">Measurement templates that turn a choice of instruments into a timestamped project folder with its own config subset and a generated setup script.</li><li class="svelte-1b0igck">An instrument server that owns each hardware transport, with safety rules that block unsafe calls (for example, biasing a detector while a shutter is open).</li><li class="svelte-1b0igck">One-line install on macOS and Linux, a native desktop window, and a launcher that shows the window in a fraction of a second.</li><!--]--></ul><!--]--></div> <aside class="facts svelte-1b0igck"><dl class="svelte-1b0igck"><dt class="svelte-1b0igck">Role</dt> <dd class="svelte-1b0igck">Design and development</dd> <dt class="svelte-1b0igck">When</dt> <dd class="svelte-1b0igck">2025 – now</dd> <!--[0--><dt class="svelte-1b0igck">Stack</dt> <dd class="svelte-1b0igck"><ul class="stack svelte-1b0igck"><!--[--><li class="svelte-1b0igck">Python</li><li class="svelte-1b0igck">FastAPI</li><li class="svelte-1b0igck">SvelteKit</li><li class="svelte-1b0igck">pywebview</li><li class="svelte-1b0igck">uv</li><li class="svelte-1b0igck">YAML</li><!--]--></ul></dd><!--]--></dl></aside></div> <!--[0--><section class="gallery svelte-1b0igck"><!--[--><figure class="svelte-1b0igck"><button class="zoom svelte-1b0igck" aria-label="Enlarge: Lab Wizard procedure composer"><img src="/work/lab-wizard/composer.avif" alt="Lab Wizard procedure composer" loading="lazy" class="gallery-img themed-light svelte-1nsahor"/> <!--[-1--><!--]--><!----></button> <!--[0--><figcaption class="svelte-1b0igck">Composing a measurement procedure from reusable steps.</figcaption><!--]--></figure><figure class="svelte-1b0igck"><button class="zoom svelte-1b0igck" aria-label="Enlarge: Generated Python for a procedure"><img src="/work/lab-wizard/python.avif" alt="Generated Python for a procedure" loading="lazy" class="gallery-img themed-light svelte-1nsahor"/> <!--[-1--><!--]--><!----></button> <!--[0--><figcaption class="svelte-1b0igck">Every procedure exports to readable Python.</figcaption><!--]--></figure><figure class="svelte-1b0igck"><button class="zoom svelte-1b0igck" aria-label="Enlarge: Lab Wizard safety rules"><img src="/work/lab-wizard/permissions.avif" alt="Lab Wizard safety rules" loading="lazy" class="gallery-img themed-light svelte-1nsahor"/> <!--[-1--><!--]--><!----></button> <!--[0--><figcaption class="svelte-1b0igck">Safety rules enforced by the instrument server.</figcaption><!--]--></figure><!--]--></section> <!--[-1--><!--]--><!----><!--]--></article><!--]--><!----> <footer class="site-footer svelte-12qhfyh"><span>© 2026 · runi.sh · Andrew Mueller</span> <div class="footer-socials svelte-12qhfyh"><!--[--><a href="https://github.com/sansseriff" aria-label="GitHub" title="GitHub" class="social-link svelte-1yhw9ik text-mode rs-flourish" target="_blank" rel="noopener noreferrer"><!--[0--><span aria-hidden="true">[gh]</span><!--]--></a><a href="https://scholar.google.com/citations?user=FRQbz4sAAAAJ&amp;hl=en" aria-label="Google Scholar" title="Google Scholar" class="social-link svelte-1yhw9ik text-mode rs-flourish" target="_blank" rel="noopener noreferrer"><!--[0--><span aria-hidden="true">[edu]</span><!--]--></a><a href="mailto:andrewstermueller@gmail.com" aria-label="Email" title="Email" class="social-link svelte-1yhw9ik text-mode rs-flourish" target="_blank" rel="noopener noreferrer"><!--[0--><span aria-hidden="true">[mail]</span><!--]--></a><!--]--></div> <div class="footer-theme svelte-12qhfyh"><!--[-1--><button type="button" aria-label="Switch to dark mode" class="theme-text rs-flourish svelte-qp5h0m">[light]</button><!--]--><!----></div></footer></section> <aside class="rs-right svelte-12qhfyh"><!--[0--><div class="mode-note svelte-12qhfyh"><span class="mode-dot svelte-12qhfyh" aria-hidden="true"></span> <span>Professional view</span> <a href="../../" class="mode-exit rs-flourish svelte-12qhfyh">Full site →</a></div><!--]--></aside></div> <!--[-1--><!--]--></main><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_13bf7g3 = {
+						base: new URL("../..", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.EpxenjM5.js"),
+						import("../../_app/immutable/entry/app.azTkXyG0.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 5],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
