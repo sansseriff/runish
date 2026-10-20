@@ -3,8 +3,6 @@
 	import SectionHeader from '$lib/SectionHeader.svelte';
 	import PageWrapper from '$lib/PageWrapper.svelte';
 	import Page from '../+page.svelte';
-	const cvHref = `${base}/AMueller_CV_MayX_2025.pdf`;
-	const resumeHref = `${base}/AMueller_CV_MayX_2025.pdf`; // placeholder points to CV for now
 	const profileSrc = `${base}/shared/profile_picture.png`;
 </script>
 

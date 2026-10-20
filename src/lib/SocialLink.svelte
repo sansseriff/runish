@@ -30,7 +30,8 @@
 			text: 'edu'
 		},
 		email: {
-			href: 'mailto:andrewstermueller@gmail.com',
+			// Filled in the browser from $lib/email, so the address is not in the HTML.
+			href: '',
 			label: 'Email',
 			text: 'mail'
 		}
@@ -43,6 +44,8 @@
 	import InstagramLogo from 'phosphor-svelte/lib/InstagramLogo';
 	import EnvelopeSimple from 'phosphor-svelte/lib/EnvelopeSimple';
 	import BlueSkyLogo from '$lib/BlueSkyLogo.svelte';
+	import { onMount } from 'svelte';
+	import { emailAddress } from '$lib/email';
 
 	let {
 		platform,
@@ -51,18 +54,24 @@
 	}: { platform: SocialPlatform; mode?: SocialMode; size?: number } = $props();
 
 	const meta = $derived(socials[platform]);
+
+	let mailHref = $state<string | undefined>(undefined);
+	onMount(() => {
+		if (platform === 'email') mailHref = `mailto:${emailAddress('gmail')}`;
+	});
+	const isMail = $derived(platform === 'email');
 </script>
 
 <a
-	href={meta.href}
+	href={isMail ? mailHref : meta.href}
 	aria-label={meta.label}
 	title={meta.label}
 	class="social-link"
 	class:text-mode={mode === 'text'}
 	class:icon-mode={mode === 'icon'}
 	class:rs-flourish={mode === 'text'}
-	target="_blank"
-	rel="noopener noreferrer"
+	target={isMail ? undefined : '_blank'}
+	rel={isMail ? undefined : 'noopener noreferrer'}
 >
 	{#if mode === 'text'}
 		<span aria-hidden="true">[{meta.text}]</span>

@@ -1,13 +1,12 @@
 import { base } from '$app/paths';
 
-// Web version of content/AMueller_CV_Aug_2026.pdf. Home address and phone are
-// deliberately left out of the public page; they remain in the PDF.
+// Web version of the CV. The published PDF has the home address and phone
+// redacted; email addresses are rendered by Email.svelte, not stored here.
 
 export const cvPdf = `${base}/AMueller_CV_Aug_2026.pdf`;
 
 export const contact = {
 	name: 'Andrew Mueller',
-	email: 'andrewstermueller@gmail.com',
 	links: [
 		{ label: 'GitHub', href: 'https://github.com/sansseriff' },
 		{

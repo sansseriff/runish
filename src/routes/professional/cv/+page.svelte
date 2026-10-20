@@ -1,6 +1,7 @@
 <script lang="ts">
 	import DownloadSimple from 'phosphor-svelte/lib/DownloadSimple';
 	import Printer from 'phosphor-svelte/lib/Printer';
+	import Email from '$lib/Email.svelte';
 	import {
 		contact,
 		cvPdf,
@@ -24,7 +25,9 @@
 			<div class="eyebrow">Curriculum vitae</div>
 			<h1 class="name">{contact.name}</h1>
 			<p class="contact">
-				<a href="mailto:{contact.email}">{contact.email}</a>
+				<Email which="gmail" />
+				<span class="sep">·</span>
+				<Email which="caltech" />
 				{#each contact.links as l}
 					<span class="sep">·</span>
 					<a href={l.href} target="_blank" rel="noopener noreferrer">{l.label}</a>

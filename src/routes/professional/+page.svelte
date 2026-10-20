@@ -3,6 +3,7 @@
 	import { base } from '$app/paths';
 	import HomeHero from '$lib/HomeHero.svelte';
 	import ThemedImage from '$lib/ThemedImage.svelte';
+	import Email from '$lib/Email.svelte';
 	import { work, workHref, cardImage } from '$lib/data/work';
 	import { cvPdf } from '$lib/data/cv';
 
@@ -116,7 +117,7 @@
 				<li>Cover artwork for <em>Nature</em> 612 (2022).</li>
 				<li>
 					<a href={cvPdf} download>Download CV (PDF)</a> ·
-					<a href="mailto:andrewstermueller@gmail.com">andrewstermueller@gmail.com</a>
+					<Email which="gmail" />
 				</li>
 			</ul>
 		</div>
