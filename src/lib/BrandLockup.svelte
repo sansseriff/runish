@@ -2,10 +2,10 @@
 	import { base } from '$app/paths';
 	import RunishText from '$lib/RunishText.svelte';
 
-	let { compact = false }: { compact?: boolean } = $props();
+	let { compact = false, href = `${base}/` }: { compact?: boolean; href?: string } = $props();
 </script>
 
-<a href="{base}/" class="brand-lockup" class:compact aria-label="runi.sh — Home">
+<a {href} class="brand-lockup" class:compact aria-label="runi.sh — Home">
 	<img src="{base}/Runish.svg" width="18" height="18" alt="" />
 	<span class="wordmark">
 		<RunishText size="sm" rememberVisitor={false} />

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { posts as allPosts, postsSorted, blogHref, formatDate } from '$lib/data/blog';
+	import { posts as allPosts, postsSorted, blogHref, formatMonthYear } from '$lib/data/blog';
 	import {
 		projects as allProjects,
 		projectHref,
@@ -12,69 +12,76 @@
 
 	const blogPreview = $derived(postsSorted().slice(0, blogLimit));
 	const projectPreview = $derived(allProjects.slice(0, projectLimit));
+	const rows = $derived(Math.max(blogPreview.length, projectPreview.length));
 </script>
 
-<section class="previews">
-	<div class="col col-blog">
-		<header class="col-header">
-			<div>
-				<div class="eyebrow">Notes</div>
-				<h2 class="col-title">From the Desk</h2>
-			</div>
-			<div class="meta">Blog · {blogPreview.length} of {allPosts.length}</div>
-		</header>
-
-		{#each blogPreview as p, i}
-			<a class="row blog-row" href={blogHref(p)}>
-				<time class="date">{formatDate(p.date)}</time>
-				<div class="row-body">
-					<h3 class="row-title">{p.title}</h3>
-					<p class="row-summary">{p.summary}</p>
-				</div>
-				<span class="tag">{p.tag}</span>
-			</a>
-			{#if i < blogPreview.length - 1}
-				<div class="row-divider"></div>
-			{/if}
-		{/each}
-
-		<div class="col-footer">
-			<a class="all-link rs-flourish" href="{base}/blog">All notes →</a>
+<!--
+	One grid for both columns, so row n of the notes and row n of the projects
+	share a height and their dividers line up. Cells are in DOM order per
+	column, which is also the stacking order on narrow screens.
+-->
+<section class="previews" style:--rows={rows}>
+	<header class="col-header blog-cell" style:grid-row="1">
+		<div>
+			<div class="eyebrow">Notes</div>
+			<h2 class="col-title">From the Desk</h2>
 		</div>
+		<div class="meta">Blog · {blogPreview.length} of {allPosts.length}</div>
+	</header>
+	{#each blogPreview as p, i}
+		<a
+			class="row blog-row blog-cell"
+			class:first={i === 0}
+			href={blogHref(p)}
+			style:grid-row={i + 2}
+		>
+			<div class="row-body">
+				<h3 class="row-title">{p.title}</h3>
+				<p class="row-summary">{p.teaser}</p>
+			</div>
+			<time class="date" datetime={p.date}>{formatMonthYear(p.date)}</time>
+		</a>
+	{/each}
+	{#each Array(rows - blogPreview.length) as _, i}
+		<div class="filler blog-cell" style:grid-row={blogPreview.length + i + 2}></div>
+	{/each}
+	<div class="col-footer blog-cell" style:grid-row={rows + 2}>
+		<a class="all-link rs-flourish" href="{base}/blog">All notes →</a>
 	</div>
 
-	<div class="col col-projects">
-		<header class="col-header">
-			<div>
-				<div class="eyebrow">Projects</div>
-				<h2 class="col-title">Code & Colors</h2>
-			</div>
-			<div class="meta">Portfolio · {projectPreview.length} of {allProjects.length}</div>
-		</header>
-
-		{#each projectPreview as p, i}
-			<a class="row project-row" href={projectHref(p)}>
-				<span class="fragment" style:background-image={`url(${p.media.path})`} aria-hidden="true">
-					<span class="frag-overlay"></span>
-					<span class="frag-tick"></span>
-				</span>
-				<div class="row-body">
-					<div class="proj-titlerow">
-						<img class="flag-icon" src={projectFlagIcon(primaryFlag(p))} alt={primaryFlag(p)} />
-						<h3 class="proj-title">{p.title}</h3>
-					</div>
-					<p class="row-summary">{p.tagline}</p>
-				</div>
-				<span class="year">{p.year}</span>
-			</a>
-			{#if i < projectPreview.length - 1}
-				<div class="row-divider"></div>
-			{/if}
-		{/each}
-
-		<div class="col-footer">
-			<a class="all-link rs-flourish" href="{base}/portfolio">All projects →</a>
+	<header class="col-header proj-cell" style:grid-row="1">
+		<div>
+			<div class="eyebrow">Projects</div>
+			<h2 class="col-title">Code & Colors</h2>
 		</div>
+		<div class="meta">Portfolio · {projectPreview.length} of {allProjects.length}</div>
+	</header>
+	{#each projectPreview as p, i}
+		<a
+			class="row project-row proj-cell"
+			class:first={i === 0}
+			href={projectHref(p)}
+			style:grid-row={i + 2}
+		>
+			<span class="fragment" style:background-image={`url(${p.media.path})`} aria-hidden="true">
+				<span class="frag-overlay"></span>
+				<span class="frag-tick"></span>
+			</span>
+			<div class="row-body">
+				<div class="proj-titlerow">
+					<img class="flag-icon" src={projectFlagIcon(primaryFlag(p))} alt={primaryFlag(p)} />
+					<h3 class="proj-title">{p.title}</h3>
+				</div>
+				<p class="row-summary">{p.tagline}</p>
+			</div>
+			<span class="year">{p.year}</span>
+		</a>
+	{/each}
+	{#each Array(rows - projectPreview.length) as _, i}
+		<div class="filler proj-cell" style:grid-row={projectPreview.length + i + 2}></div>
+	{/each}
+	<div class="col-footer proj-cell" style:grid-row={rows + 2}>
+		<a class="all-link rs-flourish" href="{base}/portfolio">All projects →</a>
 	</div>
 </section>
 
@@ -82,14 +89,28 @@
 	.previews {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto repeat(var(--rows), auto) auto;
 		border-bottom: 1px solid var(--rs-rule);
 	}
-	.col {
-		display: flex;
-		flex-direction: column;
-	}
-	.col-blog {
+	.blog-cell {
+		grid-column: 1;
 		border-right: 1px solid var(--rs-rule);
+	}
+	.proj-cell {
+		grid-column: 2;
+	}
+	/* Inset divider above every row but the first, as before. */
+	.row,
+	.filler {
+		position: relative;
+	}
+	.row:not(.first)::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 28px;
+		right: 28px;
+		border-top: 1px solid var(--rs-rule);
 	}
 
 	.col-header {
@@ -142,15 +163,17 @@
 		background-size: 0 1px;
 	}
 	.blog-row {
-		grid-template-columns: 84px 1fr auto;
-		align-items: baseline;
+		grid-template-columns: 1fr auto;
+		align-items: start;
 	}
 	.project-row {
 		grid-template-columns: 52px 1fr auto;
-		align-items: center;
+		align-items: start;
 	}
 
 	.date {
+		white-space: nowrap;
+		padding-top: 4px;
 		font-family: var(--font-mono-rs);
 		font-size: 11px;
 		color: var(--rs-fg-subtle);
@@ -180,7 +203,7 @@
 		color: var(--rs-fg-muted);
 		max-width: 50ch;
 	}
-	.tag,
+	.blog-row .date,
 	.year {
 		font-family: var(--font-mono-rs);
 		font-size: 10px;
@@ -251,13 +274,7 @@
 		background: var(--rs-fg-accent);
 	}
 
-	.row-divider {
-		margin: 0 28px;
-		border-bottom: 1px solid var(--rs-rule);
-	}
-
 	.col-footer {
-		margin-top: auto;
 		padding: 14px 28px 20px;
 		font-family: var(--font-mono-rs);
 		font-size: 11px;
@@ -271,10 +288,16 @@
 
 	@media (max-width: 768px) {
 		.previews {
-			grid-template-columns: 1fr;
+			display: flex;
+			flex-direction: column;
 		}
-		.col-blog {
+		.blog-cell {
 			border-right: 0;
+		}
+		.filler {
+			display: none;
+		}
+		.blog-cell.col-footer {
 			border-bottom: 1px solid var(--rs-rule);
 		}
 	}

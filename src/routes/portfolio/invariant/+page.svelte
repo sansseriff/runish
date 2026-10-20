@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import SectionHeader from '$lib/SectionHeader.svelte';
+	import PortfolioPage from '$lib/PortfolioPage.svelte';
 </script>
 
-<section class="prose max-w-none w-full mx-auto mt-6 lg:pr-4">
-	<SectionHeader title="Coming Soon" tag="h1" />
-	<div class="p-6 lg:p-8 font-serif text-sm leading-relaxed space-y-6 dark:text-gray-300">
-		<p>Coming soon...</p>
-	</div>
-</section>
-
+<PortfolioPage
+	title="The Invariant"
+	eyebrow="Aerial short film"
+	paragraphs={['An aerial short film featuring UC San Diego views and students.']}
+	links={[{ label: 'YouTube', href: 'https://www.youtube.com/watch?v=1IA1IlqJJvA' }]}
+	youtube={[{ id: '1IA1IlqJJvA', title: 'The Invariant - A UCSD Aerial Film' }]}
+	images={[
+		{ src: `${base}/portfolio/aerial/tricopter.avif`, alt: 'A camera tricopter', wide: true },
+		{ src: `${base}/portfolio/aerial/tricopter-beach.avif`, alt: 'The tricopter on a beach' },
+		{ src: `${base}/portfolio/aerial/tricopter-case.avif`, alt: 'The tricopter packed in its case' }
+	]}
+/>

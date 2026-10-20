@@ -650,3 +650,35 @@ html.dark {
 .rs-flourish:hover {
 	background-size: 100% 1px;
 }
+
+/* =============================================================
+   Print — used by the web CV. Drop site chrome and print light.
+============================================================= */
+@media print {
+	/* !important: the dark tokens sit behind :root:not(.light), which outranks html. */
+	html {
+		--rs-bg: #fff !important;
+		--rs-bg-raised: #fff !important;
+		--rs-fg: #222 !important;
+		--rs-fg-strong: #000 !important;
+		--rs-fg-muted: #444 !important;
+		--rs-fg-subtle: #666 !important;
+		--rs-fg-accent: #2f48ac !important;
+		--rs-rule: #ddd !important;
+		--rs-border: #ddd !important;
+		--rs-border-strong: #ccc !important;
+		background: #fff !important;
+	}
+	.mobile-header,
+	.rs-left,
+	.rs-right,
+	.site-footer {
+		display: none !important;
+	}
+	.rs-main {
+		border: 0 !important;
+	}
+	.rs-main-noise::before {
+		display: none !important;
+	}
+}

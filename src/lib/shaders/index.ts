@@ -1,15 +1,19 @@
 import { VERT } from './common';
 import { FRAG_PLASMA } from './plasma';
-import { FRAG_NEBULA } from './nebula';
-import { FRAG_ASCII } from './ascii';
+import { FRAG_PULSAR } from './pulsar';
+import { FRAG_WAVES } from './waves';
+import { FRAG_NANOWIRE } from './nanowire';
+import { FRAG_FIELD } from './field';
 
-export const PRESETS = ['plasma', 'nebula', 'ascii'] as const;
+export const PRESETS = ['plasma', 'pulsar', 'waves', 'nanowire', 'field'] as const;
 export type Preset = (typeof PRESETS)[number];
 
 export const FRAG_BY_PRESET: Record<Preset, string> = {
 	plasma: FRAG_PLASMA,
-	nebula: FRAG_NEBULA,
-	ascii: FRAG_ASCII
+	pulsar: FRAG_PULSAR,
+	waves: FRAG_WAVES,
+	nanowire: FRAG_NANOWIRE,
+	field: FRAG_FIELD
 };
 
 export { VERT };

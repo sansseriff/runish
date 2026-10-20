@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	export type SocialPlatform = 'github' | 'bluesky' | 'instagram' | 'scholar';
+	export type SocialPlatform = 'github' | 'bluesky' | 'instagram' | 'scholar' | 'email';
 	export type SocialMode = 'text' | 'icon';
 
 	interface SocialMeta {
@@ -28,6 +28,11 @@
 			href: 'https://scholar.google.com/citations?user=FRQbz4sAAAAJ&hl=en',
 			label: 'Google Scholar',
 			text: 'edu'
+		},
+		email: {
+			href: 'mailto:andrewstermueller@gmail.com',
+			label: 'Email',
+			text: 'mail'
 		}
 	};
 </script>
@@ -36,6 +41,7 @@
 	import GithubLogo from 'phosphor-svelte/lib/GithubLogo';
 	import GraduationCap from 'phosphor-svelte/lib/GraduationCap';
 	import InstagramLogo from 'phosphor-svelte/lib/InstagramLogo';
+	import EnvelopeSimple from 'phosphor-svelte/lib/EnvelopeSimple';
 	import BlueSkyLogo from '$lib/BlueSkyLogo.svelte';
 
 	let {
@@ -68,6 +74,8 @@
 		<InstagramLogo {size} weight={'regular'} />
 	{:else if platform === 'scholar'}
 		<GraduationCap {size} weight={'regular'} />
+	{:else if platform === 'email'}
+		<EnvelopeSimple {size} weight={'regular'} />
 	{/if}
 </a>
 

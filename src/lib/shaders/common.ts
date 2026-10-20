@@ -30,6 +30,9 @@ vec3 fgCol(){ return mix(INK_200, vec3(.929,.929,.941), u_dark); }
 vec3 mutedCol(){ return mix(vec3(.431,.431,.439), vec3(.604,.604,.631), u_dark); }
 vec3 accentCol(){ return mix(ACCENT_500, ACCENT_300, u_dark); }
 
+// The hero title sits on the left; keep that side quieter so text stays legible.
+float heroMask(vec2 uv){ return mix(0.35, 1.0, smoothstep(-0.65, 0.3, uv.x)); }
+
 float hash21(vec2 p){ p = fract(p*vec2(234.34,435.345)); p += dot(p, p+34.23); return fract(p.x*p.y); }
 float vnoise(vec2 p){
   vec2 i = floor(p); vec2 f = fract(p);

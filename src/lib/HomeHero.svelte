@@ -5,6 +5,7 @@
 	import ThemeChip from '$lib/ThemeChip.svelte';
 	import { posts as blogPosts } from '$lib/data/blog';
 	import { PRESETS, nextPreset, type Preset } from '$lib/shaders';
+	import type { Snippet } from 'svelte';
 
 	let {
 		isDark = false,
@@ -12,7 +13,11 @@
 		density = 0.8,
 		speed = 0.35,
 		accent = 0.36,
-		onToggleTheme
+		onToggleTheme,
+		title,
+		kicker = 'Something',
+		lede = 'Portfolio and blog of Andrew Mueller — mildly mystical, mostly scientific.',
+		actions
 	}: {
 		isDark?: boolean;
 		preset?: Preset;
@@ -20,6 +25,12 @@
 		speed?: number;
 		accent?: number;
 		onToggleTheme?: () => void;
+		/** Plain-text title; defaults to the animated runish wordmark. */
+		title?: string;
+		kicker?: string;
+		lede?: string;
+		/** Replaces the transmission log at the bottom of the hero. */
+		actions?: Snippet;
 	} = $props();
 
 	const latest = blogPosts[0];
@@ -48,10 +59,6 @@
 
 	<div class="hero-content">
 		<div class="hero-eyebrow">
-			<div class="eyebrow-left">
-				<span class="diamond-mark" aria-hidden="true"></span>
-				<span>live</span>
-			</div>
 			{#if onToggleTheme}
 				<div class="eyebrow-right" data-no-pulse>
 					<ThemeChip {isDark} onToggle={onToggleTheme} />
@@ -59,37 +66,44 @@
 			{/if}
 		</div>
 
-		<div class="kicker">Something</div>
+		<div class="kicker">{kicker}</div>
 
-		<h1 class="hero-title">
-			<RunishText rememberVisitor={false} />
-		</h1>
+		{#if title}
+			<h1 class="hero-title plain">{title}</h1>
+		{:else}
+			<h1 class="hero-title">
+				<RunishText rememberVisitor={false} />
+			</h1>
+		{/if}
 
-		<p class="hero-lede">
-			Portfolio and blog of Andrew Mueller — mildly mystical, mostly scientific.
-		</p>
+		<p class="hero-lede">{lede}</p>
 
-		<div class="transmission-log">
-			<span>v0.5</span>
-			<span class="sep">·</span>
-			<span
-				>latest: <a href={latest ? `${base}/blog/${latest.slug}` : '#'} class="log-link rs-flourish"
-					>{latest?.title ?? '—'}</a
-				></span
-			>
-			<span class="sep">·</span>
-			<span>click anywhere in the field to emit a pulse</span>
-			<button
-				type="button"
-				class="preset-label"
-				data-no-pulse
-				onclick={cyclePreset}
-				aria-label="Cycle shader preset"
-			>
-				<span class="preset-name">{activePreset}</span>
-				<span class="preset-meta">· ch {ch}</span>
-			</button>
-		</div>
+		{#if actions}
+			<div class="hero-actions" data-no-pulse>
+				{@render actions()}
+			</div>
+		{:else}
+			<div class="transmission-log">
+				<span>v0.5</span>
+				<span class="sep">·</span>
+				<span
+					>latest: <a
+						href={latest ? `${base}/blog/${latest.slug}` : '#'}
+						class="log-link rs-flourish">{latest?.title ?? '—'}</a
+					></span
+				>
+				<button
+					type="button"
+					class="preset-label"
+					data-no-pulse
+					onclick={cyclePreset}
+					aria-label="Cycle shader preset"
+				>
+					<span class="preset-name">{activePreset}</span>
+					<span class="preset-meta">· ch {ch}</span>
+				</button>
+			</div>
+		{/if}
 	</div>
 </section>
 
@@ -190,23 +204,10 @@
 		margin-bottom: 22px;
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
-	}
-	.eyebrow-left {
-		display: flex;
-		gap: 10px;
-		align-items: center;
+		justify-content: flex-end;
 	}
 	.eyebrow-right {
 		pointer-events: auto;
-	}
-	.diamond-mark {
-		width: 6px;
-		height: 6px;
-		border-radius: 1px;
-		transform: rotate(45deg);
-		background: var(--rs-fg-accent);
-		display: inline-block;
 	}
 	.kicker {
 		font-family: var(--font-serif-rs);
@@ -229,6 +230,24 @@
 		pointer-events: auto;
 		margin-top: -3rem;
 		height: 1.2em;
+	}
+
+	.hero-title.plain {
+		margin-top: 0;
+		height: auto;
+		font-size: 56px;
+	}
+	@media (max-width: 640px) {
+		.hero-title.plain {
+			font-size: 40px;
+		}
+	}
+
+	.hero-actions {
+		margin-top: auto;
+		padding-top: 20px;
+		border-top: 1px solid var(--rs-rule);
+		pointer-events: auto;
 	}
 
 	.hero-lede {

@@ -5,9 +5,17 @@
 	import Diamond from 'phosphor-svelte/lib/DiamondsFour';
 	import BrandLockup from '$lib/BrandLockup.svelte';
 	import ThemeChip from '$lib/ThemeChip.svelte';
-	import SocialLink from '$lib/SocialLink.svelte';
+	import SocialLink, { type SocialPlatform } from '$lib/SocialLink.svelte';
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
+	import {
+		proMode,
+		isProPath,
+		initProMode,
+		enterProMode,
+		exitProMode,
+		PRO_ROOT
+	} from '$lib/mode.svelte';
 
 	let { children } = $props();
 	let menuOpen = $state(false);
@@ -71,17 +79,46 @@
 		}
 	});
 
-	const navItems = [
+	$effect(() => {
+		initProMode();
+	});
+
+	const onProPath = $derived(isProPath(page.url.pathname));
+	// Landing on the regular home page means the visitor wants the full site.
+	const onFullHome = $derived(
+		page.url.pathname === `${base}/` || page.url.pathname === base || page.url.pathname === '/'
+	);
+	$effect(() => {
+		if (onProPath) enterProMode();
+		else if (onFullHome) exitProMode();
+	});
+	const pro = $derived(onProPath || proMode.sticky);
+
+	const fullNav = [
 		{ label: 'Home', path: '/' },
 		{ label: 'About', path: '/about' },
 		{ label: 'Portfolio', path: '/portfolio' },
 		{ label: 'Blog', path: '/blog' }
 	];
+	const proNav = [
+		{ label: 'Home', path: '/professional' },
+		{ label: 'Work', path: '/professional/work' },
+		{ label: 'CV', path: '/professional/cv' },
+		{ label: 'Writing', path: '/blog' },
+		{ label: 'About', path: '/about' }
+	];
+	const navItems = $derived(pro ? proNav : fullNav);
+	const homeHref = $derived(pro ? PRO_ROOT : `${base}/`);
+	const socialsShown = $derived<SocialPlatform[]>(
+		pro ? ['github', 'scholar', 'email'] : ['github', 'bluesky', 'instagram', 'scholar']
+	);
 
 	function isActive(path: string): boolean {
 		const current = page.url.pathname;
 		const target = `${base}${path}`;
 		if (path === '/') return current === target || current === `${base}` || current === '/';
+		// Each mode's home is a prefix of its other pages, so match it exactly.
+		if (path === '/professional') return current === target;
 		return current === target || current.startsWith(`${target}/`);
 	}
 
@@ -98,17 +135,17 @@
 <main class="rs-shell">
 	<!-- Mobile header -->
 	<div class="mobile-header">
-		<BrandLockup compact />
+		<BrandLockup compact href={homeHref} />
 		<button onclick={toggleMenu} class="menu-btn" aria-label="Open menu">
 			<Diamond size={22} weight={'regular'} />
 		</button>
 	</div>
 
-	<div class="rs-shell-inner" class:portfolio-mode={onPortfolio}>
+	<div class="rs-shell-inner" class:portfolio-mode={onPortfolio && !pro}>
 		<!-- Left sidebar -->
 		<aside class="rs-left">
 			<div class="brand-row">
-				<BrandLockup />
+				<BrandLockup href={homeHref} />
 			</div>
 			<ul class="nav-list">
 				{#each navItems as item}
@@ -132,22 +169,27 @@
 		<section class="rs-main rs-main-noise">
 			{@render children()}
 			<footer class="site-footer">
-				<span>© {new Date().getFullYear()} · runi.sh · AM</span>
+				<span>© {new Date().getFullYear()} · runi.sh · {pro ? 'Andrew Mueller' : 'AM'}</span>
 				<div class="footer-socials">
-					<SocialLink platform="github" mode="text" />
-					<SocialLink platform="bluesky" mode="text" />
-					<SocialLink platform="instagram" mode="text" />
-					<SocialLink platform="scholar" mode="text" />
+					{#each socialsShown as platform}
+						<SocialLink {platform} mode="text" />
+					{/each}
 				</div>
-				<ThemeChip {isDark} onToggle={toggleTheme} mode="text" />
+				<div class="footer-theme">
+					<ThemeChip {isDark} onToggle={toggleTheme} mode="text" />
+				</div>
 			</footer>
 		</section>
 
 		<!-- Right sidebar -->
 		<aside class="rs-right">
-			<div class="right-bottom">
-				<div class="copyright">© {new Date().getFullYear()} · AM</div>
-			</div>
+			{#if pro}
+				<div class="mode-note">
+					<span class="mode-dot" aria-hidden="true"></span>
+					<span>Professional view</span>
+					<a href="{base}/" class="mode-exit rs-flourish" onclick={exitProMode}>Full site →</a>
+				</div>
+			{/if}
 		</aside>
 	</div>
 
@@ -181,6 +223,11 @@
 						</a>
 					</li>
 				{/each}
+				{#if pro}
+					<li>
+						<a href="{base}/" class="m-link m-exit" onclick={exitProMode}>Full site →</a>
+					</li>
+				{/if}
 				<li class="m-theme-row">
 					<ThemeChip {isDark} onToggle={toggleTheme} />
 				</li>
@@ -323,14 +370,33 @@
 		border-radius: 1px;
 	}
 
-	.right-bottom {
-		margin-top: auto;
+	.mode-note {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
 		font-family: var(--font-mono-rs);
 		font-size: 10px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
 		color: var(--rs-fg-subtle);
-		letter-spacing: 0.06em;
 	}
-	.copyright {
+	.mode-dot {
+		width: 6px;
+		height: 6px;
+		border-radius: 1px;
+		transform: rotate(45deg);
+		background: var(--rs-fg-accent);
+		display: inline-block;
+	}
+	.mode-exit {
+		color: var(--rs-fg-muted);
+		text-decoration: none;
+		align-self: flex-start;
+	}
+	.mode-exit:hover {
+		color: var(--rs-fg-strong);
+	}
+	.m-exit {
 		color: var(--rs-fg-subtle);
 	}
 
@@ -373,11 +439,11 @@
 
 	.site-footer {
 		padding: 18px 28px;
-		display: flex;
+		/* Three columns with equal outer tracks keep the socials truly centred. */
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
 		align-items: center;
-		justify-content: space-between;
 		gap: 16px;
-		flex-wrap: wrap;
 		font-family: var(--font-mono-rs);
 		font-size: 11px;
 		color: var(--rs-fg-subtle);
@@ -388,6 +454,18 @@
 		display: flex;
 		gap: 16px;
 		align-items: center;
+	}
+	.footer-theme {
+		justify-self: end;
+	}
+	@media (max-width: 640px) {
+		.site-footer {
+			grid-template-columns: 1fr;
+			justify-items: start;
+		}
+		.footer-theme {
+			justify-self: start;
+		}
 	}
 
 	/* Mobile bottom modal menu */
