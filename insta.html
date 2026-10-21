@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Runish</title>
+		<!-- Ensure UA knows both schemes are supported -->
+		<meta name="color-scheme" content="light dark" />
+		<script>
+			// Early theme application to avoid FOUC / flash of wrong theme.
+			// Mirrors logic in +layout.svelte but must run BEFORE paint.
+			(function () {
+				// Temporarily disable transitions to avoid flash when adding theme class
+				var css = document.createElement('style');
+				css.textContent = '*{transition:none!important}';
+				css.setAttribute('data-theme-preload', '');
+				document.head.appendChild(css);
+				try {
+					var stored = localStorage.getItem('theme');
+					var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+					var dark = stored === 'dark' || (stored === null && prefersDark);
+					var root = document.documentElement;
+					root.classList.remove('light', 'dark');
+					root.classList.add(dark ? 'dark' : 'light');
+					// Optional: set a flag so later scripts know it was pre-set.
+					root.dataset.themeApplied = 'true';
+				} catch (e) {
+					/* noop */
+				}
+				// Allow a frame then remove the no-transition style
+				requestAnimationFrame(function () {
+					var guard = document.querySelector('style[data-theme-preload]');
+					if (guard) guard.remove();
+				});
+			})();
+		</script>
+		<link rel="icon" href="./Runish.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link href="./_app/immutable/entry/start.Br97se7v.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BRPndiIq.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/Dx547FNf.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/iPLYMfff.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="./_app/immutable/entry/app.D97hfVAi.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/CZt_fp0_.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/6GQpga6d.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/CAsZmGN8.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BGtmIOaB.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/DWll-9Av.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BrqDUh2o.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/DDYNyw7m.js" rel="modulepreload">
+		<link href="./_app/immutable/nodes/0.DujLzrpP.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BCwH9m4n.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/cEC7bt5f.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BIIny9A8.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/CXLAl0eE.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/B7n8GS3k.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/C4OFBPJk.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/C39QwPgl.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BEqMOgyr.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BY7vNNus.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/DdhpyJ7S.js" rel="modulepreload">
+		<link href="./_app/immutable/nodes/24.D7uMN0uR.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/DTP-gsSF.js" rel="modulepreload">
+		<!--1hlm6oz--><meta name="robots" content="noindex"/> <meta http-equiv="refresh" content="0; url=https://www.instagram.com/andstermueller/"/> <link rel="canonical" href="https://www.instagram.com/andstermueller/"/><!----><title>Redirecting…</title>
+		<link href="./_app/immutable/assets/ThemeChip.B4TPI-qx.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/0.Q1r8My7-.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/24.DoZy_w7K.css" rel="stylesheet">
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body
+		data-sveltekit-preload-data="hover"
+		class="diagonal-pattern noise-texture transition-colors duration-300"
+	>
+		<div style="display: contents"><!--[--><!--[0--><!--[--><main class="rs-shell svelte-12qhfyh"><div class="mobile-header svelte-12qhfyh"><a href="./" class="brand-lockup svelte-j6ls9a compact" aria-label="runi.sh — Home"><img src="./Runish.svg" width="18" height="18" alt=""/> <span class="wordmark svelte-j6ls9a"><span class="runish-container svelte-6yu6wb runish-sm"><!--[--><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">R</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">u</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">n</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">i</span><span class="runish-letter svelte-6yu6wb dot dot-color" role="presentation" style=" --letter-spacing: -0.029rem; --vertical-offset: 0.09em; --font-size: 1.4em; --char-width: auto; ">.</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">s</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">h</span><!--]--></span><!----></span></a><!----> <button class="menu-btn svelte-12qhfyh" aria-label="Open menu"><svg xmlns="http://www.w3.org/2000/svg" role="img" width="22" height="22" fill="currentColor" viewBox="0 0 256 256"><!--[-1--><!--]--><rect width="256" height="256" fill="none"></rect><!--[4--><path d="M122.34,109.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0,0-11.32l-40-40a8,8,0,0,0-11.32,0l-40,40a8,8,0,0,0,0,11.32ZM128,35.31,156.69,64,128,92.69,99.31,64Zm5.66,111a8,8,0,0,0-11.32,0l-40,40a8,8,0,0,0,0,11.32l40,40a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0,0-11.32ZM128,220.69,99.31,192,128,163.31,156.69,192Zm109.66-98.35-40-40a8,8,0,0,0-11.32,0l-40,40a8,8,0,0,0,0,11.32l40,40a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,237.66,122.34ZM192,156.69,163.31,128,192,99.31,220.69,128Zm-82.34-34.35-40-40a8,8,0,0,0-11.32,0l-40,40a8,8,0,0,0,0,11.32l40,40a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,109.66,122.34ZM64,156.69,35.31,128,64,99.31,92.69,128Z"></path><!--]--></svg><!----></button></div> <div class="rs-shell-inner svelte-12qhfyh"><aside class="rs-left svelte-12qhfyh"><div class="brand-row svelte-12qhfyh"><a href="./" class="brand-lockup svelte-j6ls9a" aria-label="runi.sh — Home"><img src="./Runish.svg" width="18" height="18" alt=""/> <span class="wordmark svelte-j6ls9a"><span class="runish-container svelte-6yu6wb runish-sm"><!--[--><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">R</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">u</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">n</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">i</span><span class="runish-letter svelte-6yu6wb dot dot-color" role="presentation" style=" --letter-spacing: -0.029rem; --vertical-offset: 0.09em; --font-size: 1.4em; --char-width: auto; ">.</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">s</span><span class="runish-letter svelte-6yu6wb" role="presentation" style=" --letter-spacing: 0; --vertical-offset: 0.15em; --font-size: 1em; --char-width: auto; ">h</span><!--]--></span><!----></span></a><!----></div> <ul class="nav-list svelte-12qhfyh"><!--[--><li class="svelte-12qhfyh"><a href="./" class="nav-item svelte-12qhfyh">Home <!--[-1--><!--]--></a></li><li class="svelte-12qhfyh"><a href="./about" class="nav-item svelte-12qhfyh">About <!--[-1--><!--]--></a></li><li class="svelte-12qhfyh"><a href="./portfolio" class="nav-item svelte-12qhfyh">Portfolio <!--[-1--><!--]--></a></li><li class="svelte-12qhfyh"><a href="./blog" class="nav-item svelte-12qhfyh">Blog <!--[-1--><!--]--></a></li><!--]--></ul></aside> <section class="rs-main rs-main-noise svelte-12qhfyh"><!--[--><p class="redirect svelte-1hlm6oz">Redirecting to <a href="https://www.instagram.com/andstermueller/">https://www.instagram.com/andstermueller/</a></p><!--]--><!----> <footer class="site-footer svelte-12qhfyh"><span>© 2026 · runi.sh · AM</span> <div class="footer-socials svelte-12qhfyh"><!--[--><a href="https://github.com/sansseriff" aria-label="GitHub" title="GitHub" class="social-link svelte-1yhw9ik text-mode rs-flourish" target="_blank" rel="noopener noreferrer"><!--[0--><span aria-hidden="true">[gh]</span><!--]--></a><a href="https://bsky.app/profile/sansseriff.bsky.social" aria-label="Bluesky" title="Bluesky" class="social-link svelte-1yhw9ik text-mode rs-flourish" target="_blank" rel="noopener noreferrer"><!--[0--><span aria-hidden="true">[bsky]</span><!--]--></a><a href="https://www.instagram.com/andstermueller/" aria-label="Instagram" title="Instagram" class="social-link svelte-1yhw9ik text-mode rs-flourish" target="_blank" rel="noopener noreferrer"><!--[0--><span aria-hidden="true">[ig]</span><!--]--></a><a href="https://scholar.google.com/citations?user=FRQbz4sAAAAJ&amp;hl=en" aria-label="Google Scholar" title="Google Scholar" class="social-link svelte-1yhw9ik text-mode rs-flourish" target="_blank" rel="noopener noreferrer"><!--[0--><span aria-hidden="true">[edu]</span><!--]--></a><!--]--></div> <div class="footer-theme svelte-12qhfyh"><!--[-1--><button type="button" aria-label="Switch to dark mode" class="theme-text rs-flourish svelte-qp5h0m">[light]</button><!--]--><!----></div></footer></section> <aside class="rs-right svelte-12qhfyh"><!--[-1--><!--]--></aside></div> <!--[-1--><!--]--></main><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1275klu = {
+						base: new URL(".", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("./_app/immutable/entry/start.Br97se7v.js"),
+						import("./_app/immutable/entry/app.D97hfVAi.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 24],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
